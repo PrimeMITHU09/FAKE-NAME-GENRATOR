@@ -1336,30 +1336,12 @@
                     <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('gmail', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
-                <div class="info-row">
-                    <span class="label">SSN</span>
-                    <span class="value" id="ssn">780-54-XXXX</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('ssn', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
-                </div>
-
-                <div class="info-row">
-                    <span class="label">Geo coordinates</span>
-                    <span class="value" id="geo">-11.5604, -140.0717</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('geo', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
-                </div>
-
                 <div class="section-header">PHONE</div>
 
                 <div class="info-row">
                     <span class="label">Phone</span>
                     <span class="value" id="phone">0554-4430674</span>
                     <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('phone', this, true)"><i class="fa-solid fa-copy"></i> Copy</button></div>
-                </div>
-
-                <div class="info-row">
-                    <span class="label">Home phone</span>
-                    <span class="value" id="home-phone">0554-4430674</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('home-phone', this, true)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="section-header">BIRTHDAY</div>
@@ -2055,10 +2037,15 @@
 
                 document.getElementById("gmail").innerText = generatedEmail;
 
-                document.getElementById("ssn").innerText = ssn;
-                document.getElementById("geo").innerText = geo;
+                const ssnEl = document.getElementById("ssn");
+                if (ssnEl) ssnEl.innerText = ssn;
+
+                const geoEl = document.getElementById("geo");
+                if (geoEl) geoEl.innerText = geo;
+
                 document.getElementById("phone").innerText = phone;
-                document.getElementById("home-phone").innerText = homePhone;
+                const homePhoneEl = document.getElementById("home-phone");
+                if (homePhoneEl) homePhoneEl.innerText = homePhone;
 
                 const bdayEl = document.getElementById("bday");
                 bdayEl.innerText = birthdayDisplay;
