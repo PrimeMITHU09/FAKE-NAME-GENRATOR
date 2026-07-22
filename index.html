@@ -83,28 +83,29 @@
             transform: translateY(-1px);
         }
 
-        /* GLASSMORPHISM CENTERED MAIN CARD */
+        /* ULTRA FROSTED GLASSMORPHISM CENTERED MAIN CARD */
         .main-card {
-            background: rgba(255, 255, 255, 0.88) !important;
-            backdrop-filter: blur(18px) saturate(180%) !important;
-            -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.6) !important;
-            border-radius: 20px !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65)) !important;
+            backdrop-filter: blur(25px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.7) !important;
+            border-radius: 24px !important;
             width: 100%;
             max-width: 980px;
             padding: 35px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 2px 10px rgba(0, 0, 0, 0.05) !important;
-            transition: all 0.3s ease;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+            transition: all 0.35s ease;
         }
 
         .generator-box {
-            background: rgba(248, 250, 252, 0.82) !important;
-            backdrop-filter: blur(10px) !important;
-            border: 1.5px solid rgba(203, 213, 225, 0.8) !important;
-            border-radius: 14px !important;
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.78), rgba(241, 245, 249, 0.58)) !important;
+            backdrop-filter: blur(14px) !important;
+            -webkit-backdrop-filter: blur(14px) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
+            border-radius: 16px !important;
             padding: 24px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04) !important;
         }
 
         .generator-header {
@@ -275,13 +276,17 @@
 
         .right-panel {
             flex: 1;
+            width: 100%;
         }
 
+        /* 100% VERTICALLY ALIGNED INFO ROWS */
         .info-row {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            margin-bottom: 12px;
             font-size: 15px;
+            width: 100%;
         }
 
         .info-row.large {
@@ -292,7 +297,8 @@
         .info-row .label {
             font-weight: 800;
             color: #1e293b;
-            min-width: 160px;
+            width: 150px;
+            flex-shrink: 0;
             font-size: 15px;
         }
 
@@ -300,7 +306,17 @@
             color: #0f172a;
             font-weight: 700;
             font-size: 16px;
-            margin-right: 12px;
+            flex: 1;
+            padding-right: 15px;
+            word-break: break-word;
+        }
+
+        .copy-btn-col {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-shrink: 0;
+            margin-left: auto;
         }
 
         .copy-tag {
@@ -309,10 +325,11 @@
             color: #1e293b;
             font-size: 12px;
             font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 4px;
+            padding: 5px 12px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.15s;
+            white-space: nowrap;
         }
 
         .copy-tag:hover {
@@ -579,7 +596,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(8px);
             z-index: 99999;
             justify-content: center;
             align-items: center;
@@ -726,7 +743,7 @@
             box-shadow: 0 8px 25px rgba(138, 43, 226, 0.7);
         }
 
-        /* REALTIME THEME PRESETS */
+        /* REALTIME THEME PRESETS & DYNAMIC CONTRAST */
         body.theme-pic {
             background: url('bg.jpg') no-repeat center center fixed !important;
             background-size: cover !important;
@@ -765,86 +782,113 @@
             color: #ffffff !important;
         }
 
-        /* DARK MODE GLASSMORPHISM */
-        body.dark-mode {
-            background-color: #0f172a;
-            color: #f8fafc;
-        }
+        /* DYNAMIC HIGH CONTRAST FOR DARK & WALLPAPER THEMES */
+        body.theme-pic .main-card,
+        body.theme-custom-bg .main-card,
+        body.theme-sunset .main-card,
+        body.theme-ocean .main-card,
+        body.theme-cyber .main-card,
         body.dark-mode .main-card {
-            background: rgba(26, 26, 36, 0.88) !important;
-            backdrop-filter: blur(18px) saturate(180%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+            background: linear-gradient(135deg, rgba(18, 18, 30, 0.88), rgba(28, 28, 44, 0.78)) !important;
+            backdrop-filter: blur(25px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
             color: #ffffff !important;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
         }
+
+        body.theme-pic .generator-box,
+        body.theme-custom-bg .generator-box,
+        body.theme-sunset .generator-box,
+        body.theme-ocean .generator-box,
+        body.theme-cyber .generator-box,
         body.dark-mode .generator-box {
-            background: rgba(35, 35, 48, 0.85) !important;
-            border-color: rgba(255, 255, 255, 0.15) !important;
+            background: rgba(30, 30, 48, 0.75) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
         }
-        body.dark-mode .generator-box h3,
-        body.dark-mode .generator-header h3 {
-            color: #ffffff !important;
-            border-color: #444;
-        }
-        body.dark-mode .form-group label,
-        body.dark-mode .info-row .label {
+
+        body.theme-pic .info-row .label,
+        body.theme-custom-bg .info-row .label,
+        body.theme-sunset .info-row .label,
+        body.theme-ocean .info-row .label,
+        body.theme-cyber .info-row .label,
+        body.dark-mode .info-row .label,
+        body.theme-pic .form-group label,
+        body.theme-custom-bg .form-group label,
+        body.theme-sunset .form-group label,
+        body.theme-ocean .form-group label,
+        body.theme-cyber .form-group label,
+        body.dark-mode .form-group label {
             color: #cbd5e1 !important;
+            font-weight: 800 !important;
         }
+
+        body.theme-pic .info-row .value,
+        body.theme-custom-bg .info-row .value,
+        body.theme-sunset .info-row .value,
+        body.theme-ocean .info-row .value,
+        body.theme-cyber .info-row .value,
         body.dark-mode .info-row .value {
             color: #ffffff !important;
+            font-weight: 800 !important;
         }
+
+        body.theme-pic .generator-header h3,
+        body.theme-custom-bg .generator-header h3,
+        body.theme-sunset .generator-header h3,
+        body.theme-ocean .generator-header h3,
+        body.theme-cyber .generator-header h3,
+        body.dark-mode .generator-header h3 {
+            color: #ffffff !important;
+        }
+
+        body.theme-pic .section-header,
+        body.theme-custom-bg .section-header,
+        body.theme-sunset .section-header,
+        body.theme-ocean .section-header,
+        body.theme-cyber .section-header,
         body.dark-mode .section-header {
-            color: #a855f7 !important;
-            border-color: #444;
+            color: #c084fc !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
         }
+
+        body.theme-pic select,
+        body.theme-custom-bg select,
+        body.theme-sunset select,
+        body.theme-ocean select,
+        body.theme-cyber select,
         body.dark-mode select,
+        body.theme-pic input[type="text"],
+        body.theme-custom-bg input[type="text"],
+        body.theme-sunset input[type="text"],
+        body.theme-ocean input[type="text"],
+        body.theme-cyber input[type="text"],
         body.dark-mode input[type="text"] {
-            background-color: #181818;
-            color: #ffffff;
-            border-color: #444;
+            background-color: rgba(20, 20, 32, 0.85) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.25) !important;
         }
-        body.dark-mode .theme-btn {
-            background-color: rgba(45, 45, 60, 0.9);
-            color: #fff;
-            border-color: #555;
-        }
+
+        body.theme-pic .copy-tag,
+        body.theme-custom-bg .copy-tag,
+        body.theme-sunset .copy-tag,
+        body.theme-ocean .copy-tag,
+        body.theme-cyber .copy-tag,
         body.dark-mode .copy-tag {
-            background-color: #333;
-            border-color: #555;
-            color: #eee;
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            color: #ffffff !important;
+            backdrop-filter: blur(5px) !important;
         }
+
+        body.theme-pic .copy-tag:hover,
+        body.theme-custom-bg .copy-tag:hover,
+        body.theme-sunset .copy-tag:hover,
+        body.theme-ocean .copy-tag:hover,
+        body.theme-cyber .copy-tag:hover,
         body.dark-mode .copy-tag:hover {
-            background-color: #444;
-        }
-        body.dark-mode .adv-panel {
-            background-color: #252525;
-            border-color: #8a2be2;
-            color: #eee;
-        }
-        body.dark-mode .adv-options-link {
-            color: #b366ff;
-        }
-        body.dark-mode .logged-in-text,
-        body.dark-mode footer,
-        body.dark-mode .social-links a {
-            color: #aaa;
-        }
-        body.dark-mode .modal-box {
-            background: #1e1e1e;
-        }
-        body.dark-mode .sheeter-table-container {
-            background: #181818;
-            border-color: #444;
-        }
-        body.dark-mode .sheeter-table th, body.dark-mode .sheeter-table td {
-            border-color: #333;
-            color: #eee;
-        }
-        body.dark-mode .sheeter-table tr:nth-child(even) {
-            background-color: #222;
-        }
-        body.dark-mode .sheeter-table tr.marked {
-            background-color: #3b0764 !important;
+            background-color: rgba(138, 43, 226, 0.6) !important;
+            color: #ffffff !important;
         }
 
         /* GLASSMORPHISM FOOTER */
@@ -950,8 +994,8 @@
                 <div class="form-group">
                     <label for="country">Country</label>
                     <select id="country">
+                        <option value="United States" selected>United States</option>
                         <option value="Bangladesh">Bangladesh</option>
-                        <option value="United States">United States</option>
                         <option value="United Kingdom">United Kingdom</option>
                         <option value="Canada">Canada</option>
                         <option value="Australia">Australia</option>
@@ -1028,55 +1072,55 @@
                 <div class="info-row large">
                     <span class="label">First Name:</span>
                     <span class="value" id="fn">Bert Y.</span>
-                    <button class="copy-tag" onclick="copyText('fn', this)">Copy First Name</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('fn', this)">Copy First Name</button></div>
                 </div>
 
                 <div class="info-row large" style="margin-bottom: 15px;">
                     <span class="label">Last Name:</span>
                     <span class="value" id="ln">Steininger</span>
-                    <button class="copy-tag" onclick="copyText('ln', this)">Copy Last Name</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('ln', this)">Copy Last Name</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Street:</span>
                     <span class="value" id="street">9463 Ringstraße</span>
-                    <button class="copy-tag" onclick="copyText('street', this)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('street', this)">Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">City:</span>
                     <span class="value" id="city">Betzenstein</span>
-                    <button class="copy-tag" onclick="copyText('city', this)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('city', this)">Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">State:</span>
                     <span class="value" id="state">Saarland</span>
-                    <button class="copy-tag" onclick="copyText('state', this)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('state', this)">Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Zip Code:</span>
                     <span class="value" id="zip">34743</span>
-                    <button class="copy-tag" onclick="copyText('zip', this)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('zip', this)">Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Gmail</span>
                     <span class="value" id="gmail">bert.steininger84@gmail.com</span>
-                    <button class="copy-tag" onclick="copyText('gmail', this)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('gmail', this)">Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">SSN</span>
                     <span class="value" id="ssn">780-54-XXXX</span>
-                    <button class="copy-tag" onclick="copyText('ssn', this)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('ssn', this)">Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Geo coordinates</span>
                     <span class="value" id="geo">-11.5604, -140.0717</span>
-                    <button class="copy-tag" onclick="copyText('geo', this)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('geo', this)">Copy</button></div>
                 </div>
 
                 <div class="section-header">PHONE</div>
@@ -1084,13 +1128,13 @@
                 <div class="info-row">
                     <span class="label">Phone</span>
                     <span class="value" id="phone">0554-4430674</span>
-                    <button class="copy-tag" onclick="copyText('phone', this, true)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('phone', this, true)">Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Home phone</span>
                     <span class="value" id="home-phone">0554-4430674</span>
-                    <button class="copy-tag" onclick="copyText('home-phone', this, true)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('home-phone', this, true)">Copy</button></div>
                 </div>
 
                 <div class="section-header">BIRTHDAY</div>
@@ -1098,7 +1142,7 @@
                 <div class="info-row">
                     <span class="label">Birthday</span>
                     <span class="value" id="bday">December 1, 1970</span>
-                    <div style="display: flex; gap: 4px;">
+                    <div class="copy-btn-col">
                         <button class="copy-tag" onclick="copyBirthday(this)">Copy</button>
                         <button class="copy-tag" onclick="copyYearOnly(this)">Copy Year</button>
                     </div>
@@ -1107,7 +1151,7 @@
                 <div class="info-row">
                     <span class="label">Age</span>
                     <span class="value" id="age">55 years old</span>
-                    <button class="copy-tag" onclick="copyText('age', this)">Copy</button>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('age', this)">Copy</button></div>
                 </div>
             </div>
         </div>
@@ -1277,6 +1321,32 @@
                         <i class="fa-solid fa-cloud-arrow-up"></i> Upload Your Custom BG Wallpaper:
                     </label>
                     <input type="file" id="custom-bg-input" accept="image/*" onchange="uploadCustomBg(this)" style="font-size: 12px; width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; background: #fafafa;">
+                </div>
+
+                <!-- Realtime Brightness & Custom Color Tint Control Box -->
+                <div style="margin-top: 15px; border-top: 1px dashed #8a2be2; padding-top: 12px; text-align: left;">
+                    <label style="font-weight: bold; font-size: 12px; color: #8a2be2; display: block; margin-bottom: 8px;">
+                        <i class="fa-solid fa-sun"></i> BG Brightness & Color Adjustment:
+                    </label>
+                    
+                    <!-- Brightness Slider -->
+                    <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                        <label style="font-size: 11px; font-weight: bold; color: #555;">Brightness:</label>
+                        <input type="range" id="bg-brightness-range" min="20" max="150" value="100" oninput="previewBgAdjustments()" style="flex: 1; cursor: pointer;">
+                        <span id="brightness-val-text" style="font-size: 11px; font-weight: bold; width: 35px; text-align: right; color: #8a2be2;">100%</span>
+                    </div>
+
+                    <!-- Custom Tint Color Picker -->
+                    <div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                        <label style="font-size: 11px; font-weight: bold; color: #555;">Color Tint:</label>
+                        <input type="color" id="bg-color-picker" value="#8a2be2" oninput="previewBgAdjustments()" style="width: 40px; height: 26px; border: 1px solid #ccc; cursor: pointer; border-radius: 4px; padding: 0;">
+                        <label style="font-size: 11px; color: #444; cursor: pointer; font-weight: bold;"><input type="checkbox" id="bg-use-color-tint" onchange="previewBgAdjustments()"> Apply Tint</label>
+                    </div>
+
+                    <!-- Save BG Settings Button -->
+                    <button class="btn-generate" onclick="saveBgAdjustments()" style="width: 100%; padding: 8px; font-size: 12px; background: linear-gradient(135deg, #10b981, #059669); border: none; color: white; cursor: pointer; border-radius: 6px; font-weight: bold;">
+                        <i class="fa-solid fa-floppy-disk"></i> Save BG Color & Brightness
+                    </button>
                 </div>
             </div>
         </div>
@@ -1548,23 +1618,28 @@
                     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
                     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
                     "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80"
                 ],
                 female: [
                     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
                     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
                     "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80"
                 ]
             },
             "India": {
                 male: [
                     "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80"
                 ],
                 female: [
                     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80"
                 ]
             },
             "Western": {
@@ -1572,54 +1647,82 @@
                     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
                     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
                     "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80"
                 ],
                 female: [
                     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
                     "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=400&q=80",
                     "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
                 ]
             },
             "Latin": {
                 male: [
                     "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80"
                 ],
                 female: [
                     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80"
                 ]
             },
             "MiddleEastern": {
                 male: [
                     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80"
                 ],
                 female: [
                     "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
-                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80"
                 ]
             }
         };
 
+        const usedPhotoSet = new Set();
+
         function get100PercentMatchedPhoto(country, gender) {
-            let pool = countryPhotos[country];
-            if (!pool) {
+            let poolGroup = countryPhotos[country];
+            if (!poolGroup) {
                 if (["Brazil", "Mexico"].includes(country)) {
-                    pool = countryPhotos["Latin"];
+                    poolGroup = countryPhotos["Latin"];
                 } else if (["Iran", "Turkey"].includes(country)) {
-                    pool = countryPhotos["MiddleEastern"];
+                    poolGroup = countryPhotos["MiddleEastern"];
                 } else if (["India", "Bangladesh"].includes(country)) {
-                    pool = countryPhotos["Bangladesh"];
+                    poolGroup = countryPhotos["Bangladesh"];
                 } else {
-                    pool = countryPhotos["Western"];
+                    poolGroup = countryPhotos["Western"];
                 }
             }
-            if (pool && pool[gender]) {
-                const photosList = pool[gender];
-                return photosList[Math.floor(Math.random() * photosList.length)];
+
+            if (poolGroup && poolGroup[gender] && poolGroup[gender].length > 0) {
+                const available = poolGroup[gender].filter(url => !usedPhotoSet.has(url));
+                let chosenUrl = "";
+
+                if (available.length > 0) {
+                    chosenUrl = available[Math.floor(Math.random() * available.length)];
+                } else {
+                    // Reset used history for this pool if all photos have been shown
+                    poolGroup[gender].forEach(url => usedPhotoSet.delete(url));
+                    chosenUrl = poolGroup[gender][Math.floor(Math.random() * poolGroup[gender].length)];
+                }
+
+                usedPhotoSet.add(chosenUrl);
+                if (usedPhotoSet.size > 100) {
+                    const firstVal = usedPhotoSet.values().next().value;
+                    usedPhotoSet.delete(firstVal);
+                }
+
+                // Add unique signature query parameter to force browser cache bypass & ensure no visual repeat
+                const uniqueSig = Math.floor(Math.random() * 900000) + 100000;
+                return chosenUrl.includes('?') ? `${chosenUrl}&sig=${uniqueSig}` : `${chosenUrl}?sig=${uniqueSig}`;
             }
+
             return null;
         }
 
@@ -1767,9 +1870,58 @@
             }
         }
 
+        function applyBgFilter(brightnessVal, colorVal, useColorTint) {
+            document.body.style.filter = `brightness(${brightnessVal}%)`;
+            if (useColorTint && colorVal) {
+                document.body.style.backgroundColor = colorVal;
+            }
+        }
+
+        function previewBgAdjustments() {
+            const brightnessVal = document.getElementById('bg-brightness-range').value;
+            const colorVal = document.getElementById('bg-color-picker').value;
+            const useColorTint = document.getElementById('bg-use-color-tint').checked;
+
+            document.getElementById('brightness-val-text').innerText = `${brightnessVal}%`;
+            applyBgFilter(brightnessVal, colorVal, useColorTint);
+        }
+
+        function saveBgAdjustments() {
+            const brightnessVal = document.getElementById('bg-brightness-range').value;
+            const colorVal = document.getElementById('bg-color-picker').value;
+            const useColorTint = document.getElementById('bg-use-color-tint').checked;
+
+            localStorage.setItem('bg_brightness', brightnessVal);
+            localStorage.setItem('bg_color_tint', colorVal);
+            localStorage.setItem('bg_use_tint', useColorTint ? 'true' : 'false');
+
+            applyBgFilter(brightnessVal, colorVal, useColorTint);
+            closeThemeModal();
+            showNotification('BG Color & Brightness Saved permanently!');
+        }
+
+        function loadSavedBgAdjustments() {
+            const savedBrightness = localStorage.getItem('bg_brightness') || '100';
+            const savedColor = localStorage.getItem('bg_color_tint') || '#8a2be2';
+            const savedUseTint = localStorage.getItem('bg_use_tint') === 'true';
+
+            const brightnessRange = document.getElementById('bg-brightness-range');
+            const colorPicker = document.getElementById('bg-color-picker');
+            const useTintCheckbox = document.getElementById('bg-use-color-tint');
+            const valText = document.getElementById('brightness-val-text');
+
+            if (brightnessRange) brightnessRange.value = savedBrightness;
+            if (colorPicker) colorPicker.value = savedColor;
+            if (useTintCheckbox) useTintCheckbox.checked = savedUseTint;
+            if (valText) valText.innerText = `${savedBrightness}%`;
+
+            applyBgFilter(savedBrightness, savedColor, savedUseTint);
+        }
+
         window.onload = function() {
             applySavedTheme();
             applyPremiumState();
+            loadSavedBgAdjustments();
             generateIdentity();
         };
 
