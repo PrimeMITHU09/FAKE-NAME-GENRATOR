@@ -839,56 +839,73 @@
             height: 100%;
         }
 
-        /* Sheeter Modal & Floating Change Name Button Styles */
+        /* SHEETER MODAL DARK GLASS & CLEAN TABLE DESIGN */
         .sheeter-modal-box {
-            max-width: 880px;
+            max-width: 940px;
             width: 95%;
-            height: 85vh;
+            height: 88vh;
             display: flex;
             flex-direction: column;
             position: relative;
+            background: #141224 !important;
+            color: #ffffff !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7) !important;
+            overflow: hidden;
         }
 
         .sheeter-table-container {
             flex: 1;
             overflow-y: auto;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
             margin-top: 10px;
-            background: #fff;
+            background: #1a172e;
         }
 
         .sheeter-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 13px;
             text-align: left;
+            color: #f1f5f9;
         }
 
         .sheeter-table th, .sheeter-table td {
-            border: 1px solid #ddd;
-            padding: 6px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 14px;
         }
 
         .sheeter-table th {
-            background-color: #8a2be2;
-            color: #fff;
+            background: linear-gradient(135deg, #3b0764, #2e1065);
+            color: #e9d5ff;
             position: sticky;
             top: 0;
             z-index: 10;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .sheeter-table th.col-d-header {
-            background-color: #6d28d9;
-            font-weight: bold;
+            background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+            color: #ffffff !important;
+            font-weight: 800;
+            border-bottom: 2px solid #a855f7;
         }
 
         .sheeter-table tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .sheeter-table tr:hover {
+            background-color: rgba(138, 43, 226, 0.15);
         }
 
         .sheeter-table tr.marked {
-            background-color: #e9d5ff !important;
+            background-color: rgba(168, 85, 247, 0.25) !important;
         }
 
         .sheeter-floating-btn {
@@ -898,11 +915,11 @@
             background: linear-gradient(135deg, #8a2be2, #4a00e0);
             color: #ffffff !important;
             border: none;
-            padding: 10px 20px;
+            padding: 11px 22px;
             border-radius: 30px;
             font-size: 13px;
             font-weight: bold;
-            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.6);
             cursor: pointer;
             z-index: 1000;
             transition: all 0.25s ease;
@@ -1233,7 +1250,6 @@
                     <span class="adv-options-link" onclick="openDocModal('Passport')"><i class="fa-solid fa-passport"></i> Passport</span>
                     <span class="adv-options-link" onclick="openDocModal('NID')"><i class="fa-solid fa-address-card"></i> NID</span>
                     <span class="adv-options-link" onclick="openCreditModal()"><i class="fa-solid fa-credit-card"></i> Card Generator (3 Cards)</span>
-                    <span class="adv-options-link" onclick="openSheeterModal()"><i class="fa-solid fa-table-list"></i> Sheeter</span>
                 </div>
             </div>
 
@@ -1272,6 +1288,14 @@
 
             <!-- COPY BUTTONS POSITIONED RIGHT NEXT TO TEXT VALUES -->
             <div class="right-panel">
+                <div class="info-row large" style="margin-bottom: 14px; background: rgba(138, 43, 226, 0.15); padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(138, 43, 226, 0.3); display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="label" style="color: #c084fc; font-weight: bold; font-size: 14px;"><i class="fa-solid fa-user-check"></i> Full Name:</span>
+                        <span class="value" id="fullname-display" style="color: #ffffff; font-weight: 800; font-size: 17px;">Bert Y. Steininger</span>
+                    </div>
+                    <div class="copy-btn-col"><button class="btn-generate" onclick="copyFullName(this)" style="padding: 6px 14px; font-size: 12px; background: linear-gradient(135deg, #8a2be2, #4a00e0); border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold;"><i class="fa-solid fa-copy"></i> Copy Full Name</button></div>
+                </div>
+
                 <div class="info-row large">
                     <span class="label">First Name:</span>
                     <span class="value" id="fn">Bert Y.</span>
@@ -1398,75 +1422,6 @@
         </div>
     </div>
 
-    <!-- SHEETER MODAL (Google Drive Link Preview & Column D 12 Rows) -->
-    <div class="modal-overlay" id="sheeter-modal" onclick="closeModalOnOverlay(event)">
-        <div class="modal-box sheeter-modal-box">
-            <div class="modal-header">
-                <span><i class="fa-solid fa-table-list"></i> Identity Sheeter (Create Google Sheet & 12 Rows Sync)</span>
-                <button class="modal-close-btn" onclick="closeSheeterModal()">&times;</button>
-            </div>
-            <div class="modal-body" style="padding: 18px; display: flex; flex-direction: column; overflow: hidden; position: relative;">
-                <!-- Phase 1: Drive Link Input & Create Sheet -->
-                <div id="sheeter-drive-step" style="text-align: center; margin: auto; padding: 20px; max-width: 580px;">
-                    <h3 style="margin-bottom: 8px; color: #8a2be2;"><i class="fa-solid fa-file-excel"></i> Create or Link Google Sheet</h3>
-                    <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Open a fresh Google Sheet or paste an existing link. Column D (12 Rows) full name changer will operate live inside!</p>
-                    
-                    <!-- 1-Click Create Google Sheet Button -->
-                    <button class="btn-generate" onclick="createNewGoogleSheet()" style="background: linear-gradient(135deg, #10b981, #059669); width: 100%; padding: 12px; font-size: 14px; font-weight: bold; margin-bottom: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
-                        <i class="fa-solid fa-file-circle-plus"></i> Create New Google Sheet (1-Click Popup)
-                    </button>
-
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
-                        <hr style="flex: 1; border: 0; border-top: 1px dashed #ccc;">
-                        <span style="font-size: 11px; font-weight: bold; color: #888;">OR PASTE EXISTING LINK</span>
-                        <hr style="flex: 1; border: 0; border-top: 1px dashed #ccc;">
-                    </div>
-
-                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                        <input type="text" id="sheeter-drive-url" placeholder="https://docs.google.com/spreadsheets/d/..." style="flex: 1; min-width: 240px; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px;">
-                        <button class="btn-generate" onclick="confirmDriveLink()" style="padding: 10px 18px; font-size: 13px;">
-                            <i class="fa-solid fa-up-right-from-square"></i> Open & Embed Sheet
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Phase 2: Sheet View & Column D Grid (12 Rows) -->
-                <div id="sheeter-grid-step" style="display: none; flex-direction: column; height: 100%; overflow: hidden;">
-                    <!-- Embedded Google Drive Sheet Frame -->
-                    <iframe id="sheeter-drive-iframe" style="width: 100%; height: 220px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px; display: none;"></iframe>
-
-                    <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px;">
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <span style="font-size: 13px; font-weight: bold; color: #6d28d9;"><i class="fa-solid fa-table-columns"></i> Column D: Full Name (12 Rows)</span>
-                        </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="copy-tag" onclick="openSheetInNewTab()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Sheet in New Tab</button>
-                            <button class="copy-tag" onclick="exportSheeterData(this)"><i class="fa-solid fa-copy"></i> Copy All 12 Rows</button>
-                        </div>
-                    </div>
-
-                    <div class="sheeter-table-container">
-                        <table class="sheeter-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 50px;">Col A (#)</th>
-                                    <th style="width: 80px;">Col B (Gender)</th>
-                                    <th style="width: 100px;">Col C (Country)</th>
-                                    <th class="col-d-header">Col D (Full Name - 12 Rows)</th>
-                                    <th>Col E (Gmail)</th>
-                                    <th>Col F (Phone)</th>
-                                    <th>Col G (SSN)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sheeter-tbody"></tbody>
-                        </table>
-                    </div>
-
-                    <!-- Floating Change Name Button -->
-                    <button class="sheeter-floating-btn" onclick="changeColumnDNames()"><i class="fa-solid fa-rotate"></i> Change Column D Names (12 Rows)</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- PREMIUM SUBSCRIPTION MODAL -->
@@ -2058,8 +2013,15 @@
                 let age = `${user.dob.age} years old`;
 
                 document.getElementById("avatar-img").src = photoUrl;
-                document.getElementById("fn").innerText = middleInitial ? `${firstName} ${middleInitial}` : firstName;
+                let displayFn = middleInitial ? `${firstName} ${middleInitial}` : firstName;
+                document.getElementById("fn").innerText = displayFn;
                 document.getElementById("ln").innerText = lastName;
+
+                const fullnameEl = document.getElementById("fullname-display");
+                if (fullnameEl) {
+                    fullnameEl.innerText = `${displayFn} ${lastName}`.trim();
+                }
+
                 document.getElementById("street").innerText = street;
                 document.getElementById("city").innerText = city;
                 document.getElementById("state").innerText = state;
@@ -2283,6 +2245,21 @@
             navigator.clipboard.writeText(fullYear).then(() => {
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '<i class="fa-solid fa-check"></i> Year';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        }
+
+        function copyFullName(btn) {
+            const fullnameEl = document.getElementById("fullname-display");
+            const fullNameText = fullnameEl ? fullnameEl.innerText.trim() : "";
+
+            navigator.clipboard.writeText(fullNameText).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied Name!';
                 btn.classList.add('copied');
                 setTimeout(() => {
                     btn.innerHTML = originalText;
@@ -2643,13 +2620,13 @@
             const tbody = document.getElementById('sheeter-tbody');
             tbody.innerHTML = sheeterRowsData.map(row => `
                 <tr class="${row.marked ? 'marked' : ''}" id="sheeter-tr-${row.id}">
-                    <td><strong>${row.id}</strong></td>
-                    <td>${row.gender}</td>
-                    <td>${row.country}</td>
-                    <td><strong id="sheeter-name-${row.id}" style="color: #8a2be2;">${row.name}</strong></td>
-                    <td>${row.email}</td>
-                    <td>${row.phone}</td>
-                    <td>${row.ssn}</td>
+                    <td style="color: #94a3b8; font-weight: bold;">${row.id}</td>
+                    <td style="color: #cbd5e1;">${row.gender}</td>
+                    <td style="color: #cbd5e1;">${row.country}</td>
+                    <td><strong id="sheeter-name-${row.id}" style="color: #c084fc; font-size: 14px;">${row.name}</strong></td>
+                    <td style="color: #38bdf8;">${row.email}</td>
+                    <td style="color: #94a3b8;">${row.phone}</td>
+                    <td style="color: #94a3b8;">${row.ssn}</td>
                 </tr>
             `).join('');
         }
