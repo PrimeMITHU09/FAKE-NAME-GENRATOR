@@ -1677,6 +1677,9 @@
 
         function setRealtimeTheme(themeName) {
             document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber', 'theme-custom-bg');
+            if (themeName !== 'custom') {
+                document.body.style.backgroundImage = '';
+            }
             
             if (themeName === 'dark') {
                 document.body.classList.add('dark-mode');
