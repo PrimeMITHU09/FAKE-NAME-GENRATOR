@@ -1061,6 +1061,28 @@
             color: #ffffff !important;
         }
 
+        /* ADJUSTABLE DYNAMIC FONT SIZES & CONTRAST */
+        body.font-size-sm .info-row .value { font-size: 14px !important; }
+        body.font-size-sm .info-row .label { font-size: 13px !important; }
+        
+        body.font-size-md .info-row .value { font-size: 16px !important; }
+        body.font-size-md .info-row .label { font-size: 15px !important; }
+        
+        body.font-size-lg .info-row .value { font-size: 18px !important; }
+        body.font-size-lg .info-row .label { font-size: 17px !important; }
+        
+        body.font-size-xl .info-row .value { font-size: 20px !important; }
+        body.font-size-xl .info-row .label { font-size: 19px !important; }
+
+        body.high-contrast-font .info-row .value,
+        body.high-contrast-font .info-row .label,
+        body.high-contrast-font .generator-header h3,
+        body.high-contrast-font .section-header {
+            font-weight: 900 !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.85), 0 0 2px #000 !important;
+            letter-spacing: 0.3px !important;
+        }
+
         /* GLASSMORPHISM FOOTER */
         footer {
             margin-top: 28px;
@@ -1518,6 +1540,29 @@
                     <button class="btn-generate" onclick="saveBgAdjustments()" style="width: 100%; padding: 8px; font-size: 12px; background: linear-gradient(135deg, #10b981, #059669); border: none; color: white; cursor: pointer; border-radius: 6px; font-weight: bold;">
                         <i class="fa-solid fa-floppy-disk"></i> Save Theme & Color Settings
                     </button>
+                </div>
+
+                <!-- Adjustable Font Size & Readability Controls -->
+                <div style="margin-top: 15px; border-top: 1px dashed #8a2be2; padding-top: 12px; text-align: left;">
+                    <label style="font-weight: bold; font-size: 12px; color: #8a2be2; display: block; margin-bottom: 8px;">
+                        <i class="fa-solid fa-font"></i> Adjustable Font Size & High Contrast:
+                    </label>
+
+                    <!-- Font Size Selector Buttons -->
+                    <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                        <button class="theme-btn" onclick="setFontSize('sm')" style="flex: 1; padding: 6px; font-size: 11px;">Small</button>
+                        <button class="theme-btn" onclick="setFontSize('md')" style="flex: 1; padding: 6px; font-size: 11px; border-color: #8a2be2;">Normal</button>
+                        <button class="theme-btn" onclick="setFontSize('lg')" style="flex: 1; padding: 6px; font-size: 11px;">Large</button>
+                        <button class="theme-btn" onclick="setFontSize('xl')" style="flex: 1; padding: 6px; font-size: 11px;">Huge</button>
+                    </div>
+
+                    <!-- Ultra Readability High Contrast Toggle -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                        <label style="font-size: 11px; color: #444; font-weight: bold; cursor: pointer;">
+                            <input type="checkbox" id="font-high-contrast" onchange="toggleHighContrast(this)">
+                            <i class="fa-solid fa-eye"></i> Ultra High Contrast Mode (Crisp Text Shadow)
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2078,6 +2123,42 @@
             showNotification('BG Color & Theme Saved permanently!');
         }
 
+        function setFontSize(size) {
+            document.body.classList.remove('font-size-sm', 'font-size-md', 'font-size-lg', 'font-size-xl');
+            document.body.classList.add(`font-size-${size}`);
+            localStorage.setItem('font_size', size);
+            showNotification(`Font Size adjusted: ${size.toUpperCase()} (Saved)`);
+        }
+
+        function toggleHighContrast(checkbox) {
+            if (checkbox.checked) {
+                document.body.classList.add('high-contrast-font');
+                localStorage.setItem('high_contrast_font', 'true');
+                showNotification('Ultra High Contrast Text Mode Enabled!');
+            } else {
+                document.body.classList.remove('high-contrast-font');
+                localStorage.setItem('high_contrast_font', 'false');
+                showNotification('Ultra High Contrast Text Mode Disabled.');
+            }
+        }
+
+        function loadSavedFontSettings() {
+            const savedSize = localStorage.getItem('font_size') || 'md';
+            const savedHighContrast = localStorage.getItem('high_contrast_font') === 'true';
+
+            document.body.classList.remove('font-size-sm', 'font-size-md', 'font-size-lg', 'font-size-xl');
+            document.body.classList.add(`font-size-${savedSize}`);
+
+            const contrastCheckbox = document.getElementById('font-high-contrast');
+            if (savedHighContrast) {
+                document.body.classList.add('high-contrast-font');
+                if (contrastCheckbox) contrastCheckbox.checked = true;
+            } else {
+                document.body.classList.remove('high-contrast-font');
+                if (contrastCheckbox) contrastCheckbox.checked = false;
+            }
+        }
+
         function loadSavedBgAdjustments() {
             const savedBrightness = localStorage.getItem('bg_brightness') || '100';
             const savedColor = localStorage.getItem('bg_color_tint') || '#8a2be2';
@@ -2100,6 +2181,7 @@
             applySavedTheme();
             applyPremiumState();
             loadSavedBgAdjustments();
+            loadSavedFontSettings();
             generateIdentity();
         };
 
