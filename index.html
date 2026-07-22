@@ -2682,25 +2682,36 @@
 
             closePremiumModal();
             applyPremiumState();
-            showNotification(`🎉 Premium Claimed! ${currentSelectedPlan.toUpperCase()} Pass active. Premium features unlocked!`);
+            showNotification(`🎉 Premium Claimed! ${currentSelectedPlan.toUpperCase()} Pass (${days} days) active. All tools unlocked!`);
         }
 
         function cancelPremiumSubscription() {
-            if (confirm("Are you sure you want to cancel your Premium subscription? Premium buttons will be hidden.")) {
-                localStorage.removeItem('premium_active');
-                localStorage.removeItem('premium_plan');
-                localStorage.removeItem('premium_expiry');
-                applyPremiumState();
-                showNotification('Premium Subscription Cancelled. Premium features are now hidden.');
-            }
+            localStorage.removeItem('premium_active');
+            localStorage.removeItem('premium_plan');
+            localStorage.removeItem('premium_expiry');
+            applyPremiumState();
+            showNotification('Premium Pass Reset.');
         }
 
         function applyPremiumState() {
-            localStorage.setItem('premium_active', 'true');
+            const isActive = localStorage.getItem('premium_active') === 'true';
+            const expiry = parseInt(localStorage.getItem('premium_expiry') || '0', 10);
+            const now = new Date().getTime();
+
             const premiumBtnText = document.getElementById('premium-btn-text');
             const statusText = document.getElementById('premium-status-text');
-            if (premiumBtnText) premiumBtnText.innerText = '⭐ Premium Active (30d)';
-            if (statusText) statusText.innerText = 'Status: Full Access Unlocked';
+
+            if (isActive && expiry > now) {
+                const remainingDays = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+                const planType = localStorage.getItem('premium_plan') || 'weekly';
+
+                if (premiumBtnText) premiumBtnText.innerText = `⭐ Premium Active (${remainingDays}d)`;
+                if (statusText) statusText.innerText = `Status: Premium Active (${planType.toUpperCase()} - ${remainingDays} days remaining)`;
+            } else {
+                localStorage.setItem('premium_active', 'true');
+                if (premiumBtnText) premiumBtnText.innerText = '⭐ Premium Active';
+                if (statusText) statusText.innerText = 'Status: Full Access Unlocked';
+            }
         }
     </script>
 </body>
