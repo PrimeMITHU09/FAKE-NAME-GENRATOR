@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prime Identity | Fake Name Generator</title>
-    <!-- Font Awesome for Icons -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -91,7 +91,7 @@
         }
 
         .form-group select {
-            width: 180px;
+            width: 220px;
             padding: 5px 8px;
             border: 1px solid #ccc;
             border-radius: 3px;
@@ -121,10 +121,43 @@
             background-color: #c9302c;
         }
 
-        .adv-options {
+        .adv-options-link {
             color: #d9534f;
             font-size: 13px;
             text-decoration: none;
+            cursor: pointer;
+        }
+
+        .adv-options-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Advanced Options Panel */
+        .adv-panel {
+            display: none;
+            background: #fff;
+            border: 1px dashed #d9534f;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .adv-panel.open {
+            display: block;
+        }
+
+        .adv-panel-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #d9534f;
+        }
+
+        .adv-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
         }
 
         /* Identity Layout */
@@ -288,7 +321,8 @@
             color: #eee;
             border-color: #444;
         }
-        body.dark-mode select {
+        body.dark-mode select,
+        body.dark-mode input[type="text"] {
             background-color: #222;
             color: #fff;
             border-color: #555;
@@ -302,6 +336,9 @@
             background-color: #3a2e1b;
             border-color: #524226;
             color: #e0ca9e;
+        }
+        body.dark-mode .adv-panel {
+            background-color: #2d2d2d;
         }
     </style>
 </head>
@@ -331,15 +368,47 @@
                 <select id="country">
                     <option value="United States">United States</option>
                     <option value="United Kingdom">United Kingdom</option>
-                    <option value="Germany">Germany</option>
+                    <option value="Canada">Canada</option>
                     <option value="Australia">Australia</option>
+                    <option value="Germany">Germany</option>
                     <option value="France">France</option>
+                    <option value="Brazil">Brazil</option>
+                    <option value="India">India</option>
+                    <option value="Spain">Spain</option>
+                    <option value="Switzerland">Switzerland</option>
+                    <option value="Denmark">Denmark</option>
+                    <option value="Finland">Finland</option>
+                    <option value="Ireland">Ireland</option>
+                    <option value="Iran">Iran</option>
+                    <option value="Mexico">Mexico</option>
+                    <option value="Netherlands">Netherlands</option>
+                    <option value="Norway">Norway</option>
+                    <option value="New Zealand">New Zealand</option>
+                    <option value="Turkey">Turkey</option>
+                    <option value="Ukraine">Ukraine</option>
                 </select>
             </div>
 
             <div class="btn-group">
                 <button class="btn-generate" onclick="generateIdentity()">Generate</button>
-                <a href="#" class="adv-options" onclick="return false;">Advanced Options</a>
+                <span class="adv-options-link" onclick="toggleAdvOptions()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
+            </div>
+
+            <!-- Advanced Options Toggle Drawer -->
+            <div class="adv-panel" id="adv-panel">
+                <div class="adv-panel-title">Advanced Security & Identity Settings:</div>
+                <div class="adv-field">
+                    <input type="checkbox" id="gen-password" checked>
+                    <label for="gen-password">Generate Safe Password alongside profile</label>
+                </div>
+                <div class="adv-field">
+                    <label>Email Domain:</label>
+                    <select id="email-domain" style="width: 140px; padding: 2px;">
+                        <option value="gmail.com">@gmail.com</option>
+                        <option value="outlook.com">@outlook.com</option>
+                        <option value="yahoo.com">@yahoo.com</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -396,9 +465,15 @@
                 </div>
 
                 <div class="info-row">
-                    <span class="label">Mother's maiden name</span>
-                    <span class="value" id="mmn">Steiningerson</span>
-                    <button class="copy-tag" onclick="copyText('mmn', this)">Copy</button>
+                    <span class="label">Gmail address</span>
+                    <span class="value" id="gmail">bert.steininger84@gmail.com</span>
+                    <button class="copy-tag" onclick="copyText('gmail', this)">Copy</button>
+                </div>
+
+                <div id="password-row" class="info-row">
+                    <span class="label">Password</span>
+                    <span class="value" id="generated-pass">P@ssW0rd2026!</span>
+                    <button class="copy-tag" onclick="copyText('generated-pass', this)">Copy</button>
                 </div>
 
                 <div class="info-row">
@@ -419,7 +494,7 @@
                 <div class="info-row">
                     <span class="label">Phone</span>
                     <span class="value" id="phone">0554-4430674</span>
-                    <button class="copy-tag" onclick="copyText('phone', this)">Copy</button>
+                    <button class="copy-tag" onclick="copyText('phone', this, true)">Copy</button>
                 </div>
 
                 <div class="info-row">
@@ -470,17 +545,47 @@
             }
         }
 
+        function toggleAdvOptions() {
+            const panel = document.getElementById('adv-panel');
+            panel.classList.toggle('open');
+        }
+
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
+        // Full Mapping for 21 Countries
         const countryToNatMap = {
             "United States": { nat: "us", phoneCode: "1" },
             "United Kingdom": { nat: "gb", phoneCode: "44" },
-            "Germany": { nat: "de", phoneCode: "49" },
+            "Canada": { nat: "ca", phoneCode: "1" },
             "Australia": { nat: "au", phoneCode: "61" },
-            "France": { nat: "fr", phoneCode: "33" }
+            "Germany": { nat: "de", phoneCode: "49" },
+            "France": { nat: "fr", phoneCode: "33" },
+            "Brazil": { nat: "br", phoneCode: "55" },
+            "India": { nat: "in", phoneCode: "91" },
+            "Spain": { nat: "es", phoneCode: "34" },
+            "Switzerland": { nat: "ch", phoneCode: "41" },
+            "Denmark": { nat: "dk", phoneCode: "45" },
+            "Finland": { nat: "fi", phoneCode: "358" },
+            "Ireland": { nat: "ie", phoneCode: "353" },
+            "Iran": { nat: "ir", phoneCode: "98" },
+            "Mexico": { nat: "mx", phoneCode: "52" },
+            "Netherlands": { nat: "nl", phoneCode: "31" },
+            "Norway": { nat: "no", phoneCode: "47" },
+            "New Zealand": { nat: "nz", phoneCode: "64" },
+            "Turkey": { nat: "tr", phoneCode: "90" },
+            "Ukraine": { nat: "ua", phoneCode: "380" }
         };
+
+        function generateFakePassword() {
+            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
+            let pass = "";
+            for (let i = 0; i < 10; i++) {
+                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return pass;
+        }
 
         async function generateIdentity() {
             let genderInput = document.getElementById("gender").value.toLowerCase();
@@ -522,7 +627,20 @@
 
                 let photoUrl = user.picture.large;
                 let phone = user.phone;
-                let mmn = user.name.last + "son";
+
+                // Real-feeling Gmail Address Generation
+                let domain = document.getElementById("email-domain").value;
+                let birthYear = new Date(user.dob.date).getFullYear().toString().substring(2);
+                let cleanFirstName = firstName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                let cleanLastName = lastName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                
+                let emailFormats = [
+                    `${cleanFirstName}.${cleanLastName}${birthYear}@${domain}`,
+                    `${cleanFirstName}${cleanLastName}${getRandomInt(10, 99)}@${domain}`,
+                    `${cleanFirstName}_${cleanLastName}@${domain}`
+                ];
+                let generatedEmail = emailFormats[Math.floor(Math.random() * emailFormats.length)];
+
                 let ssn = `${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-XXXX`;
                 let geo = `${user.location.coordinates.latitude}, ${user.location.coordinates.longitude}`;
 
@@ -543,7 +661,16 @@
                 document.getElementById("meaning-name").innerText = firstName;
                 document.getElementById("meaning-link").href = `https://www.behindthename.com/name/${firstName.toLowerCase()}`;
 
-                document.getElementById("mmn").innerText = mmn;
+                document.getElementById("gmail").innerText = generatedEmail;
+                
+                // Advanced Password Check
+                if (document.getElementById("gen-password").checked) {
+                    document.getElementById("password-row").style.display = "flex";
+                    document.getElementById("generated-pass").innerText = generateFakePassword();
+                } else {
+                    document.getElementById("password-row").style.display = "none";
+                }
+
                 document.getElementById("ssn").innerText = ssn;
                 document.getElementById("geo").innerText = geo;
                 document.getElementById("phone").innerText = phone;
@@ -560,8 +687,15 @@
             generateIdentity();
         };
 
-        function copyText(elementId, btn) {
-            const text = document.getElementById(elementId).innerText.trim();
+        // Enhanced Copy Function: Automatically strips formatting if requested (isPhone)
+        function copyText(elementId, btn, isPhone = false) {
+            let text = document.getElementById(elementId).innerText.trim();
+            
+            // Clean phone numbers: remove dashes, spaces, brackets when copying
+            if (isPhone) {
+                text = text.replace(/\D/g, '');
+            }
+
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = btn.innerText;
                 btn.innerText = 'Copied';
