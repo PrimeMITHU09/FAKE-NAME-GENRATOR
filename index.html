@@ -7,267 +7,317 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --primary-color: #007bff;
-            --primary-hover: #0056b3;
-            --border-color: #e0e0e0;
-            --secondary-bg: #f8f9fa;
-            --shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        body.dark-mode {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --primary-color: #3f51b5;
-            --primary-hover: #303f9f;
-            --border-color: #333333;
-            --secondary-bg: #2a2a2a;
-            --shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background-color 0.3s, color 0.3s;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #f4f4f4;
+            color: #333;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            padding: 20px;
             min-height: 100vh;
         }
 
-        header {
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 30px;
+        .header-bar {
+            width: 100%;
+            max-width: 780px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow);
+            margin-bottom: 10px;
         }
 
         .brand-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #d9534f;
         }
 
-        .theme-toggle-btn {
-            background-color: var(--secondary-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 16px;
-            border-radius: 20px;
+        .theme-btn {
+            background-color: #e6e6e6;
+            border: 1px solid #ccc;
+            padding: 5px 12px;
+            border-radius: 3px;
             cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 12px;
+            color: #333;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
-            flex: 1;
+        .main-card {
+            background-color: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 780px;
+            padding: 25px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .controls-card {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
+        /* Top Controls Box */
+        .generator-box {
+            background-color: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 18px;
             margin-bottom: 25px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-            justify-content: space-between;
         }
 
-        .control-group {
+        .generator-box h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            width: 100px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group select {
+            width: 180px;
+            padding: 5px 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 13px;
+            background-color: #fff;
+        }
+
+        .btn-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .btn-generate {
+            background-color: #d9534f;
+            color: #fff;
+            border: 1px solid #d43f3a;
+            padding: 6px 18px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .btn-generate:hover {
+            background-color: #c9302c;
+        }
+
+        .adv-options {
+            color: #d9534f;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        /* Identity Layout */
+        .identity-container {
+            display: flex;
+            gap: 25px;
+        }
+
+        .left-panel {
+            width: 140px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            flex: 1;
-            min-width: 180px;
+            align-items: flex-start;
         }
 
-        .control-group label {
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border: 1px solid #ccc;
+            object-fit: cover;
+            margin-bottom: 8px;
+        }
+
+        .logged-in-text {
+            font-size: 11px;
+            color: #777;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .btn-gplus {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .right-panel {
+            flex: 1;
+        }
+
+        /* Identity Details Lines */
+        .info-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-row.large {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .info-row .label {
+            font-weight: bold;
+            color: #333;
+            min-width: 140px;
+        }
+
+        .info-row .value {
+            color: #222;
+            margin-right: 10px;
+        }
+
+        .copy-tag {
+            background-color: #e6e6e6;
+            border: 1px solid #ccc;
+            color: #333;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .copy-tag:hover {
+            background-color: #d8d8d8;
+        }
+
+        .copy-tag.copied {
+            background-color: #5cb85c;
+            color: white;
+            border-color: #4cae4c;
+        }
+
+        /* Banner Box */
+        .meaning-box {
+            background-color: #fcf8e3;
+            border: 1px solid #faebcc;
+            border-left: 3px solid #d9534f;
+            padding: 10px;
+            margin: 18px 0;
             font-size: 13px;
-            font-weight: 600;
+            color: #8a6d3b;
+        }
+
+        .meaning-box a {
+            color: #d9534f;
+            text-decoration: underline;
+        }
+
+        .section-header {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
             text-transform: uppercase;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+            margin: 18px 0 10px 0;
             letter-spacing: 0.5px;
         }
 
-        select, button.generate-btn {
-            padding: 10px 14px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            background-color: var(--secondary-bg);
-            color: var(--text-color);
-            font-size: 14px;
-            outline: none;
-        }
-
-        button.generate-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            align-self: flex-end;
-            min-width: 150px;
-            padding: 11px 14px;
-        }
-
-        button.generate-btn:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .profile-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .profile-header {
-            background-color: var(--secondary-bg);
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 4px solid var(--primary-color);
-            object-fit: cover;
-        }
-
-        .profile-main-info h2 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .profile-main-info p {
-            color: #777;
-            font-size: 14px;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 25px;
-        }
-
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 12px;
-            background-color: var(--secondary-bg);
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-        }
-
-        .detail-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #777;
-        }
-
-        .detail-value-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .detail-value {
-            font-weight: 600;
-            font-size: 14px;
-            word-break: break-all;
-        }
-
-        .copy-btn {
-            background: transparent;
-            border: none;
-            color: var(--primary-color);
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .copy-btn:hover {
-            background-color: rgba(0,123,255,0.1);
-        }
-
-        .copy-btn.copied {
-            color: #28a745;
-        }
-
         footer {
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            padding: 20px;
+            margin-top: 25px;
             text-align: center;
-            margin-top: 40px;
+            font-size: 12px;
+            color: #777;
         }
 
         .social-links {
+            margin-top: 8px;
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 10px;
+            gap: 12px;
         }
 
         .social-links a {
-            color: var(--text-color);
-            font-size: 18px;
+            color: #555;
+            font-size: 15px;
             text-decoration: none;
         }
 
         .social-links a:hover {
-            color: var(--primary-color);
+            color: #d9534f;
+        }
+
+        /* Dark Mode Override */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #ddd;
+        }
+        body.dark-mode .main-card {
+            background-color: #262626;
+            border-color: #3d3d3d;
+        }
+        body.dark-mode .generator-box {
+            background-color: #303030;
+            border-color: #404040;
+        }
+        body.dark-mode .generator-box h3,
+        body.dark-mode .form-group label,
+        body.dark-mode .info-row .label,
+        body.dark-mode .section-header {
+            color: #eee;
+            border-color: #444;
+        }
+        body.dark-mode select {
+            background-color: #222;
+            color: #fff;
+            border-color: #555;
+        }
+        body.dark-mode .copy-tag {
+            background-color: #444;
+            border-color: #555;
+            color: #fff;
+        }
+        body.dark-mode .meaning-box {
+            background-color: #3a2e1b;
+            border-color: #524226;
+            color: #e0ca9e;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="brand-title">
-            <i class="fa-solid fa-id-card"></i> Prime Identity
-        </div>
-        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">
-            <i class="fa-solid fa-moon"></i> <span>Night Mode</span>
-        </button>
-    </header>
+    <div class="header-bar">
+        <div class="brand-title"><i class="fa-solid fa-id-card"></i> Prime Identity</div>
+        <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">Night Mode</button>
+    </div>
 
-    <div class="container">
-        <!-- Input Controls -->
-        <div class="controls-card">
-            <div class="control-group">
+    <div class="main-card">
+        <!-- Top Controls Box -->
+        <div class="generator-box">
+            <h3>Your Randomly Generated Identity</h3>
+            
+            <div class="form-group">
                 <label for="gender">Gender</label>
                 <select id="gender">
                     <option value="random">Random</option>
@@ -275,8 +325,9 @@
                     <option value="female">Female</option>
                 </select>
             </div>
-            <div class="control-group">
-                <label for="country">Country Set</label>
+
+            <div class="form-group">
+                <label for="country">Country</label>
                 <select id="country">
                     <option value="United States">United States</option>
                     <option value="United Kingdom">United Kingdom</option>
@@ -285,75 +336,111 @@
                     <option value="France">France</option>
                 </select>
             </div>
-            <button class="generate-btn" onclick="generateIdentity()">
-                <i class="fa-solid fa-rotate"></i> Generate
-            </button>
+
+            <div class="btn-group">
+                <button class="btn-generate" onclick="generateIdentity()">Generate</button>
+                <a href="#" class="adv-options" onclick="return false;">Advanced Options</a>
+            </div>
         </div>
 
-        <!-- Generated Profile Display -->
-        <div class="profile-card">
-            <div class="profile-header">
-                <img id="avatar-img" src="" alt="Profile Picture" class="profile-avatar">
-                <div class="profile-main-info">
-                    <h2><span id="fn">John A.</span> <span id="ln">Doe</span></h2>
-                    <p><i class="fa-solid fa-location-dot"></i> <span id="street">123 Main St</span>, <span id="city">New York</span>, <span id="state">NY</span>, <span id="zip">10001</span></p>
-                </div>
+        <!-- Identity Output -->
+        <div class="identity-container">
+            <!-- Left Side Image -->
+            <div class="left-panel">
+                <img id="avatar-img" src="" alt="Profile" class="avatar">
+                <div class="logged-in-text">Logged in users can view full details.</div>
+                <button class="btn-gplus"><i class="fa-brands fa-google"></i> Sign in</button>
             </div>
 
-            <div class="details-grid">
-                <div class="detail-item">
-                    <span class="detail-label">Name Meaning</span>
-                    <div class="detail-value-container">
-                        <span class="detail-value" id="name-meaning">-</span>
-                        <a id="meaning-link" href="#" target="_blank" class="copy-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                    </div>
+            <!-- Right Side Details -->
+            <div class="right-panel">
+                <div class="info-row large">
+                    <span class="label">First Name:</span>
+                    <span class="value" id="fn">Bert Y.</span>
+                    <button class="copy-tag" onclick="copyText('fn', this)">Copy First Name</button>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Mother's Maiden Name</span>
-                    <div class="detail-value-container">
-                        <span class="detail-value" id="mmn">-</span>
-                        <button class="copy-btn" onclick="copyText('mmn', this)">Copy</button>
-                    </div>
+                <div class="info-row large" style="margin-bottom: 15px;">
+                    <span class="label">Last Name:</span>
+                    <span class="value" id="ln">Steininger</span>
+                    <button class="copy-tag" onclick="copyText('ln', this)">Copy Last Name</button>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">SSN / ID Number</span>
-                    <div class="detail-value-container">
-                        <span class="detail-value" id="ssn">-</span>
-                        <button class="copy-btn" onclick="copyText('ssn', this)">Copy</button>
-                    </div>
+                <div class="info-row">
+                    <span class="label">Street:</span>
+                    <span class="value" id="street">9463 Ringstraße</span>
+                    <button class="copy-tag" onclick="copyText('street', this)">Copy</button>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Geo Coordinates</span>
-                    <div class="detail-value-container">
-                        <span class="detail-value" id="geo">-</span>
-                        <button class="copy-btn" onclick="copyText('geo', this)">Copy</button>
-                    </div>
+                <div class="info-row">
+                    <span class="label">City:</span>
+                    <span class="value" id="city">Betzenstein</span>
+                    <button class="copy-tag" onclick="copyText('city', this)">Copy</button>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Phone Number</span>
-                    <div class="detail-value-container">
-                        <span class="detail-value" id="phone">-</span>
-                        <button class="copy-btn" onclick="copyText('phone', this)">Copy</button>
-                    </div>
+                <div class="info-row">
+                    <span class="label">State:</span>
+                    <span class="value" id="state">Saarland</span>
+                    <button class="copy-tag" onclick="copyText('state', this)">Copy</button>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Birthday</span>
-                    <div class="detail-value-container">
-                        <span class="detail-value" id="bday">-</span>
-                        <button class="copy-btn" onclick="copyText('bday', this)">Copy</button>
-                    </div>
+                <div class="info-row">
+                    <span class="label">Zip Code:</span>
+                    <span class="value" id="zip">34743</span>
+                    <button class="copy-tag" onclick="copyText('zip', this)">Copy</button>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Age</span>
-                    <div class="detail-value-container">
-                        <span class="detail-value" id="age">-</span>
-                    </div>
+                <!-- Meaning Banner -->
+                <div class="meaning-box">
+                    Curious what <strong id="meaning-name">Bert</strong> means? <a id="meaning-link" href="#" target="_blank">Click here to find out!</a>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Mother's maiden name</span>
+                    <span class="value" id="mmn">Steiningerson</span>
+                    <button class="copy-tag" onclick="copyText('mmn', this)">Copy</button>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">SSN</span>
+                    <span class="value" id="ssn">780-54-XXXX</span>
+                    <button class="copy-tag" onclick="copyText('ssn', this)">Copy</button>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Geo coordinates</span>
+                    <span class="value" id="geo">-11.5604, -140.0717</span>
+                    <button class="copy-tag" onclick="copyText('geo', this)">Copy</button>
+                </div>
+
+                <!-- Phone Section -->
+                <div class="section-header">PHONE</div>
+
+                <div class="info-row">
+                    <span class="label">Phone</span>
+                    <span class="value" id="phone">0554-4430674</span>
+                    <button class="copy-tag" onclick="copyText('phone', this)">Copy</button>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Country code</span>
+                    <span class="value" id="country-code">1</span>
+                    <button class="copy-tag" onclick="copyText('country-code', this)">Copy</button>
+                </div>
+
+                <!-- Birthday Section -->
+                <div class="section-header">BIRTHDAY</div>
+
+                <div class="info-row">
+                    <span class="label">Birthday</span>
+                    <span class="value" id="bday">December 1, 1970</span>
+                    <button class="copy-tag" onclick="copyText('bday', this)">Copy</button>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Age</span>
+                    <span class="value" id="age">55 years old</span>
+                    <button class="copy-tag" onclick="copyText('age', this)">Copy</button>
                 </div>
             </div>
         </div>
@@ -373,14 +460,13 @@
     <script>
         let generatedUsers = new Set();
 
-        // Toggle Dark / Day Mode
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const btn = document.getElementById('theme-btn');
             if (document.body.classList.contains('dark-mode')) {
-                btn.innerHTML = `<i class="fa-solid fa-sun"></i> <span>Day Mode</span>`;
+                btn.innerText = 'Day Mode';
             } else {
-                btn.innerHTML = `<i class="fa-solid fa-moon"></i> <span>Night Mode</span>`;
+                btn.innerText = 'Night Mode';
             }
         }
 
@@ -388,7 +474,6 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        // Country Mapping
         const countryToNatMap = {
             "United States": { nat: "us", phoneCode: "1" },
             "United Kingdom": { nat: "gb", phoneCode: "44" },
@@ -402,7 +487,6 @@
             let countryInput = document.getElementById("country").value;
 
             let apiGender = genderInput === "random" ? (Math.random() > 0.5 ? "male" : "female") : genderInput;
-
             let selectedCountryData = countryToNatMap[countryInput] || { nat: "us", phoneCode: "1" };
             let natCode = selectedCountryData.nat;
 
@@ -411,7 +495,6 @@
                 let data = await response.json();
                 let user = data.results[0];
 
-                // Prevent Duplicates
                 if (generatedUsers.has(user.login.uuid)) {
                     return generateIdentity();
                 }
@@ -425,7 +508,6 @@
                 let city = user.location.city;
                 let state = user.location.state;
                 
-                // Zip Code Logic (Ensures 5 digits for USA, standard format for others)
                 let rawZip = String(user.location.postcode || '');
                 let zip = rawZip;
 
@@ -449,7 +531,7 @@
                 let birthday = `${monthNames[dobDate.getMonth()]} ${dobDate.getDate()}, ${dobDate.getFullYear()}`;
                 let age = `${user.dob.age} years old`;
 
-                // Update UI Elements
+                // Set Elements
                 document.getElementById("avatar-img").src = photoUrl;
                 document.getElementById("fn").innerText = `${firstName} ${middleInitial}`;
                 document.getElementById("ln").innerText = lastName;
@@ -458,13 +540,14 @@
                 document.getElementById("state").innerText = state;
                 document.getElementById("zip").innerText = zip;
 
-                document.getElementById("name-meaning").innerText = firstName;
+                document.getElementById("meaning-name").innerText = firstName;
                 document.getElementById("meaning-link").href = `https://www.behindthename.com/name/${firstName.toLowerCase()}`;
 
                 document.getElementById("mmn").innerText = mmn;
                 document.getElementById("ssn").innerText = ssn;
                 document.getElementById("geo").innerText = geo;
                 document.getElementById("phone").innerText = phone;
+                document.getElementById("country-code").innerText = selectedCountryData.phoneCode;
                 document.getElementById("bday").innerText = birthday;
                 document.getElementById("age").innerText = age;
 
@@ -473,17 +556,15 @@
             }
         }
 
-        // Generate Data on Page Load
         window.onload = function() {
             generateIdentity();
         };
 
-        // Copy Text Function
         function copyText(elementId, btn) {
             const text = document.getElementById(elementId).innerText.trim();
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = btn.innerText;
-                btn.innerText = 'Copied!';
+                btn.innerText = 'Copied';
                 btn.classList.add('copied');
                 setTimeout(() => {
                     btn.innerText = originalText;
