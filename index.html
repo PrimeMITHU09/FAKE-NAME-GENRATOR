@@ -1,120 +1,496 @@
-let generatedUsers = new Set();
-
-    // Toggle Dark / Day Mode
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        const btn = document.getElementById('theme-btn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = `<i class="fa-solid fa-sun"></i> <span>Day Mode</span>`;
-        } else {
-            btn.innerHTML = `<i class="fa-solid fa-moon"></i> <span>Night Mode</span>`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Identity | Fake Name Generator</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --border-color: #e0e0e0;
+            --secondary-bg: #f8f9fa;
+            --shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-    }
 
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --primary-color: #3f51b5;
+            --primary-hover: #303f9f;
+            --border-color: #333333;
+            --secondary-bg: #2a2a2a;
+            --shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
 
-    // দেশ অনুযায়ী নির্দিষ্ট জিপ কোড এবং কান্ট্রি কোড ম্যাপ
-    const countryToNatMap = {
-        "United States": { nat: "us", phoneCode: "1" },
-        "United Kingdom": { nat: "gb", phoneCode: "44" },
-        "Germany": { nat: "de", phoneCode: "49" },
-        "Australia": { nat: "au", phoneCode: "61" },
-        "France": { nat: "fr", phoneCode: "33" }
-    };
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-    async function generateIdentity() {
-        let genderInput = document.getElementById("gender").value.toLowerCase();
-        let countryInput = document.getElementById("country").value;
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-        // জেন্ডার ফিল্টার
-        let apiGender = genderInput === "random" ? (Math.random() > 0.5 ? "male" : "female") : genderInput;
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
 
-        // কান্ট্রি ফিল্টার (সিলেক্ট করা কান্ট্রির সাথে API NAT ট্যাগ কানেক্ট করা)
-        let selectedCountryData = countryToNatMap[countryInput] || { nat: "us", phoneCode: "1" };
-        let natCode = selectedCountryData.nat;
+        .brand-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-        try {
-            // নির্বাচিত দেশের ডাটা আনতে nat=${natCode} পাঠানো হচ্ছে
-            let response = await fetch(`https://randomuser.me/api/?gender=${apiGender}&nat=${natCode}`);
-            let data = await response.json();
-            let user = data.results[0];
+        .theme-toggle-btn {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-            if (generatedUsers.has(user.login.uuid)) {
-                return generateIdentity();
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .controls-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .control-group label {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, button.generate-btn {
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            font-size: 14px;
+            outline: none;
+        }
+
+        button.generate-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: flex-end;
+            min-width: 150px;
+            padding: 11px 14px;
+        }
+
+        button.generate-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .profile-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-header {
+            background-color: var(--secondary-bg);
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            object-fit: cover;
+        }
+
+        .profile-main-info h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .profile-main-info p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 25px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background-color: var(--secondary-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #777;
+        }
+
+        .detail-value-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(0,123,255,0.1);
+        }
+
+        .copy-btn.copied {
+            color: #28a745;
+        }
+
+        footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-title">
+            <i class="fa-solid fa-id-card"></i> Prime Identity
+        </div>
+        <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">
+            <i class="fa-solid fa-moon"></i> <span>Night Mode</span>
+        </button>
+    </header>
+
+    <div class="container">
+        <!-- Input Controls -->
+        <div class="controls-card">
+            <div class="control-group">
+                <label for="gender">Gender</label>
+                <select id="gender">
+                    <option value="random">Random</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="country">Country Set</label>
+                <select id="country">
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Australia">Australia</option>
+                    <option value="France">France</option>
+                </select>
+            </div>
+            <button class="generate-btn" onclick="generateIdentity()">
+                <i class="fa-solid fa-rotate"></i> Generate
+            </button>
+        </div>
+
+        <!-- Generated Profile Display -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <img id="avatar-img" src="" alt="Profile Picture" class="profile-avatar">
+                <div class="profile-main-info">
+                    <h2><span id="fn">John A.</span> <span id="ln">Doe</span></h2>
+                    <p><i class="fa-solid fa-location-dot"></i> <span id="street">123 Main St</span>, <span id="city">New York</span>, <span id="state">NY</span>, <span id="zip">10001</span></p>
+                </div>
+            </div>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Name Meaning</span>
+                    <div class="detail-value-container">
+                        <span class="detail-value" id="name-meaning">-</span>
+                        <a id="meaning-link" href="#" target="_blank" class="copy-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Mother's Maiden Name</span>
+                    <div class="detail-value-container">
+                        <span class="detail-value" id="mmn">-</span>
+                        <button class="copy-btn" onclick="copyText('mmn', this)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">SSN / ID Number</span>
+                    <div class="detail-value-container">
+                        <span class="detail-value" id="ssn">-</span>
+                        <button class="copy-btn" onclick="copyText('ssn', this)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Geo Coordinates</span>
+                    <div class="detail-value-container">
+                        <span class="detail-value" id="geo">-</span>
+                        <button class="copy-btn" onclick="copyText('geo', this)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Phone Number</span>
+                    <div class="detail-value-container">
+                        <span class="detail-value" id="phone">-</span>
+                        <button class="copy-btn" onclick="copyText('phone', this)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Birthday</span>
+                    <div class="detail-value-container">
+                        <span class="detail-value" id="bday">-</span>
+                        <button class="copy-btn" onclick="copyText('bday', this)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Age</span>
+                    <div class="detail-value-container">
+                        <span class="detail-value" id="age">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Prime World. All rights reserved.</p>
+        <div class="social-links">
+            <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://t.me" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+            <a href="https://whatsapp.com" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://github.com" target="_blank"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        let generatedUsers = new Set();
+
+        // Toggle Dark / Day Mode
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.getElementById('theme-btn');
+            if (document.body.classList.contains('dark-mode')) {
+                btn.innerHTML = `<i class="fa-solid fa-sun"></i> <span>Day Mode</span>`;
+            } else {
+                btn.innerHTML = `<i class="fa-solid fa-moon"></i> <span>Night Mode</span>`;
             }
-            generatedUsers.add(user.login.uuid);
+        }
 
-            let firstName = user.name.first;
-            let lastName = user.name.last;
-            let middleInitial = String.fromCharCode(65 + Math.floor(Math.random() * 26)) + ".";
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
 
-            let street = `${user.location.street.number} ${user.location.street.name}`;
-            let city = user.location.city;
-            let state = user.location.state;
-            
-            // জিপ কোড হ্যান্ডলিং (USA হলে বাধ্যতামূলকভাবে ৫ সংখ্যার ডিজিট জিপ কোড)
-            let zip = user.location.postcode.toString();
-            if (countryInput === "United States") {
-                // USA Zip Code ফরম্যাটিং (5 Digits)
-                zip = zip.replace(/\D/g, ''); // অক্ষর থাকলে মুছে ফেলা
-                if (zip.length < 5) {
-                    zip = getRandomInt(10000, 99999).toString();
-                } else if (zip.length > 5) {
-                    zip = zip.substring(0, 5);
+        // Country Mapping
+        const countryToNatMap = {
+            "United States": { nat: "us", phoneCode: "1" },
+            "United Kingdom": { nat: "gb", phoneCode: "44" },
+            "Germany": { nat: "de", phoneCode: "49" },
+            "Australia": { nat: "au", phoneCode: "61" },
+            "France": { nat: "fr", phoneCode: "33" }
+        };
+
+        async function generateIdentity() {
+            let genderInput = document.getElementById("gender").value.toLowerCase();
+            let countryInput = document.getElementById("country").value;
+
+            let apiGender = genderInput === "random" ? (Math.random() > 0.5 ? "male" : "female") : genderInput;
+
+            let selectedCountryData = countryToNatMap[countryInput] || { nat: "us", phoneCode: "1" };
+            let natCode = selectedCountryData.nat;
+
+            try {
+                let response = await fetch(`https://randomuser.me/api/?gender=${apiGender}&nat=${natCode}`);
+                let data = await response.json();
+                let user = data.results[0];
+
+                // Prevent Duplicates
+                if (generatedUsers.has(user.login.uuid)) {
+                    return generateIdentity();
                 }
+                generatedUsers.add(user.login.uuid);
+
+                let firstName = user.name.first;
+                let lastName = user.name.last;
+                let middleInitial = String.fromCharCode(65 + Math.floor(Math.random() * 26)) + ".";
+
+                let street = `${user.location.street.number} ${user.location.street.name}`;
+                let city = user.location.city;
+                let state = user.location.state;
+                
+                // Zip Code Logic (Ensures 5 digits for USA, standard format for others)
+                let rawZip = String(user.location.postcode || '');
+                let zip = rawZip;
+
+                if (countryInput === "United States") {
+                    let digitsOnly = rawZip.replace(/\D/g, '');
+                    if (digitsOnly.length === 5) {
+                        zip = digitsOnly;
+                    } else {
+                        zip = getRandomInt(10001, 99950).toString();
+                    }
+                }
+
+                let photoUrl = user.picture.large;
+                let phone = user.phone;
+                let mmn = user.name.last + "son";
+                let ssn = `${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-XXXX`;
+                let geo = `${user.location.coordinates.latitude}, ${user.location.coordinates.longitude}`;
+
+                let dobDate = new Date(user.dob.date);
+                let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                let birthday = `${monthNames[dobDate.getMonth()]} ${dobDate.getDate()}, ${dobDate.getFullYear()}`;
+                let age = `${user.dob.age} years old`;
+
+                // Update UI Elements
+                document.getElementById("avatar-img").src = photoUrl;
+                document.getElementById("fn").innerText = `${firstName} ${middleInitial}`;
+                document.getElementById("ln").innerText = lastName;
+                document.getElementById("street").innerText = street;
+                document.getElementById("city").innerText = city;
+                document.getElementById("state").innerText = state;
+                document.getElementById("zip").innerText = zip;
+
+                document.getElementById("name-meaning").innerText = firstName;
+                document.getElementById("meaning-link").href = `https://www.behindthename.com/name/${firstName.toLowerCase()}`;
+
+                document.getElementById("mmn").innerText = mmn;
+                document.getElementById("ssn").innerText = ssn;
+                document.getElementById("geo").innerText = geo;
+                document.getElementById("phone").innerText = phone;
+                document.getElementById("bday").innerText = birthday;
+                document.getElementById("age").innerText = age;
+
+            } catch (error) {
+                console.error("Error generating identity: ", error);
             }
-
-            let photoUrl = user.picture.large;
-            let phone = user.phone;
-            let mmn = user.name.last + "son";
-            let ssn = `${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-XXXX`;
-            let geo = `${user.location.coordinates.latitude}, ${user.location.coordinates.longitude}`;
-
-            let dobDate = new Date(user.dob.date);
-            let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            let birthday = `${monthNames[dobDate.getMonth()]} ${dobDate.getDate()}, ${dobDate.getFullYear()}`;
-            let age = `${user.dob.age} years old`;
-
-            // HTML Elements আপডেট করা
-            document.getElementById("avatar-img").src = photoUrl;
-            document.getElementById("fn").innerText = `${firstName} ${middleInitial}`;
-            document.getElementById("ln").innerText = lastName;
-            document.getElementById("street").innerText = street;
-            document.getElementById("city").innerText = city;
-            document.getElementById("state").innerText = state;
-            document.getElementById("zip").innerText = zip;
-
-            document.getElementById("name-meaning").innerText = firstName;
-            document.getElementById("meaning-link").href = `https://www.behindthename.com/name/${firstName.toLowerCase()}`;
-
-            document.getElementById("mmn").innerText = mmn;
-            document.getElementById("ssn").innerText = ssn;
-            document.getElementById("geo").innerText = geo;
-            document.getElementById("phone").innerText = phone;
-            document.getElementById("bday").innerText = birthday;
-            document.getElementById("age").innerText = age;
-
-        } catch (error) {
-            console.error("Error generating identity: ", error);
         }
-    }
 
-    // পেজ লোড হওয়ার সাথে সাথে প্রথম ডাটা লোড হবে
-    window.onload = function() {
-        generateIdentity();
-    };
+        // Generate Data on Page Load
+        window.onload = function() {
+            generateIdentity();
+        };
 
-    function copyText(elementId, btn) {
-        const text = document.getElementById(elementId).innerText.trim();
-        navigator.clipboard.writeText(text).then(() => {
-            const originalText = btn.innerText;
-            btn.innerText = 'Copied!';
-            btn.classList.add('copied');
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.remove('copied');
-            }, 1500);
-        });
-    }
+        // Copy Text Function
+        function copyText(elementId, btn) {
+            const text = document.getElementById(elementId).innerText.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+</html>
