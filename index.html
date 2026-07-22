@@ -90,7 +90,7 @@
             color: #444;
         }
 
-        .form-group select {
+        .form-group select, .form-group input {
             width: 220px;
             padding: 5px 8px;
             border: 1px solid #ccc;
@@ -104,6 +104,7 @@
             align-items: center;
             gap: 15px;
             margin-top: 15px;
+            flex-wrap: wrap;
         }
 
         .btn-generate {
@@ -132,7 +133,7 @@
             text-decoration: underline;
         }
 
-        /* Advanced Options Panel */
+        /* Panels for Advanced & IP Lookup */
         .adv-panel {
             display: none;
             background: #fff;
@@ -392,15 +393,12 @@
             <div class="btn-group">
                 <button class="btn-generate" onclick="generateIdentity()">Generate</button>
                 <span class="adv-options-link" onclick="toggleAdvOptions()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
+                <span class="adv-options-link" onclick="toggleIpPanel()"><i class="fa-solid fa-globe"></i> IP Lookup</span>
             </div>
 
-            <!-- Advanced Options Toggle Drawer -->
+            <!-- Advanced Options Panel -->
             <div class="adv-panel" id="adv-panel">
-                <div class="adv-panel-title">Advanced Security & Identity Settings:</div>
-                <div class="adv-field">
-                    <input type="checkbox" id="gen-password" checked>
-                    <label for="gen-password">Generate Safe Password alongside profile</label>
-                </div>
+                <div class="adv-panel-title">Advanced Settings:</div>
                 <div class="adv-field">
                     <label>Email Domain:</label>
                     <select id="email-domain" style="width: 140px; padding: 2px;">
@@ -408,6 +406,15 @@
                         <option value="outlook.com">@outlook.com</option>
                         <option value="yahoo.com">@yahoo.com</option>
                     </select>
+                </div>
+            </div>
+
+            <!-- IP Lookup Panel -->
+            <div class="adv-panel" id="ip-panel">
+                <div class="adv-panel-title">Generate Identity from IP Address:</div>
+                <div class="adv-field">
+                    <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8" style="width: 180px;">
+                    <button class="btn-generate" style="padding: 4px 10px;" onclick="generateByIp()">Search IP</button>
                 </div>
             </div>
         </div>
@@ -468,12 +475,6 @@
                     <span class="label">Gmail address</span>
                     <span class="value" id="gmail">bert.steininger84@gmail.com</span>
                     <button class="copy-tag" onclick="copyText('gmail', this)">Copy</button>
-                </div>
-
-                <div id="password-row" class="info-row">
-                    <span class="label">Password</span>
-                    <span class="value" id="generated-pass">P@ssW0rd2026!</span>
-                    <button class="copy-tag" onclick="copyText('generated-pass', this)">Copy</button>
                 </div>
 
                 <div class="info-row">
@@ -538,61 +539,57 @@
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const btn = document.getElementById('theme-btn');
-            if (document.body.classList.contains('dark-mode')) {
-                btn.innerText = 'Day Mode';
-            } else {
-                btn.innerText = 'Night Mode';
-            }
+            btn.innerText = document.body.classList.contains('dark-mode') ? 'Day Mode' : 'Night Mode';
         }
 
         function toggleAdvOptions() {
-            const panel = document.getElementById('adv-panel');
-            panel.classList.toggle('open');
+            document.getElementById('adv-panel').classList.toggle('open');
+            document.getElementById('ip-panel').classList.remove('open');
+        }
+
+        function toggleIpPanel() {
+            document.getElementById('ip-panel').classList.toggle('open');
+            document.getElementById('adv-panel').classList.remove('open');
         }
 
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        // Full Mapping for 21 Countries
+        // Country Mapping + Realistic Phone Formats
         const countryToNatMap = {
-            "United States": { nat: "us", phoneCode: "1" },
-            "United Kingdom": { nat: "gb", phoneCode: "44" },
-            "Canada": { nat: "ca", phoneCode: "1" },
-            "Australia": { nat: "au", phoneCode: "61" },
-            "Germany": { nat: "de", phoneCode: "49" },
-            "France": { nat: "fr", phoneCode: "33" },
-            "Brazil": { nat: "br", phoneCode: "55" },
-            "India": { nat: "in", phoneCode: "91" },
-            "Spain": { nat: "es", phoneCode: "34" },
-            "Switzerland": { nat: "ch", phoneCode: "41" },
-            "Denmark": { nat: "dk", phoneCode: "45" },
-            "Finland": { nat: "fi", phoneCode: "358" },
-            "Ireland": { nat: "ie", phoneCode: "353" },
-            "Iran": { nat: "ir", phoneCode: "98" },
-            "Mexico": { nat: "mx", phoneCode: "52" },
-            "Netherlands": { nat: "nl", phoneCode: "31" },
-            "Norway": { nat: "no", phoneCode: "47" },
-            "New Zealand": { nat: "nz", phoneCode: "64" },
-            "Turkey": { nat: "tr", phoneCode: "90" },
-            "Ukraine": { nat: "ua", phoneCode: "380" }
+            "United States": { nat: "us", phoneCode: "1", format: "(###) ###-####" },
+            "United Kingdom": { nat: "gb", phoneCode: "44", format: "07### ######" },
+            "Canada": { nat: "ca", phoneCode: "1", format: "(###) ###-####" },
+            "Australia": { nat: "au", phoneCode: "61", format: "04## ### ###" },
+            "Germany": { nat: "de", phoneCode: "49", format: "015# ########" },
+            "France": { nat: "fr", phoneCode: "33", format: "06 ## ## ## ##" },
+            "Brazil": { nat: "br", phoneCode: "55", format: "(11) 9####-####" },
+            "India": { nat: "in", phoneCode: "91", format: "9#### #####" },
+            "Spain": { nat: "es", phoneCode: "34", format: "6## ## ## ##" },
+            "Switzerland": { nat: "ch", phoneCode: "41", format: "079 ### ## ##" },
+            "Denmark": { nat: "dk", phoneCode: "45", format: "## ## ## ##" },
+            "Finland": { nat: "fi", phoneCode: "358", format: "040 ### ####" },
+            "Ireland": { nat: "ie", phoneCode: "353", format: "087 ### ####" },
+            "Iran": { nat: "ir", phoneCode: "98", format: "0912 ### ####" },
+            "Mexico": { nat: "mx", phoneCode: "52", format: "55 #### ####" },
+            "Netherlands": { nat: "nl", phoneCode: "31", format: "06 ########" },
+            "Norway": { nat: "no", phoneCode: "47", format: "9## ## ###" },
+            "New Zealand": { nat: "nz", phoneCode: "64", format: "021 ### ####" },
+            "Turkey": { nat: "tr", phoneCode: "90", format: "0532 ### ## ##" },
+            "Ukraine": { nat: "ua", phoneCode: "380", format: "050 ### ####" }
         };
 
-        function generateFakePassword() {
-            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
-            let pass = "";
-            for (let i = 0; i < 10; i++) {
-                pass += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return pass;
+        function generateRealPhone(pattern) {
+            return pattern.replace(/#/g, () => getRandomInt(0, 9));
         }
 
-        async function generateIdentity() {
+        async function generateIdentity(customLocation = null) {
             let genderInput = document.getElementById("gender").value.toLowerCase();
             let countryInput = document.getElementById("country").value;
 
             let apiGender = genderInput === "random" ? (Math.random() > 0.5 ? "male" : "female") : genderInput;
-            let selectedCountryData = countryToNatMap[countryInput] || { nat: "us", phoneCode: "1" };
+            let selectedCountryData = countryToNatMap[countryInput] || { nat: "us", phoneCode: "1", format: "(###) ###-####" };
             let natCode = selectedCountryData.nat;
 
             try {
@@ -600,49 +597,30 @@
                 let data = await response.json();
                 let user = data.results[0];
 
-                if (generatedUsers.has(user.login.uuid)) {
-                    return generateIdentity();
-                }
-                generatedUsers.add(user.login.uuid);
-
                 let firstName = user.name.first;
                 let lastName = user.name.last;
                 let middleInitial = String.fromCharCode(65 + Math.floor(Math.random() * 26)) + ".";
 
                 let street = `${user.location.street.number} ${user.location.street.name}`;
-                let city = user.location.city;
-                let state = user.location.state;
-                
-                let rawZip = String(user.location.postcode || '');
-                let zip = rawZip;
-
-                if (countryInput === "United States") {
-                    let digitsOnly = rawZip.replace(/\D/g, '');
-                    if (digitsOnly.length === 5) {
-                        zip = digitsOnly;
-                    } else {
-                        zip = getRandomInt(10001, 99950).toString();
-                    }
-                }
+                let city = customLocation ? customLocation.city : user.location.city;
+                let state = customLocation ? customLocation.region : user.location.state;
+                let zip = customLocation ? customLocation.postal : (countryInput === "United States" ? getRandomInt(10001, 99950).toString() : user.location.postcode);
 
                 let photoUrl = user.picture.large;
-                let phone = user.phone;
+                
+                // Realistic phone digit calculation per country
+                let phone = generateRealPhone(selectedCountryData.format);
 
-                // Real-feeling Gmail Address Generation
+                // Real-feeling Gmail Address
                 let domain = document.getElementById("email-domain").value;
                 let birthYear = new Date(user.dob.date).getFullYear().toString().substring(2);
                 let cleanFirstName = firstName.toLowerCase().replace(/[^a-z0-9]/g, '');
                 let cleanLastName = lastName.toLowerCase().replace(/[^a-z0-9]/g, '');
                 
-                let emailFormats = [
-                    `${cleanFirstName}.${cleanLastName}${birthYear}@${domain}`,
-                    `${cleanFirstName}${cleanLastName}${getRandomInt(10, 99)}@${domain}`,
-                    `${cleanFirstName}_${cleanLastName}@${domain}`
-                ];
-                let generatedEmail = emailFormats[Math.floor(Math.random() * emailFormats.length)];
+                let generatedEmail = `${cleanFirstName}.${cleanLastName}${birthYear}@${domain}`;
 
                 let ssn = `${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-XXXX`;
-                let geo = `${user.location.coordinates.latitude}, ${user.location.coordinates.longitude}`;
+                let geo = customLocation ? `${customLocation.lat}, ${customLocation.lon}` : `${user.location.coordinates.latitude}, ${user.location.coordinates.longitude}`;
 
                 let dobDate = new Date(user.dob.date);
                 let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -662,15 +640,6 @@
                 document.getElementById("meaning-link").href = `https://www.behindthename.com/name/${firstName.toLowerCase()}`;
 
                 document.getElementById("gmail").innerText = generatedEmail;
-                
-                // Advanced Password Check
-                if (document.getElementById("gen-password").checked) {
-                    document.getElementById("password-row").style.display = "flex";
-                    document.getElementById("generated-pass").innerText = generateFakePassword();
-                } else {
-                    document.getElementById("password-row").style.display = "none";
-                }
-
                 document.getElementById("ssn").innerText = ssn;
                 document.getElementById("geo").innerText = geo;
                 document.getElementById("phone").innerText = phone;
@@ -683,18 +652,47 @@
             }
         }
 
+        // IP Based Lookup Generator
+        async function generateByIp() {
+            let ip = document.getElementById("ip-input").value.trim();
+            if(!ip) return alert("Please enter an IP address!");
+
+            try {
+                let res = await fetch(`https://ipapi.co/${ip}/json/`);
+                let ipData = await res.json();
+
+                if(ipData.error) {
+                    alert("Invalid IP Address!");
+                    return;
+                }
+
+                // Match country if available in list
+                let matchedCountry = Object.keys(countryToNatMap).find(c => c.toLowerCase() === ipData.country_name.toLowerCase());
+                if(matchedCountry) {
+                    document.getElementById("country").value = matchedCountry;
+                }
+
+                generateIdentity({
+                    city: ipData.city,
+                    region: ipData.region,
+                    postal: ipData.postal,
+                    lat: ipData.latitude,
+                    lon: ipData.longitude
+                });
+
+            } catch(e) {
+                alert("Could not fetch IP details.");
+            }
+        }
+
         window.onload = function() {
             generateIdentity();
         };
 
-        // Enhanced Copy Function: Automatically strips formatting if requested (isPhone)
+        // Clean phone copying
         function copyText(elementId, btn, isPhone = false) {
             let text = document.getElementById(elementId).innerText.trim();
-            
-            // Clean phone numbers: remove dashes, spaces, brackets when copying
-            if (isPhone) {
-                text = text.replace(/\D/g, '');
-            }
+            if (isPhone) text = text.replace(/\D/g, '');
 
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = btn.innerText;
