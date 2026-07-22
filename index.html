@@ -133,7 +133,7 @@
             text-decoration: underline;
         }
 
-        /* Panels for Advanced & IP Lookup */
+        /* Panels for Advanced, IP Lookup & Temp Mail */
         .adv-panel {
             display: none;
             background: #fff;
@@ -394,6 +394,7 @@
                 <button class="btn-generate" onclick="generateIdentity()">Generate</button>
                 <span class="adv-options-link" onclick="toggleAdvOptions()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
                 <span class="adv-options-link" onclick="toggleIpPanel()"><i class="fa-solid fa-globe"></i> IP Lookup</span>
+                <span class="adv-options-link" onclick="toggleTempMailPanel()"><i class="fa-solid fa-envelope"></i> Temp Mail</span>
             </div>
 
             <!-- Advanced Options Panel -->
@@ -416,6 +417,13 @@
                     <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8" style="width: 180px;">
                     <button class="btn-generate" style="padding: 4px 10px;" onclick="generateByIp()">Search IP</button>
                 </div>
+            </div>
+
+            <!-- Temp Mail Panel -->
+            <div class="adv-panel" id="tempmail-panel">
+                <div class="adv-panel-title">Temporary Mail Service:</div>
+                <p style="margin-bottom: 8px;">Active Temp Email: <strong id="temp-email-display" style="color:#d9534f;">Loading...</strong></p>
+                <button class="btn-generate" style="padding: 4px 10px;" onclick="openInbox()">Check Inbox</button>
             </div>
         </div>
 
@@ -536,20 +544,52 @@
     <script>
         let generatedUsers = new Set();
 
+        // Persistent Theme Logic with LocalStorage
+        function applySavedTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const btn = document.getElementById('theme-btn');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                btn.innerText = 'Day Mode';
+            } else {
+                document.body.classList.remove('dark-mode');
+                btn.innerText = 'Night Mode';
+            }
+        }
+
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
-            const btn = document.getElementById('theme-btn');
-            btn.innerText = document.body.classList.contains('dark-mode') ? 'Day Mode' : 'Night Mode';
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('theme-btn').innerText = isDark ? 'Day Mode' : 'Night Mode';
+        }
+
+        // Drawer Panels Control
+        function closeAllPanels() {
+            document.getElementById('adv-panel').classList.remove('open');
+            document.getElementById('ip-panel').classList.remove('open');
+            document.getElementById('tempmail-panel').classList.remove('open');
         }
 
         function toggleAdvOptions() {
-            document.getElementById('adv-panel').classList.toggle('open');
-            document.getElementById('ip-panel').classList.remove('open');
+            const panel = document.getElementById('adv-panel');
+            const isOpen = panel.classList.contains('open');
+            closeAllPanels();
+            if(!isOpen) panel.classList.add('open');
         }
 
         function toggleIpPanel() {
-            document.getElementById('ip-panel').classList.toggle('open');
-            document.getElementById('adv-panel').classList.remove('open');
+            const panel = document.getElementById('ip-panel');
+            const isOpen = panel.classList.contains('open');
+            closeAllPanels();
+            if(!isOpen) panel.classList.add('open');
+        }
+
+        function toggleTempMailPanel() {
+            const panel = document.getElementById('tempmail-panel');
+            const isOpen = panel.classList.contains('open');
+            closeAllPanels();
+            if(!isOpen) panel.classList.add('open');
         }
 
         function getRandomInt(min, max) {
@@ -607,11 +647,8 @@
                 let zip = customLocation ? customLocation.postal : (countryInput === "United States" ? getRandomInt(10001, 99950).toString() : user.location.postcode);
 
                 let photoUrl = user.picture.large;
-                
-                // Realistic phone digit calculation per country
                 let phone = generateRealPhone(selectedCountryData.format);
 
-                // Real-feeling Gmail Address
                 let domain = document.getElementById("email-domain").value;
                 let birthYear = new Date(user.dob.date).getFullYear().toString().substring(2);
                 let cleanFirstName = firstName.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -640,6 +677,8 @@
                 document.getElementById("meaning-link").href = `https://www.behindthename.com/name/${firstName.toLowerCase()}`;
 
                 document.getElementById("gmail").innerText = generatedEmail;
+                document.getElementById("temp-email-display").innerText = generatedEmail;
+
                 document.getElementById("ssn").innerText = ssn;
                 document.getElementById("geo").innerText = geo;
                 document.getElementById("phone").innerText = phone;
@@ -666,7 +705,6 @@
                     return;
                 }
 
-                // Match country if available in list
                 let matchedCountry = Object.keys(countryToNatMap).find(c => c.toLowerCase() === ipData.country_name.toLowerCase());
                 if(matchedCountry) {
                     document.getElementById("country").value = matchedCountry;
@@ -685,7 +723,12 @@
             }
         }
 
+        function openInbox() {
+            window.open('https://generator.email/', '_blank');
+        }
+
         window.onload = function() {
+            applySavedTheme();
             generateIdentity();
         };
 
