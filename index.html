@@ -982,67 +982,94 @@
             color: #ffffff !important;
         }
 
-        /* DYNAMIC HIGH CONTRAST & RAZOR SHARP FONTS FOR DARK & WALLPAPER THEMES */
-        body.theme-pic .main-card,
-        body.theme-custom-bg .main-card,
-        body.theme-sunset .main-card,
-        body.theme-ocean .main-card,
-        body.theme-cyber .main-card,
-        body.dark-mode .main-card {
-            background: rgba(20, 20, 32, 0.94) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.15) !important;
-            color: #ffffff !important;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+        /* DAY MODE FROSTED GLASS CARD (theme-pic) */
+        body.theme-pic .main-card {
+            background: rgba(255, 255, 255, 0.72) !important;
+            backdrop-filter: blur(25px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            color: #0f172a !important;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2) !important;
         }
 
-        body.theme-pic .generator-box,
-        body.theme-custom-bg .generator-box,
-        body.theme-sunset .generator-box,
-        body.theme-ocean .generator-box,
-        body.theme-cyber .generator-box,
-        body.dark-mode .generator-box {
-            background: rgba(30, 30, 48, 0.85) !important;
-            border-color: rgba(255, 255, 255, 0.15) !important;
+        body.theme-pic .generator-box {
+            background: rgba(255, 255, 255, 0.55) !important;
+            border: 1px solid rgba(255, 255, 255, 0.7) !important;
+            backdrop-filter: blur(14px) !important;
         }
 
         body.theme-pic .info-row .label,
+        body.theme-pic .form-group label {
+            color: #475569 !important;
+            font-weight: 700 !important;
+        }
+
+        body.theme-pic .info-row .value {
+            color: #0f172a !important;
+            font-weight: bold !important;
+        }
+
+        body.theme-pic .generator-header h3 {
+            color: #1e1b4b !important;
+        }
+
+        body.theme-pic .section-header {
+            color: #7c3aed !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* NIGHT MODE & DARK GRADIENT THEMES (dark-mode, custom-bg, sunset, ocean, cyber) */
+        body.dark-mode .main-card,
+        body.theme-custom-bg .main-card,
+        body.theme-sunset .main-card,
+        body.theme-ocean .main-card,
+        body.theme-cyber .main-card {
+            background: rgba(18, 14, 32, 0.72) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        body.dark-mode .generator-box,
+        body.theme-custom-bg .generator-box,
+        body.theme-sunset .generator-box,
+        body.theme-ocean .generator-box,
+        body.theme-cyber .generator-box {
+            background: rgba(30, 24, 48, 0.65) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        }
+
+        body.dark-mode .info-row .label,
         body.theme-custom-bg .info-row .label,
         body.theme-sunset .info-row .label,
         body.theme-ocean .info-row .label,
         body.theme-cyber .info-row .label,
-        body.dark-mode .info-row .label,
-        body.theme-pic .form-group label,
+        body.dark-mode .form-group label,
         body.theme-custom-bg .form-group label,
         body.theme-sunset .form-group label,
         body.theme-ocean .form-group label,
-        body.theme-cyber .form-group label,
-        body.dark-mode .form-group label {
+        body.theme-cyber .form-group label {
             color: #94a3b8 !important;
             font-weight: 700 !important;
-            text-shadow: none !important;
         }
 
-        body.theme-pic .info-row .value,
+        body.dark-mode .info-row .value,
         body.theme-custom-bg .info-row .value,
         body.theme-sunset .info-row .value,
         body.theme-ocean .info-row .value,
-        body.theme-cyber .info-row .value,
-        body.dark-mode .info-row .value {
+        body.theme-cyber .info-row .value {
             color: #ffffff !important;
-            font-weight: 700 !important;
-            text-shadow: none !important;
+            font-weight: bold !important;
         }
 
-        body.theme-pic .generator-header h3,
+        body.dark-mode .generator-header h3,
         body.theme-custom-bg .generator-header h3,
         body.theme-sunset .generator-header h3,
         body.theme-ocean .generator-header h3,
-        body.theme-cyber .generator-header h3,
-        body.dark-mode .generator-header h3 {
+        body.theme-cyber .generator-header h3 {
             color: #f8fafc !important;
-            text-shadow: none !important;
         }
 
         body.theme-pic .section-header,
