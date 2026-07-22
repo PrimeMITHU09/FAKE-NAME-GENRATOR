@@ -1240,7 +1240,8 @@
 
             <div class="btn-group">
                 <button class="btn-generate" onclick="generateIdentity()">Generate</button>
-                <span class="adv-options-link" onclick="toggleAdvOptions()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
+                <span class="adv-options-link" onclick="openAdvModal()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
+                <span class="adv-options-link" onclick="openIpModal()"><i class="fa-solid fa-globe"></i> IP Lookup</span>
                 <span class="adv-options-link" onclick="open12NamesModal()"><i class="fa-solid fa-list-ol"></i> 12 Names (For Sheet)</span>
                 
                 <div id="premium-features-group" style="display: none; align-items: center; gap: 15px; flex-wrap: wrap;">
@@ -1248,31 +1249,6 @@
                     <span class="adv-options-link" onclick="openDocModal('Passport')"><i class="fa-solid fa-passport"></i> Passport</span>
                     <span class="adv-options-link" onclick="openDocModal('NID')"><i class="fa-solid fa-address-card"></i> NID</span>
                     <span class="adv-options-link" onclick="openCreditModal()"><i class="fa-solid fa-credit-card"></i> Card Generator (3 Cards)</span>
-                </div>
-            </div>
-
-            <div class="adv-panel" id="adv-panel">
-                <div class="adv-panel-title">Advanced Settings:</div>
-                <div class="adv-field">
-                    <label>Email Domain:</label>
-                    <select id="email-domain" style="width: 140px; padding: 2px;">
-                        <option value="gmail.com">@gmail.com</option>
-                        <option value="outlook.com">@outlook.com</option>
-                        <option value="yahoo.com">@yahoo.com</option>
-                    </select>
-                </div>
-
-                <div id="premium-status-section" style="margin-top: 10px; border-top: 1px dashed #8a2be2; padding-top: 10px;">
-                    <div style="font-weight: bold; margin-bottom: 6px; font-size: 12px;" id="premium-status-text">Status: Free Membership</div>
-                    <button class="copy-tag" id="cancel-premium-btn" style="display: none; background-color: #ef4444; color: white; border: none; padding: 4px 10px; font-weight: bold;" onclick="cancelPremiumSubscription()"><i class="fa-solid fa-circle-xmark"></i> Cancel Premium</button>
-                </div>
-            </div>
-
-            <div class="adv-panel" id="ip-panel">
-                <div class="adv-panel-title">Generate Identity from IP Address:</div>
-                <div class="adv-field">
-                    <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8" style="width: 180px;">
-                    <button class="btn-generate" style="padding: 4px 10px;" onclick="generateByIp()">Search IP</button>
                 </div>
             </div>
         </div>
@@ -1423,13 +1399,67 @@
                         <i class="fa-solid fa-rotate"></i> Regenerate 12 Names
                     </button>
                     <button class="btn-generate" onclick="copy12SheetNames(this)" style="flex: 1; min-width: 180px; padding: 10px; font-size: 13px; background: linear-gradient(135deg, #10b981, #059669);">
-                        <i class="fa-solid fa-copy"></i> Copy 12 Names (Paste in Sheet)
+                        <i class="fa-solid fa-copy"></i> Copy All 12 Names (For Google Sheet)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ADVANCED OPTIONS MODAL POPUP -->
+    <div class="modal-overlay" id="adv-modal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-box" style="max-width: 480px; height: auto; max-height: 90vh; border-radius: 20px; background: #141224; color: white;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #8a2be2, #4a00e0);">
+                <span><i class="fa-solid fa-sliders"></i> Advanced Identity Settings</span>
+                <button class="modal-close-btn" onclick="closeAdvModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div style="margin-bottom: 18px;">
+                    <label style="font-weight: bold; font-size: 13px; color: #c084fc; display: block; margin-bottom: 6px;">
+                        <i class="fa-solid fa-envelope"></i> Email Domain:
+                    </label>
+                    <select id="email-domain" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: white; font-size: 13px;">
+                        <option value="gmail.com">@gmail.com</option>
+                        <option value="outlook.com">@outlook.com</option>
+                        <option value="yahoo.com">@yahoo.com</option>
+                    </select>
+                </div>
+
+                <div id="premium-status-section" style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 14px; margin-top: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 8px; font-size: 12px; color: #cbd5e1;" id="premium-status-text">Status: Free Membership</div>
+                    <button class="copy-tag" id="cancel-premium-btn" style="display: none; background-color: #ef4444; color: white; border: none; padding: 6px 12px; font-weight: bold; border-radius: 6px; cursor: pointer;" onclick="cancelPremiumSubscription()"><i class="fa-solid fa-circle-xmark"></i> Cancel Premium Pass</button>
+                </div>
+
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn-generate" onclick="closeAdvModal()" style="width: 100%; padding: 10px; font-size: 13px; background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fa-solid fa-check"></i> Save & Apply Settings
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- IP LOOKUP MODAL POPUP -->
+    <div class="modal-overlay" id="ip-modal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-box" style="max-width: 460px; height: auto; max-height: 90vh; border-radius: 20px; background: #141224; color: white;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #0284c7, #06b6d4);">
+                <span><i class="fa-solid fa-globe"></i> IP Address Lookup & Generator</span>
+                <button class="modal-close-btn" onclick="closeIpModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px; text-align: center;">
+                <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 16px;">
+                    Enter an IP address to automatically fetch geographical details & generate a matched identity!
+                </p>
+
+                <div style="margin-bottom: 18px; text-align: left;">
+                    <label style="font-weight: bold; font-size: 12px; color: #38bdf8; display: block; margin-bottom: 6px;">Target IP Address:</label>
+                    <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8" style="width: 100%; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: rgba(255,255,255,0.08); color: white; font-size: 13px;">
+                </div>
+
+                <button class="btn-generate" onclick="generateByIpAndClose()" style="width: 100%; padding: 10px; font-size: 13px; background: linear-gradient(135deg, #0284c7, #06b6d4);">
+                    <i class="fa-solid fa-magnifying-glass"></i> Search IP & Generate Identity
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- PREMIUM SUBSCRIPTION MODAL -->
@@ -1690,23 +1720,25 @@
             }
         }
 
-        function closeAllPanels() {
-            document.getElementById('adv-panel').classList.remove('open');
-            document.getElementById('ip-panel').classList.remove('open');
+        function openAdvModal() {
+            document.getElementById('adv-modal').classList.add('show');
         }
 
-        function toggleAdvOptions() {
-            const panel = document.getElementById('adv-panel');
-            const isOpen = panel.classList.contains('open');
-            closeAllPanels();
-            if(!isOpen) panel.classList.add('open');
+        function closeAdvModal() {
+            document.getElementById('adv-modal').classList.remove('show');
         }
 
-        function toggleIpPanel() {
-            const panel = document.getElementById('ip-panel');
-            const isOpen = panel.classList.contains('open');
-            closeAllPanels();
-            if(!isOpen) panel.classList.add('open');
+        function openIpModal() {
+            document.getElementById('ip-modal').classList.add('show');
+        }
+
+        function closeIpModal() {
+            document.getElementById('ip-modal').classList.remove('show');
+        }
+
+        async function generateByIpAndClose() {
+            await generateByIp();
+            closeIpModal();
         }
 
         /* Notification Toast Function */
@@ -2568,10 +2600,12 @@
             const container = document.getElementById("names12-list");
             if (!container) return;
             container.innerHTML = generated12NamesList.map((name, index) => `
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px;">
-                    <span style="color: #94a3b8; font-weight: bold; width: 30px;">${index + 1}.</span>
-                    <span style="color: #c084fc; font-weight: bold; flex: 1;">${name}</span>
-                    <button class="copy-tag" onclick="copySingleNameFrom12('${name.replace(/'/g, "\\'")}', this)" style="padding: 3px 10px; font-size: 11px;"><i class="fa-solid fa-copy"></i> Copy</button>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px; background: ${index % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent'}; border-radius: 6px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="color: #94a3b8; font-weight: bold; width: 25px; text-align: right;">${index + 1}.</span>
+                        <span style="color: #c084fc; font-weight: bold; font-size: 14px;">${name}</span>
+                    </div>
+                    <button class="copy-tag" onclick="copySingleNameFrom12('${name.replace(/'/g, "\\'")}', this)" style="padding: 4px 10px; font-size: 11px; background: rgba(138, 43, 226, 0.2); border: 1px solid rgba(138, 43, 226, 0.4);"><i class="fa-solid fa-copy"></i> Copy</button>
                 </div>
             `).join('');
         }
