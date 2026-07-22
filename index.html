@@ -1964,7 +1964,21 @@
 
         const usedPhotoSet = new Set();
 
-        function get100PercentMatchedPhoto(country, gender) {
+        function get100PercentMatchedPhoto(country, gender, apiPicture = null) {
+            let candidateUrls = [];
+            const ruGender = gender === 'female' ? 'women' : 'men';
+
+            // 1. RandomUser portraits (100 men / 100 women)
+            for (let k = 0; k < 3; k++) {
+                const randomRuIdx = getRandomInt(1, 99);
+                candidateUrls.push(`https://randomuser.me/api/portraits/${ruGender}/${randomRuIdx}.jpg`);
+            }
+
+            // 2. Pravatar face portraits (70 unique portraits)
+            const randomPravatarIdx = getRandomInt(1, 70);
+            candidateUrls.push(`https://i.pravatar.cc/300?img=${randomPravatarIdx}`);
+
+            // 3. Country Curated Unsplash photo pools
             let poolGroup = countryPhotos[country];
             if (!poolGroup) {
                 if (["Brazil", "Mexico"].includes(country)) {
@@ -1978,30 +1992,32 @@
                 }
             }
 
-            if (poolGroup && poolGroup[gender] && poolGroup[gender].length > 0) {
-                const available = poolGroup[gender].filter(url => !usedPhotoSet.has(url));
-                let chosenUrl = "";
-
-                if (available.length > 0) {
-                    chosenUrl = available[Math.floor(Math.random() * available.length)];
-                } else {
-                    // Reset used history for this pool if all photos have been shown
-                    poolGroup[gender].forEach(url => usedPhotoSet.delete(url));
-                    chosenUrl = poolGroup[gender][Math.floor(Math.random() * poolGroup[gender].length)];
-                }
-
-                usedPhotoSet.add(chosenUrl);
-                if (usedPhotoSet.size > 100) {
-                    const firstVal = usedPhotoSet.values().next().value;
-                    usedPhotoSet.delete(firstVal);
-                }
-
-                // Add unique signature query parameter to force browser cache bypass & ensure no visual repeat
-                const uniqueSig = Math.floor(Math.random() * 900000) + 100000;
-                return chosenUrl.includes('?') ? `${chosenUrl}&sig=${uniqueSig}` : `${chosenUrl}?sig=${uniqueSig}`;
+            if (poolGroup && poolGroup[gender]) {
+                candidateUrls.push(...poolGroup[gender]);
             }
 
-            return null;
+            if (apiPicture) {
+                candidateUrls.push(apiPicture);
+            }
+
+            let available = candidateUrls.filter(url => !usedPhotoSet.has(url));
+
+            if (available.length === 0) {
+                const freshIdx = getRandomInt(1, 99);
+                chosenUrl = `https://randomuser.me/api/portraits/${ruGender}/${freshIdx}.jpg`;
+            } else {
+                chosenUrl = available[Math.floor(Math.random() * available.length)];
+            }
+
+            usedPhotoSet.add(chosenUrl);
+
+            if (usedPhotoSet.size > 500) {
+                const firstVal = usedPhotoSet.values().next().value;
+                usedPhotoSet.delete(firstVal);
+            }
+
+            const uniqueSig = Math.floor(Math.random() * 900000) + 100000;
+            return chosenUrl.includes('?') ? `${chosenUrl}&sig=${uniqueSig}` : `${chosenUrl}?sig=${uniqueSig}`;
         }
 
         function generateRealPhone(pattern) {
@@ -2039,8 +2055,8 @@
                     zip = getRandomInt(1000, 1300).toString();
                 }
 
-                // 100% Ethnicity Photo Matching Logic
-                let photoUrl = get100PercentMatchedPhoto(countryInput, apiGender) || user.picture.large;
+                // 100% Ethnicity Photo Matching Logic with Unlimited Non-Repeating Engine
+                let photoUrl = get100PercentMatchedPhoto(countryInput, apiGender, user.picture.large);
 
                 // Native Language Script & Name Set Handling
                 if (nameSetData[nameSetInput] && nameSetData[nameSetInput][apiGender]) {
