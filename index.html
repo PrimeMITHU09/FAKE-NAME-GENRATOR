@@ -32,7 +32,7 @@
             align-items: center;
             padding: 25px 20px;
             min-height: 100vh;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background 0.4s ease, color 0.3s;
         }
 
         .header-bar {
@@ -54,6 +54,11 @@
             cursor: pointer;
             user-select: none;
             text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .brand-title:hover {
+            transform: scale(1.03);
         }
 
         .app-logo-img {
@@ -65,6 +70,7 @@
             flex-shrink: 0;
         }
 
+        /* ANIMATED THEME BUTTON */
         .theme-btn {
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(8px);
@@ -75,12 +81,20 @@
             font-size: 14px;
             color: #333;
             font-weight: bold;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .theme-btn:hover {
-            transform: translateY(-1px);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 6px 18px rgba(138, 43, 226, 0.3);
+            background-color: #ffffff;
+        }
+
+        .theme-btn:active {
+            transform: translateY(1px) scale(0.97);
         }
 
         /* ULTRA FROSTED GLASSMORPHISM CENTERED MAIN CARD */
@@ -130,11 +144,17 @@
             background-color: #e2e8f0;
             border: 1px solid #cbd5e1;
             padding: 5px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 13px;
             font-weight: bold;
             color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .hide-toggle-btn:hover {
+            background-color: #cbd5e1;
+            transform: scale(1.05);
         }
 
         .form-group {
@@ -159,6 +179,13 @@
             font-weight: 600;
             background-color: #fff;
             color: #0f172a;
+            transition: all 0.2s;
+        }
+
+        .form-group select:focus, .form-group input:focus {
+            border-color: #8a2be2;
+            outline: none;
+            box-shadow: 0 0 8px rgba(138, 43, 226, 0.3);
         }
 
         .btn-group {
@@ -169,22 +196,30 @@
             flex-wrap: wrap;
         }
 
+        /* FULLY ANIMATED GENERATE BUTTON */
         .btn-generate {
             background: linear-gradient(135deg, #8a2be2, #6d28d9);
             color: #fff;
             border: none;
-            padding: 9px 24px;
+            padding: 10px 26px;
             font-size: 14px;
             font-weight: 800;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 3px 10px rgba(138, 43, 226, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(138, 43, 226, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-generate:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.5);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 8px 22px rgba(138, 43, 226, 0.6);
+            background: linear-gradient(135deg, #9d4edd, #7b2cbf);
+        }
+
+        .btn-generate:active {
+            transform: translateY(1px) scale(0.97);
         }
 
         .adv-options-link {
@@ -193,9 +228,15 @@
             text-decoration: none;
             cursor: pointer;
             font-weight: 800;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .adv-options-link:hover {
+            color: #6d28d9;
+            transform: translateY(-1px);
             text-decoration: underline;
         }
 
@@ -248,6 +289,11 @@
             margin-bottom: 10px;
             border-radius: 14px;
             box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.03);
         }
 
         .logged-in-text {
@@ -262,16 +308,23 @@
             background-color: #8a2be2;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 9px 16px;
             font-size: 13px;
             font-weight: 800;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 6px;
             width: 100%;
             justify-content: center;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 3px 10px rgba(138, 43, 226, 0.3);
+        }
+
+        .btn-gplus:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 16px rgba(138, 43, 226, 0.5);
         }
 
         .right-panel {
@@ -279,14 +332,14 @@
             width: 100%;
         }
 
-        /* 100% VERTICALLY ALIGNED INFO ROWS */
+        /* COPY BUTTON RIGHT NEXT TO VALUE TEXT */
         .info-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             margin-bottom: 12px;
             font-size: 15px;
             width: 100%;
+            flex-wrap: wrap;
         }
 
         .info-row.large {
@@ -297,7 +350,7 @@
         .info-row .label {
             font-weight: 800;
             color: #1e293b;
-            width: 150px;
+            width: 140px;
             flex-shrink: 0;
             font-size: 15px;
         }
@@ -306,41 +359,51 @@
             color: #0f172a;
             font-weight: 700;
             font-size: 16px;
-            flex: 1;
-            padding-right: 15px;
+            margin-right: 8px;
             word-break: break-word;
         }
 
         .copy-btn-col {
-            display: flex;
+            display: inline-flex;
             gap: 6px;
             align-items: center;
             flex-shrink: 0;
-            margin-left: auto;
         }
 
+        /* FULLY ANIMATED COPY TAG BUTTON */
         .copy-tag {
             background-color: #f1f5f9;
             border: 1px solid #cbd5e1;
             color: #1e293b;
             font-size: 12px;
             font-weight: 700;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 6px;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .copy-tag:hover {
-            background-color: #e2e8f0;
-            color: #8a2be2;
+            background-color: #8a2be2;
+            color: white;
+            border-color: #8a2be2;
+            transform: translateY(-1.5px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(138, 43, 226, 0.35);
+        }
+
+        .copy-tag:active {
+            transform: scale(0.95);
         }
 
         .copy-tag.copied {
-            background-color: #10b981;
-            color: white;
-            border-color: #059669;
+            background-color: #10b981 !important;
+            color: white !important;
+            border-color: #059669 !important;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
         }
 
         .section-header {
@@ -421,14 +484,14 @@
             background: #8a2be2;
             color: #fff;
             padding: 12px 20px;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
             font-size: 13px;
             font-weight: bold;
             display: flex;
             align-items: center;
             gap: 10px;
-            z-index: 10000;
+            z-index: 1000000;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.3s ease;
@@ -440,80 +503,180 @@
             transform: translateY(0);
         }
 
-        /* Official Document Cards */
-        .doc-card-box {
-            background: linear-gradient(135deg, #ffffff 0%, #f7f5ff 100%);
-            border: 2px solid #8a2be2;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.15);
-            margin-bottom: 15px;
+        /* REALISTIC OFFICIAL DOCUMENT CARDS (DRIVER LICENSE, PASSPORT, NID) */
+        .doc-real-card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
             position: relative;
+            font-family: Arial, sans-serif;
         }
 
-        .doc-card-header {
+        /* DRIVER LICENSE STYLING */
+        .dl-card-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid #cbd5e1;
+            color: #0f172a;
+            padding: 0;
+        }
+
+        .dl-header-bar {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #ffffff;
+            padding: 12px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #e9d8a6;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
         }
 
-        .doc-card-flag {
-            font-size: 26px;
-            margin-right: 8px;
-        }
-
-        .doc-card-country-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .doc-card-doc-type {
-            font-size: 13px;
-            font-weight: 800;
-            color: #8a2be2;
-            letter-spacing: 0.5px;
+        .dl-state-title {
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .doc-card-body {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
+        .dl-doc-type-text {
+            font-size: 12px;
+            font-weight: 800;
+            background: #f59e0b;
+            color: #1e1b4b;
+            padding: 2px 8px;
+            border-radius: 4px;
         }
 
-        .doc-card-photo {
-            width: 105px;
-            height: 125px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 2px solid #8a2be2;
+        .dl-body-grid {
+            display: flex;
+            padding: 18px;
+            gap: 18px;
+            position: relative;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+
+        .dl-photo-box {
+            position: relative;
+            width: 120px;
+            height: 145px;
             flex-shrink: 0;
         }
 
-        .doc-card-info {
+        .dl-photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #1e3a8a;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .dl-holo-badge {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #1e3a8a;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .dl-details-table {
             flex: 1;
             font-size: 12px;
             line-height: 1.6;
         }
 
-        .doc-card-info div {
-            margin-bottom: 4px;
+        .dl-details-table td {
+            padding: 2px 4px;
         }
 
-        .doc-card-info label {
+        .dl-details-table .dl-label {
+            font-weight: 800;
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .dl-details-table .dl-val {
+            font-weight: 900;
+            color: #0f172a;
+            font-size: 13px;
+        }
+
+        .dl-barcode-strip {
+            background: #ffffff;
+            padding: 8px 18px;
+            border-top: 1px solid #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dl-barcode-lines {
+            font-family: 'Courier New', monospace;
             font-weight: bold;
-            color: #666666;
-            display: inline-block;
-            width: 110px;
+            font-size: 18px;
+            letter-spacing: 4px;
+            color: #000;
         }
 
-        .doc-card-info span {
-            color: #111111;
-            font-weight: 600;
+        /* REALISTIC PASSPORT STYLING */
+        .passport-card-container {
+            background: #0f172a;
+            color: #f8fafc;
+            border: 3px solid #d97706;
+            padding: 20px;
+        }
+
+        .passport-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #d97706;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .passport-emblem {
+            font-size: 32px;
+            color: #f59e0b;
+        }
+
+        .passport-mrz-zone {
+            background: #020617;
+            border: 1.5px solid #334155;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: #38bdf8;
+            border-radius: 6px;
+            margin-top: 15px;
+            word-break: break-all;
+        }
+
+        /* REALISTIC NID CARD STYLING */
+        .nid-card-container {
+            background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+            color: #ffffff;
+            border: 2px solid #10b981;
+            padding: 18px;
+            position: relative;
+        }
+
+        .nid-chip-icon {
+            width: 38px;
+            height: 28px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 5px;
+            border: 1px solid #fef3c7;
+            margin-bottom: 12px;
         }
 
         /* 3 Virtual Credit Cards */
@@ -581,10 +744,12 @@
             font-size: 11px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.2s;
         }
 
         .cc-copy-btn:hover {
-            background: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.45);
+            transform: scale(1.05);
         }
 
         /* Modal Overlay & Box Design */
@@ -658,6 +823,11 @@
             font-size: 24px;
             cursor: pointer;
             line-height: 1;
+            transition: transform 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            transform: scale(1.2);
         }
 
         .modal-body {
@@ -732,14 +902,14 @@
             box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
             cursor: pointer;
             z-index: 1000;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .sheeter-floating-btn:hover {
-            transform: translateY(-2px) scale(1.04);
+            transform: translateY(-2px) scale(1.05);
             box-shadow: 0 8px 25px rgba(138, 43, 226, 0.7);
         }
 
@@ -752,7 +922,7 @@
 
         body.theme-custom-bg {
             background-repeat: no-repeat !important;
-            background-center: center !important;
+            background-position: center center !important;
             background-attachment: fixed !important;
             background-size: cover !important;
             color: #ffffff !important;
@@ -887,7 +1057,7 @@
         body.theme-ocean .copy-tag:hover,
         body.theme-cyber .copy-tag:hover,
         body.dark-mode .copy-tag:hover {
-            background-color: rgba(138, 43, 226, 0.6) !important;
+            background-color: rgba(138, 43, 226, 0.8) !important;
             color: #ffffff !important;
         }
 
@@ -1068,59 +1238,60 @@
                 <button class="btn-gplus"><i class="fa-brands fa-google"></i> Sign in</button>
             </div>
 
+            <!-- COPY BUTTONS POSITIONED RIGHT NEXT TO TEXT VALUES -->
             <div class="right-panel">
                 <div class="info-row large">
                     <span class="label">First Name:</span>
                     <span class="value" id="fn">Bert Y.</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('fn', this)">Copy First Name</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('fn', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row large" style="margin-bottom: 15px;">
                     <span class="label">Last Name:</span>
                     <span class="value" id="ln">Steininger</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('ln', this)">Copy Last Name</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('ln', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Street:</span>
                     <span class="value" id="street">9463 Ringstraße</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('street', this)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('street', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">City:</span>
                     <span class="value" id="city">Betzenstein</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('city', this)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('city', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">State:</span>
                     <span class="value" id="state">Saarland</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('state', this)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('state', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Zip Code:</span>
                     <span class="value" id="zip">34743</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('zip', this)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('zip', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Gmail</span>
                     <span class="value" id="gmail">bert.steininger84@gmail.com</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('gmail', this)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('gmail', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">SSN</span>
                     <span class="value" id="ssn">780-54-XXXX</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('ssn', this)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('ssn', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Geo coordinates</span>
                     <span class="value" id="geo">-11.5604, -140.0717</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('geo', this)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('geo', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="section-header">PHONE</div>
@@ -1128,13 +1299,13 @@
                 <div class="info-row">
                     <span class="label">Phone</span>
                     <span class="value" id="phone">0554-4430674</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('phone', this, true)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('phone', this, true)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Home phone</span>
                     <span class="value" id="home-phone">0554-4430674</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('home-phone', this, true)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('home-phone', this, true)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
 
                 <div class="section-header">BIRTHDAY</div>
@@ -1143,15 +1314,15 @@
                     <span class="label">Birthday</span>
                     <span class="value" id="bday">December 1, 1970</span>
                     <div class="copy-btn-col">
-                        <button class="copy-tag" onclick="copyBirthday(this)">Copy</button>
-                        <button class="copy-tag" onclick="copyYearOnly(this)">Copy Year</button>
+                        <button class="copy-tag" onclick="copyBirthday(this)"><i class="fa-solid fa-copy"></i> Copy</button>
+                        <button class="copy-tag" onclick="copyYearOnly(this)"><i class="fa-solid fa-calendar"></i> Year</button>
                     </div>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Age</span>
                     <span class="value" id="age">55 years old</span>
-                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('age', this)">Copy</button></div>
+                    <div class="copy-btn-col"><button class="copy-tag" onclick="copyText('age', this)"><i class="fa-solid fa-copy"></i> Copy</button></div>
                 </div>
             </div>
         </div>
@@ -1163,16 +1334,16 @@
         <span id="toast-msg">Notification message</span>
     </div>
 
-    <!-- DOCUMENT CARD MODAL (Driver License / Passport / NID) -->
+    <!-- REALISTIC OFFICIAL DOCUMENT CARD MODAL (Driver License / Passport / NID) -->
     <div class="modal-overlay" id="doc-modal" onclick="closeModalOnOverlay(event)">
-        <div class="modal-box" style="max-width: 540px; height: auto; max-height: 90vh;">
+        <div class="modal-box" style="max-width: 580px; height: auto; max-height: 90vh; border-radius: 20px;">
             <div class="modal-header">
                 <span id="doc-modal-title"><i class="fa-solid fa-id-card"></i> Official Document Card</span>
                 <button class="modal-close-btn" onclick="closeDocModal()">&times;</button>
             </div>
             <div class="modal-body" style="padding: 20px; overflow-y: auto;">
                 <div id="doc-modal-content"></div>
-                <div style="text-align: center; margin-top: 10px;">
+                <div style="text-align: center; margin-top: 15px;">
                     <button class="btn-generate" onclick="copyDocText(this)"><i class="fa-solid fa-copy"></i> Copy Card Details (1-Click)</button>
                 </div>
             </div>
@@ -1326,7 +1497,7 @@
                 <!-- Realtime Brightness & Custom Color Tint Control Box -->
                 <div style="margin-top: 15px; border-top: 1px dashed #8a2be2; padding-top: 12px; text-align: left;">
                     <label style="font-weight: bold; font-size: 12px; color: #8a2be2; display: block; margin-bottom: 8px;">
-                        <i class="fa-solid fa-sun"></i> BG Brightness & Color Adjustment:
+                        <i class="fa-solid fa-sun"></i> BG Brightness & Theme Color Adjustment:
                     </label>
                     
                     <!-- Brightness Slider -->
@@ -1338,14 +1509,14 @@
 
                     <!-- Custom Tint Color Picker -->
                     <div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                        <label style="font-size: 11px; font-weight: bold; color: #555;">Color Tint:</label>
+                        <label style="font-size: 11px; font-weight: bold; color: #555;">Theme Color Tint:</label>
                         <input type="color" id="bg-color-picker" value="#8a2be2" oninput="previewBgAdjustments()" style="width: 40px; height: 26px; border: 1px solid #ccc; cursor: pointer; border-radius: 4px; padding: 0;">
-                        <label style="font-size: 11px; color: #444; cursor: pointer; font-weight: bold;"><input type="checkbox" id="bg-use-color-tint" onchange="previewBgAdjustments()"> Apply Tint</label>
+                        <label style="font-size: 11px; color: #444; cursor: pointer; font-weight: bold;"><input type="checkbox" id="bg-use-color-tint" onchange="previewBgAdjustments()"> Apply Color Theme</label>
                     </div>
 
                     <!-- Save BG Settings Button -->
                     <button class="btn-generate" onclick="saveBgAdjustments()" style="width: 100%; padding: 8px; font-size: 12px; background: linear-gradient(135deg, #10b981, #059669); border: none; color: white; cursor: pointer; border-radius: 6px; font-weight: bold;">
-                        <i class="fa-solid fa-floppy-disk"></i> Save BG Color & Brightness
+                        <i class="fa-solid fa-floppy-disk"></i> Save Theme & Color Settings
                     </button>
                 </div>
             </div>
@@ -1873,7 +2044,14 @@
         function applyBgFilter(brightnessVal, colorVal, useColorTint) {
             document.body.style.filter = `brightness(${brightnessVal}%)`;
             if (useColorTint && colorVal) {
-                document.body.style.backgroundColor = colorVal;
+                document.body.style.background = `linear-gradient(135deg, ${colorVal} 0%, #0f172a 100%) fixed`;
+            } else {
+                const savedTheme = localStorage.getItem('theme') || 'theme-pic';
+                if (savedTheme === 'default') {
+                    document.body.style.background = '#f4f4f4';
+                } else if (savedTheme === 'dark') {
+                    document.body.style.background = '#0f172a';
+                }
             }
         }
 
@@ -1897,7 +2075,7 @@
 
             applyBgFilter(brightnessVal, colorVal, useColorTint);
             closeThemeModal();
-            showNotification('BG Color & Brightness Saved permanently!');
+            showNotification('BG Color & Theme Saved permanently!');
         }
 
         function loadSavedBgAdjustments() {
@@ -1930,11 +2108,11 @@
             if (isPhone) text = text.replace(/\D/g, '');
 
             navigator.clipboard.writeText(text).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = 'Copied';
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
                 btn.classList.add('copied');
                 setTimeout(() => {
-                    btn.innerText = originalText;
+                    btn.innerHTML = originalText;
                     btn.classList.remove('copied');
                 }, 1500);
             });
@@ -1945,11 +2123,11 @@
             const numericDob = bdayEl.getAttribute("data-numeric") || bdayEl.innerText.trim();
 
             navigator.clipboard.writeText(numericDob).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = 'Copied';
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
                 btn.classList.add('copied');
                 setTimeout(() => {
-                    btn.innerText = originalText;
+                    btn.innerHTML = originalText;
                     btn.classList.remove('copied');
                 }, 1500);
             });
@@ -1960,17 +2138,17 @@
             const fullYear = bdayEl.getAttribute("data-year") || "1970";
 
             navigator.clipboard.writeText(fullYear).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = 'Copied Year';
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Year';
                 btn.classList.add('copied');
                 setTimeout(() => {
-                    btn.innerText = originalText;
+                    btn.innerHTML = originalText;
                     btn.classList.remove('copied');
                 }, 1500);
             });
         }
 
-        /* DOCUMENT CARD & VIRTUAL CREDIT CARDS LOGIC */
+        /* DYNAMIC REALISTIC OFFICIAL DOCUMENT CARDS (DRIVER LICENSE, PASSPORT, NID) */
         const countryFlags = {
             "Bangladesh": "🇧🇩",
             "United States": "🇺🇸",
@@ -2013,44 +2191,114 @@
             const ssn = document.getElementById("ssn").innerText;
 
             let docNumber = "";
-            if (docType === "Driver License") {
-                docNumber = `DL-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}`;
-            } else if (docType === "Passport") {
-                docNumber = `P-${getRandomInt(10000000, 99999999)}`;
-            } else {
-                docNumber = `NID-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}`;
-            }
+            let cardHtml = "";
 
             const issueDate = `0${getRandomInt(1, 9)}/${getRandomInt(10, 28)}/2021`;
             const expiryDate = `0${getRandomInt(1, 9)}/${getRandomInt(10, 28)}/2031`;
 
-            currentDocText = `=== ${country.toUpperCase()} ${docType.toUpperCase()} ===\nFull Name: ${fullName}\nDocument Number: ${docNumber}\nCountry: ${country}\nDate of Birth: ${bday}\nAddress: ${fullAddress}\nIssue Date: ${issueDate}\nExpiry Date: ${expiryDate}\nSSN: ${ssn}`;
+            if (docType === "Driver License") {
+                docNumber = `DL-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}`;
+                currentDocText = `=== ${country.toUpperCase()} DRIVER LICENSE ===\nFull Name: ${fullName}\nDL No: ${docNumber}\nCountry: ${country}\nDOB: ${bday}\nAddress: ${fullAddress}\nISS: ${issueDate}\nEXP: ${expiryDate}\nSSN: ${ssn}`;
 
-            const container = document.getElementById("doc-modal-content");
-            container.innerHTML = `
-                <div class="doc-card-box">
-                    <div class="doc-card-header">
-                        <div class="doc-card-title-group">
-                            <span class="doc-card-flag">${flag}</span>
-                            <span class="doc-card-country-name">${country}</span>
+                cardHtml = `
+                    <div class="doc-real-card dl-card-container">
+                        <div class="dl-header-bar">
+                            <div>
+                                <span style="font-size: 20px; margin-right: 6px;">${flag}</span>
+                                <span class="dl-state-title">${country} DRIVER LICENSE</span>
+                            </div>
+                            <span class="dl-doc-type-text">CLASS C</span>
                         </div>
-                        <span class="doc-card-doc-type">${docType}</span>
-                    </div>
-                    <div class="doc-card-body">
-                        <img src="${photo}" alt="Photo" class="doc-card-photo">
-                        <div class="doc-card-info">
-                            <div><label>Full Name:</label> <span>${fullName}</span></div>
-                            <div><label>Doc Number:</label> <span>${docNumber}</span></div>
-                            <div><label>Date of Birth:</label> <span>${bday}</span></div>
-                            <div><label>Address:</label> <span>${fullAddress}</span></div>
-                            <div><label>Issue Date:</label> <span>${issueDate}</span></div>
-                            <div><label>Expiry Date:</label> <span>${expiryDate}</span></div>
-                            <div><label>SSN:</label> <span>${ssn}</span></div>
+                        <div class="dl-body-grid">
+                            <div class="dl-photo-box">
+                                <img src="${photo}" alt="Photo" class="dl-photo-img">
+                                <div class="dl-holo-badge"><i class="fa-solid fa-shield"></i></div>
+                            </div>
+                            <table class="dl-details-table">
+                                <tr><td class="dl-label">DL NO:</td><td class="dl-val">${docNumber}</td></tr>
+                                <tr><td class="dl-label">NAME:</td><td class="dl-val">${fullName}</td></tr>
+                                <tr><td class="dl-label">DOB:</td><td class="dl-val">${bday}</td></tr>
+                                <tr><td class="dl-label">ADDRESS:</td><td class="dl-val">${fullAddress}</td></tr>
+                                <tr><td class="dl-label">ISS:</td><td class="dl-val">${issueDate}</td><td class="dl-label">EXP:</td><td class="dl-val">${expiryDate}</td></tr>
+                                <tr><td class="dl-label">SEX:</td><td class="dl-val">M/F</td><td class="dl-label">SSN:</td><td class="dl-val">${ssn}</td></tr>
+                            </table>
+                        </div>
+                        <div class="dl-barcode-strip">
+                            <span class="dl-barcode-lines">||||| ||| |||||| |||| ||| |||||| |||||</span>
+                            <span style="font-size: 10px; font-weight: bold; color: #64748b;">OFFICIAL VERIFIED IDENTITY</span>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            } else if (docType === "Passport") {
+                docNumber = `P${getRandomInt(10000000, 99999999)}`;
+                currentDocText = `=== ${country.toUpperCase()} PASSPORT ===\nPassport No: ${docNumber}\nFull Name: ${fullName}\nCountry: ${country}\nDOB: ${bday}\nISS: ${issueDate}\nEXP: ${expiryDate}\nAuthority: DEPARTMENT OF STATE`;
 
+                let mrzLine1 = `P<${country.substring(0,3).toUpperCase()}${lastName.toUpperCase().replace(/[^A-Z]/g,'')}<<${firstName.toUpperCase().replace(/[^A-Z]/g,'')}`;
+                while(mrzLine1.length < 44) mrzLine1 += "<";
+                let mrzLine2 = `${docNumber}8${country.substring(0,3).toUpperCase()}7001018M3101018<<<<<<<<<<<<<<04`;
+
+                cardHtml = `
+                    <div class="doc-real-card passport-card-container">
+                        <div class="passport-header">
+                            <div>
+                                <span style="font-size: 24px; margin-right: 8px;">${flag}</span>
+                                <span style="font-size: 18px; font-weight: bold; letter-spacing: 1px; color: #f59e0b;">${country.toUpperCase()} PASSPORT</span>
+                            </div>
+                            <i class="fa-solid fa-passport passport-emblem"></i>
+                        </div>
+                        <div style="display: flex; gap: 16px; align-items: flex-start;">
+                            <img src="${photo}" alt="Passport Photo" style="width: 110px; height: 135px; border-radius: 6px; border: 2px solid #f59e0b; object-fit: cover;">
+                            <div style="flex: 1; font-size: 12px; line-height: 1.7; color: #cbd5e1;">
+                                <div><strong style="color: #94a3b8;">TYPE:</strong> <span style="color: #fff; font-weight: bold;">P</span></div>
+                                <div><strong style="color: #94a3b8;">PASSPORT NO:</strong> <span style="color: #f59e0b; font-weight: bold;">${docNumber}</span></div>
+                                <div><strong style="color: #94a3b8;">NAME:</strong> <span style="color: #fff; font-weight: bold;">${fullName}</span></div>
+                                <div><strong style="color: #94a3b8;">NATIONALITY:</strong> <span style="color: #fff; font-weight: bold;">${country}</span></div>
+                                <div><strong style="color: #94a3b8;">DOB:</strong> <span style="color: #fff; font-weight: bold;">${bday}</span></div>
+                                <div><strong style="color: #94a3b8;">ISSUE / EXP:</strong> <span style="color: #fff; font-weight: bold;">${issueDate} - ${expiryDate}</span></div>
+                            </div>
+                        </div>
+                        <div class="passport-mrz-zone">
+                            <div>${mrzLine1.substring(0, 44)}</div>
+                            <div>${mrzLine2.substring(0, 44)}</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // NID (National ID Card)
+                docNumber = `NID-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}`;
+                currentDocText = `=== ${country.toUpperCase()} NATIONAL ID CARD ===\nNID No: ${docNumber}\nFull Name: ${fullName}\nCountry: ${country}\nDOB: ${bday}\nAddress: ${fullAddress}`;
+
+                cardHtml = `
+                    <div class="doc-real-card nid-card-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 8px; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 22px;">${flag}</span>
+                                <span style="font-size: 15px; font-weight: 800; letter-spacing: 0.5px;">${country} NATIONAL ID CARD</span>
+                            </div>
+                            <i class="fa-solid fa-microchip" style="font-size: 26px; color: #f59e0b;"></i>
+                        </div>
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <div style="position: relative;">
+                                <img src="${photo}" alt="NID Photo" style="width: 105px; height: 125px; border-radius: 8px; border: 2px solid #10b981; object-fit: cover;">
+                                <i class="fa-solid fa-fingerprint" style="position: absolute; bottom: 5px; right: 5px; color: #10b981; font-size: 18px; background: rgba(0,0,0,0.6); border-radius: 50%; padding: 4px;"></i>
+                            </div>
+                            <div style="flex: 1; font-size: 12px; line-height: 1.7;">
+                                <div><span style="opacity: 0.8;">NID NO:</span> <strong style="color: #f59e0b; font-size: 14px;">${docNumber}</strong></div>
+                                <div><span style="opacity: 0.8;">NAME:</span> <strong>${fullName}</strong></div>
+                                <div><span style="opacity: 0.8;">DOB:</span> <strong>${bday}</strong></div>
+                                <div><span style="opacity: 0.8;">ADDRESS:</span> <strong>${fullAddress}</strong></div>
+                                <div><span style="opacity: 0.8;">BLOOD GROUP:</span> <strong style="color: #ef4444;">O+ POSITIVE</strong></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; opacity: 0.9;">
+                            <span>NATIONAL BIOMETRIC SMART CARD</span>
+                            <span style="font-family: monospace; font-size: 14px; letter-spacing: 2px;">|||||| || ||||| |||</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById("doc-modal-content").innerHTML = cardHtml;
             document.getElementById("doc-modal-title").innerHTML = `<i class="fa-solid fa-id-card"></i> ${flag} ${country} ${docType}`;
             document.getElementById("doc-modal").classList.add("show");
         }
