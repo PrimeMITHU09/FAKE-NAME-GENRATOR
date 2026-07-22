@@ -1402,31 +1402,46 @@
     <div class="modal-overlay" id="sheeter-modal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box sheeter-modal-box">
             <div class="modal-header">
-                <span><i class="fa-solid fa-table-list"></i> Identity Sheeter (Drive Sync & 12 Rows)</span>
+                <span><i class="fa-solid fa-table-list"></i> Identity Sheeter (Create Google Sheet & 12 Rows Sync)</span>
                 <button class="modal-close-btn" onclick="closeSheeterModal()">&times;</button>
             </div>
             <div class="modal-body" style="padding: 18px; display: flex; flex-direction: column; overflow: hidden; position: relative;">
-                <!-- Phase 1: Drive Link Input -->
-                <div id="sheeter-drive-step" style="text-align: center; margin: auto; padding: 20px;">
-                    <h3 style="margin-bottom: 12px; color: #8a2be2;">Enter Drive / Sheet Link</h3>
-                    <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Paste your Google Drive or Spreadsheet link. It will open in the popup with Column D (12 Rows) name changer.</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; max-width: 520px; margin: 0 auto; flex-wrap: wrap;">
-                        <input type="text" id="sheeter-drive-url" placeholder="https://docs.google.com/spreadsheets/d/..." style="flex: 1; min-width: 240px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
-                        <button class="btn-generate" onclick="confirmDriveLink()">Confirm & Open Sheet</button>
+                <!-- Phase 1: Drive Link Input & Create Sheet -->
+                <div id="sheeter-drive-step" style="text-align: center; margin: auto; padding: 20px; max-width: 580px;">
+                    <h3 style="margin-bottom: 8px; color: #8a2be2;"><i class="fa-solid fa-file-excel"></i> Create or Link Google Sheet</h3>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Open a fresh Google Sheet or paste an existing link. Column D (12 Rows) full name changer will operate live inside!</p>
+                    
+                    <!-- 1-Click Create Google Sheet Button -->
+                    <button class="btn-generate" onclick="createNewGoogleSheet()" style="background: linear-gradient(135deg, #10b981, #059669); width: 100%; padding: 12px; font-size: 14px; font-weight: bold; margin-bottom: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                        <i class="fa-solid fa-file-circle-plus"></i> Create New Google Sheet (1-Click Popup)
+                    </button>
+
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+                        <hr style="flex: 1; border: 0; border-top: 1px dashed #ccc;">
+                        <span style="font-size: 11px; font-weight: bold; color: #888;">OR PASTE EXISTING LINK</span>
+                        <hr style="flex: 1; border: 0; border-top: 1px dashed #ccc;">
+                    </div>
+
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <input type="text" id="sheeter-drive-url" placeholder="https://docs.google.com/spreadsheets/d/..." style="flex: 1; min-width: 240px; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px;">
+                        <button class="btn-generate" onclick="confirmDriveLink()" style="padding: 10px 18px; font-size: 13px;">
+                            <i class="fa-solid fa-up-right-from-square"></i> Open & Embed Sheet
+                        </button>
                     </div>
                 </div>
 
                 <!-- Phase 2: Sheet View & Column D Grid (12 Rows) -->
                 <div id="sheeter-grid-step" style="display: none; flex-direction: column; height: 100%; overflow: hidden;">
                     <!-- Embedded Google Drive Sheet Frame -->
-                    <iframe id="sheeter-drive-iframe" style="width: 100%; height: 200px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px; display: none;"></iframe>
+                    <iframe id="sheeter-drive-iframe" style="width: 100%; height: 220px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px; display: none;"></iframe>
 
                     <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px;">
                         <div style="display: flex; gap: 10px; align-items: center;">
                             <span style="font-size: 13px; font-weight: bold; color: #6d28d9;"><i class="fa-solid fa-table-columns"></i> Column D: Full Name (12 Rows)</span>
                         </div>
-                        <div>
-                            <button class="copy-tag" onclick="exportSheeterData(this)">Copy All 12 Rows</button>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="copy-tag" onclick="openSheetInNewTab()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Sheet in New Tab</button>
+                            <button class="copy-tag" onclick="exportSheeterData(this)"><i class="fa-solid fa-copy"></i> Copy All 12 Rows</button>
                         </div>
                     </div>
 
@@ -2536,6 +2551,19 @@
 
         /* SHEETER DYNAMIC DRIVE EMBED & COLUMN D FLOATING BUTTON LOGIC */
         let sheeterRowsData = [];
+
+        function createNewGoogleSheet() {
+            window.open('https://sheet.new', '_blank');
+            confirmDriveLink();
+            showNotification('🚀 Creating & Opening new Google Sheet in popup tab!');
+        }
+
+        function openSheetInNewTab() {
+            const urlInput = document.getElementById('sheeter-drive-url').value.trim();
+            const targetUrl = urlInput || 'https://docs.google.com/spreadsheets';
+            window.open(targetUrl, '_blank');
+            showNotification('Opening Google Sheet in new tab...');
+        }
 
         function openSheeterModal() {
             document.getElementById('sheeter-drive-step').style.display = 'block';
