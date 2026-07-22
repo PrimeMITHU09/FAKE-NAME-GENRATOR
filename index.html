@@ -300,6 +300,66 @@
             letter-spacing: 0.5px;
         }
 
+        /* Temp Mail Modal Box Design */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 90%;
+            max-width: 900px;
+            height: 85vh;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            background: #8a2be2;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         footer {
             margin-top: 25px;
             text-align: center;
@@ -393,13 +453,15 @@
         body.dark-mode .social-links a {
             color: #aaa;
         }
+        body.dark-mode .modal-box {
+            background: #1e1e1e;
+        }
     </style>
 </head>
 <body>
 
     <div class="header-bar">
         <div class="brand-title">
-            <!-- Uses icon.png for Header Logo -->
             <img src="icon.png" alt="Logo" class="app-logo-img">
             Prime Identity
         </div>
@@ -449,7 +511,8 @@
                 <button class="btn-generate" onclick="generateIdentity()">Generate</button>
                 <span class="adv-options-link" onclick="toggleAdvOptions()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
                 <span class="adv-options-link" onclick="toggleIpPanel()"><i class="fa-solid fa-globe"></i> IP Lookup</span>
-                <span class="adv-options-link" onclick="toggleTempMailPanel()"><i class="fa-solid fa-envelope"></i> Temp Mail</span>
+                <!-- Directly opens in-site Temp Mail window -->
+                <span class="adv-options-link" onclick="openTempMailModal()"><i class="fa-solid fa-envelope"></i> Temp Mail</span>
             </div>
 
             <div class="adv-panel" id="adv-panel">
@@ -470,12 +533,6 @@
                     <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8" style="width: 180px;">
                     <button class="btn-generate" style="padding: 4px 10px;" onclick="generateByIp()">Search IP</button>
                 </div>
-            </div>
-
-            <div class="adv-panel" id="tempmail-panel">
-                <div class="adv-panel-title">Temporary Mail Service:</div>
-                <p style="margin-bottom: 8px;">Active Temp Email: <strong id="temp-email-display" style="color:#b366ff;">Loading...</strong></p>
-                <button class="btn-generate" style="padding: 4px 10px;" onclick="openInbox()">Check Inbox</button>
             </div>
         </div>
 
@@ -576,6 +633,19 @@
         </div>
     </div>
 
+    <!-- IN-SITE TEMP MAIL MODAL CONTAINER -->
+    <div class="modal-overlay" id="tempmail-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span><i class="fa-solid fa-envelope"></i> Temporary Mail Inbox (mail.tm)</span>
+                <button class="modal-close-btn" onclick="closeTempMailModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="tempmail-frame" src="" title="Temp Mail"></iframe>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2026 Prime World. All rights reserved.</p>
         <div class="social-links">
@@ -588,7 +658,6 @@
     </footer>
 
     <script>
-        // Registering Service Worker for PWA Home Screen Installation
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swBlob = new Blob([`
@@ -622,7 +691,6 @@
         function closeAllPanels() {
             document.getElementById('adv-panel').classList.remove('open');
             document.getElementById('ip-panel').classList.remove('open');
-            document.getElementById('tempmail-panel').classList.remove('open');
         }
 
         function toggleAdvOptions() {
@@ -639,11 +707,19 @@
             if(!isOpen) panel.classList.add('open');
         }
 
-        function toggleTempMailPanel() {
-            const panel = document.getElementById('tempmail-panel');
-            const isOpen = panel.classList.contains('open');
-            closeAllPanels();
-            if(!isOpen) panel.classList.add('open');
+        /* Temp Mail In-Site Modal Functions */
+        function openTempMailModal() {
+            const modal = document.getElementById('tempmail-modal');
+            const iframe = document.getElementById('tempmail-frame');
+            iframe.src = "https://mail.tm/en/";
+            modal.classList.add('show');
+        }
+
+        function closeTempMailModal() {
+            const modal = document.getElementById('tempmail-modal');
+            const iframe = document.getElementById('tempmail-frame');
+            iframe.src = ""; // Stop loading when closed
+            modal.classList.remove('show');
         }
 
         function getRandomInt(min, max) {
@@ -729,7 +805,6 @@
                 document.getElementById("meaning-link").href = `https://www.behindthename.com/name/${firstName.toLowerCase()}`;
 
                 document.getElementById("gmail").innerText = generatedEmail;
-                document.getElementById("temp-email-display").innerText = generatedEmail;
 
                 document.getElementById("ssn").innerText = ssn;
                 document.getElementById("geo").innerText = geo;
@@ -772,10 +847,6 @@
             } catch(e) {
                 alert("Could not fetch IP details.");
             }
-        }
-
-        function openInbox() {
-            window.open('https://generator.email/', '_blank');
         }
 
         window.onload = function() {
