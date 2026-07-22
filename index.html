@@ -1241,9 +1241,7 @@
             <div class="btn-group">
                 <button class="btn-generate" onclick="generateIdentity()">Generate</button>
                 <span class="adv-options-link" onclick="toggleAdvOptions()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
-                <span class="adv-options-link" onclick="toggleIpPanel()"><i class="fa-solid fa-globe"></i> IP Lookup</span>
-                <span class="adv-options-link" onclick="showNotification('AI Identity Verified: Synthetic Face & Profile Synced!')"><i class="fa-solid fa-robot"></i> AI Identity</span>
-                <span class="adv-options-link" onclick="showNotification('VPN Check: Clean Connection (No Proxy / VPN Detected)')"><i class="fa-solid fa-shield-halved"></i> VPN Check</span>
+                <span class="adv-options-link" onclick="open12NamesModal()"><i class="fa-solid fa-list-ol"></i> 12 Names (For Sheet)</span>
                 
                 <div id="premium-features-group" style="display: none; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <span class="adv-options-link" onclick="openDocModal('Driver License')"><i class="fa-solid fa-id-card"></i> Driver License</span>
@@ -1417,6 +1415,34 @@
                 <div id="credit-modal-content" class="credit-cards-container"></div>
                 <div style="text-align: center; margin: 15px 0 10px 0;">
                     <button class="btn-generate" onclick="copyAllCreditCards(this)"><i class="fa-solid fa-copy"></i> Copy All 3 Cards (1-Click)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 12 NAMES SHEET BATCH GENERATOR MODAL -->
+    <div class="modal-overlay" id="names12-modal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-box" style="max-width: 540px; height: auto; max-height: 90vh; border-radius: 20px; background: #141224; color: white;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #8a2be2, #4a00e0);">
+                <span><i class="fa-solid fa-file-csv"></i> 12 Names Batch Generator (For Google Sheet)</span>
+                <button class="modal-close-btn" onclick="close12NamesModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 15px; text-align: center;">
+                    Generate 12 full names. Click <strong>Copy 12 Names</strong> to copy them formatted for 1-click pasting (Ctrl+V) directly into Column D of your Google Sheet!
+                </p>
+
+                <!-- 12 Names Container List -->
+                <div id="names12-list" style="background: #1e1b2e; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px; max-height: 280px; overflow-y: auto; margin-bottom: 18px;">
+                    <!-- 12 rows rendered here -->
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn-generate" onclick="generate12SheetNames()" style="flex: 1; min-width: 180px; padding: 10px; font-size: 13px; background: linear-gradient(135deg, #8a2be2, #4a00e0);">
+                        <i class="fa-solid fa-rotate"></i> Regenerate 12 Names
+                    </button>
+                    <button class="btn-generate" onclick="copy12SheetNames(this)" style="flex: 1; min-width: 180px; padding: 10px; font-size: 13px; background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fa-solid fa-copy"></i> Copy 12 Names (Paste in Sheet)
+                    </button>
                 </div>
             </div>
         </div>
@@ -2526,153 +2552,76 @@
             });
         }
 
-        /* SHEETER DYNAMIC DRIVE EMBED & COLUMN D FLOATING BUTTON LOGIC */
-        let sheeterRowsData = [];
+        /* 12 NAMES SHEET BATCH GENERATOR LOGIC */
+        let generated12NamesList = [];
 
-        function createNewGoogleSheet() {
-            window.open('https://sheet.new', '_blank');
-            confirmDriveLink();
-            showNotification('🚀 Creating & Opening new Google Sheet in popup tab!');
-        }
-
-        function openSheetInNewTab() {
-            const urlInput = document.getElementById('sheeter-drive-url').value.trim();
-            const targetUrl = urlInput || 'https://docs.google.com/spreadsheets';
-            window.open(targetUrl, '_blank');
-            showNotification('Opening Google Sheet in new tab...');
-        }
-
-        function openSheeterModal() {
-            document.getElementById('sheeter-drive-step').style.display = 'block';
-            document.getElementById('sheeter-grid-step').style.display = 'none';
-            document.getElementById('sheeter-drive-url').value = '';
-            document.getElementById('sheeter-modal').classList.add('show');
-        }
-
-        function closeSheeterModal() {
-            document.getElementById('sheeter-modal').classList.remove('show');
-        }
-
-        function confirmDriveLink() {
-            const urlInput = document.getElementById('sheeter-drive-url').value.trim();
-            if (!urlInput) {
-                alert("Please enter a Google Drive / Sheet link first to confirm!");
-                return;
-            }
-
-            // Google Sheet Iframe Embed conversion
-            const iframe = document.getElementById('sheeter-drive-iframe');
-            if (urlInput.includes("docs.google.com/spreadsheets")) {
-                let previewUrl = urlInput;
-                if (previewUrl.includes('/edit')) {
-                    previewUrl = previewUrl.replace(/\/edit.*$/, '/preview');
-                } else if (!previewUrl.includes('/preview') && !previewUrl.includes('/pubhtml')) {
-                    previewUrl = previewUrl.replace(/\/$/, '') + '/preview';
-                }
-                iframe.src = previewUrl;
-                iframe.style.display = 'block';
-            } else {
-                iframe.style.display = 'none';
-            }
-
-            // Generate 12 Rows for Column D
-            sheeterRowsData = [];
-            const country = document.getElementById("country").value || "Bangladesh";
+        function generate12SheetNames() {
+            const country = document.getElementById("country").value || "United States";
             const nameSetInput = document.getElementById("nameset").value.toLowerCase();
 
-            let firstNames = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Barbara"];
-            let lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez"];
+            let firstNames = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Barbara", "Richard", "Susan", "Joseph", "Jessica", "Thomas", "Sarah", "Charles", "Karen"];
+            let lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin"];
 
             if (country === "Bangladesh" || nameSetInput === "bengali") {
-                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া"];
+                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া", "তাসনিম", "সাবরিনা", "আরিফুল", "নাজমুল"];
                 lastNames = ["হাসান", "আহমেদ", "চৌধুরী", "রহমান", "ইসলাম", "হোসেন", "আরিফ", "কালাম", "রানা", "সরকার", "জাহান", "সুলতানা"];
             }
 
-            const domains = ["gmail.com", "outlook.com", "yahoo.com"];
-
+            generated12NamesList = [];
             for (let i = 1; i <= 12; i++) {
-                const fn = firstNames[(i - 1) % firstNames.length];
-                const ln = lastNames[(i - 1) % lastNames.length];
-                const gender = i % 2 === 0 ? "Male" : "Female";
-                const email = `user${i}${getRandomInt(10, 99)}@${domains[i % domains.length]}`;
-                const phone = country === "Bangladesh" ? `017${getRandomInt(10, 99)}-${getRandomInt(100000, 999999)}` : `(${getRandomInt(200, 999)}) ${getRandomInt(100, 999)}-${getRandomInt(1000, 9999)}`;
-                const ssn = `${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-${getRandomInt(1000, 9999)}`;
-
-                sheeterRowsData.push({
-                    id: i,
-                    marked: false,
-                    name: `${fn} ${ln}`,
-                    gender: gender,
-                    country: country,
-                    email: email,
-                    phone: phone,
-                    ssn: ssn
-                });
+                const fn = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const ln = lastNames[Math.floor(Math.random() * lastNames.length)];
+                generated12NamesList.push(`${fn} ${ln}`);
             }
 
-            renderSheeterTable();
-            document.getElementById('sheeter-drive-step').style.display = 'none';
-            document.getElementById('sheeter-grid-step').style.display = 'flex';
-            showNotification('Drive Sheet Confirmed & 12 Rows Loaded!');
+            render12NamesList();
         }
 
-        function renderSheeterTable() {
-            const tbody = document.getElementById('sheeter-tbody');
-            tbody.innerHTML = sheeterRowsData.map(row => `
-                <tr class="${row.marked ? 'marked' : ''}" id="sheeter-tr-${row.id}">
-                    <td style="color: #94a3b8; font-weight: bold;">${row.id}</td>
-                    <td style="color: #cbd5e1;">${row.gender}</td>
-                    <td style="color: #cbd5e1;">${row.country}</td>
-                    <td><strong id="sheeter-name-${row.id}" style="color: #c084fc; font-size: 14px;">${row.name}</strong></td>
-                    <td style="color: #38bdf8;">${row.email}</td>
-                    <td style="color: #94a3b8;">${row.phone}</td>
-                    <td style="color: #94a3b8;">${row.ssn}</td>
-                </tr>
+        function render12NamesList() {
+            const container = document.getElementById("names12-list");
+            if (!container) return;
+            container.innerHTML = generated12NamesList.map((name, index) => `
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px;">
+                    <span style="color: #94a3b8; font-weight: bold; width: 30px;">${index + 1}.</span>
+                    <span style="color: #c084fc; font-weight: bold; flex: 1;">${name}</span>
+                    <button class="copy-tag" onclick="copySingleNameFrom12('${name.replace(/'/g, "\\'")}', this)" style="padding: 3px 10px; font-size: 11px;"><i class="fa-solid fa-copy"></i> Copy</button>
+                </div>
             `).join('');
         }
 
-        function changeColumnDNames() {
-            if (!sheeterRowsData.length) return;
+        function copy12SheetNames(btn) {
+            if (!generated12NamesList.length) generate12SheetNames();
+            const formattedText = generated12NamesList.join('\n');
 
-            const country = document.getElementById("country").value || "Bangladesh";
-            const nameSetInput = document.getElementById("nameset").value.toLowerCase();
-
-            let firstNames = ["Alexander", "Charlotte", "Benjamin", "Amelia", "Lucas", "Harper", "Ethan", "Evelyn", "Mason", "Abigail", "Oliver", "Emily"];
-            let lastNames = ["Miller", "Davis", "Wilson", "Anderson", "Taylor", "Thomas", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson"];
-
-            if (country === "Bangladesh" || nameSetInput === "bengali") {
-                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া", "তাসনিম", "সাবরিনা"];
-                lastNames = ["হাসান", "আহমেদ", "চৌধুরী", "রহমান", "ইসলাম", "হোসেন", "আরিফ", "কালাম", "রানা", "সরকার", "জাহান", "সুলতানা"];
-            }
-
-            const domains = ["gmail.com", "outlook.com", "yahoo.com"];
-
-            sheeterRowsData.forEach(row => {
-                const fn = firstNames[Math.floor(Math.random() * firstNames.length)];
-                const ln = lastNames[Math.floor(Math.random() * lastNames.length)];
-                row.name = `${fn} ${ln}`;
-                row.email = `user${row.id}${getRandomInt(10, 99)}@${domains[getRandomInt(0, 2)]}`;
+            navigator.clipboard.writeText(formattedText).then(() => {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied 12 Names!';
+                btn.classList.add('copied');
+                showNotification('📋 Copied 12 Names! Now paste (Ctrl+V) directly into Google Sheet Column D!');
+                setTimeout(() => {
+                    btn.innerHTML = orig;
+                    btn.classList.remove('copied');
+                }, 1800);
             });
-
-            renderSheeterTable();
-            showNotification('Updated Column D Names (12 Rows) successfully!');
         }
 
-        function exportSheeterData(btn) {
-            if (!sheeterRowsData.length) return;
-            const textData = sheeterRowsData.map(r => 
-                `${r.id}. Name: ${r.name} | Gender: ${r.gender} | Country: ${r.country} | Email: ${r.email} | Phone: ${r.phone} | SSN: ${r.ssn}`
-            ).join('\n');
-
-            navigator.clipboard.writeText(textData).then(() => {
-                const orig = btn.innerText;
-                btn.innerText = 'Copied All 12 Rows!';
-                btn.classList.add('copied');
+        function copySingleNameFrom12(nameText, btn) {
+            navigator.clipboard.writeText(nameText).then(() => {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
                 setTimeout(() => {
-                    btn.innerText = orig;
-                    btn.classList.remove('copied');
-                }, 1500);
+                    btn.innerHTML = orig;
+                }, 1200);
             });
+        }
+
+        function open12NamesModal() {
+            generate12SheetNames();
+            document.getElementById('names12-modal').classList.add('show');
+        }
+
+        function close12NamesModal() {
+            document.getElementById('names12-modal').classList.remove('show');
         }
 
         /* PREMIUM SUBSCRIPTION CONTROL LOGIC */
