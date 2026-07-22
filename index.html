@@ -1243,13 +1243,10 @@
                 <span class="adv-options-link" onclick="openAdvModal()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
                 <span class="adv-options-link" onclick="openIpModal()"><i class="fa-solid fa-globe"></i> IP Lookup</span>
                 <span class="adv-options-link" onclick="open12NamesModal()"><i class="fa-solid fa-list-ol"></i> 12 Names (For Sheet)</span>
-                
-                <div id="premium-features-group" style="display: none; align-items: center; gap: 15px; flex-wrap: wrap;">
-                    <span class="adv-options-link" onclick="openDocModal('Driver License')"><i class="fa-solid fa-id-card"></i> Driver License</span>
-                    <span class="adv-options-link" onclick="openDocModal('Passport')"><i class="fa-solid fa-passport"></i> Passport</span>
-                    <span class="adv-options-link" onclick="openDocModal('NID')"><i class="fa-solid fa-address-card"></i> NID</span>
-                    <span class="adv-options-link" onclick="openCreditModal()"><i class="fa-solid fa-credit-card"></i> Card Generator (3 Cards)</span>
-                </div>
+                <span class="adv-options-link" onclick="openDocModal('Driver License')"><i class="fa-solid fa-id-card"></i> Driver License</span>
+                <span class="adv-options-link" onclick="openDocModal('Passport')"><i class="fa-solid fa-passport"></i> Passport</span>
+                <span class="adv-options-link" onclick="openDocModal('NID')"><i class="fa-solid fa-address-card"></i> NID</span>
+                <span class="adv-options-link" onclick="openCreditModal()"><i class="fa-solid fa-credit-card"></i> Card Generator (3 Cards)</span>
             </div>
         </div>
 
@@ -2698,33 +2695,11 @@
         }
 
         function applyPremiumState() {
-            const isActive = localStorage.getItem('premium_active') === 'true';
-            const expiry = parseInt(localStorage.getItem('premium_expiry') || '0', 10);
-            const now = new Date().getTime();
-
-            const premiumGroup = document.getElementById('premium-features-group');
+            localStorage.setItem('premium_active', 'true');
             const premiumBtnText = document.getElementById('premium-btn-text');
-            const cancelBtn = document.getElementById('cancel-premium-btn');
             const statusText = document.getElementById('premium-status-text');
-
-            if (isActive && expiry > now) {
-                const remainingDays = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
-                const planType = localStorage.getItem('premium_plan') || 'weekly';
-
-                if (premiumGroup) premiumGroup.style.display = 'inline-flex';
-                if (premiumBtnText) premiumBtnText.innerText = `⭐ Premium Active (${remainingDays}d)`;
-                if (cancelBtn) cancelBtn.style.display = 'inline-block';
-                if (statusText) statusText.innerText = `Status: Premium Active (${planType.toUpperCase()} - ${remainingDays} days remaining)`;
-            } else {
-                localStorage.removeItem('premium_active');
-                localStorage.removeItem('premium_plan');
-                localStorage.removeItem('premium_expiry');
-
-                if (premiumGroup) premiumGroup.style.display = 'none';
-                if (premiumBtnText) premiumBtnText.innerText = 'Premium';
-                if (cancelBtn) cancelBtn.style.display = 'none';
-                if (statusText) statusText.innerText = 'Status: Free Membership (Claim Premium to unlock tools)';
-            }
+            if (premiumBtnText) premiumBtnText.innerText = '⭐ Premium Active (30d)';
+            if (statusText) statusText.innerText = 'Status: Full Access Unlocked';
         }
     </script>
 </body>
