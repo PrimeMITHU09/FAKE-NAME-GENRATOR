@@ -1648,7 +1648,7 @@
             if (checkbox.checked) {
                 setRealtimeTheme('dark');
             } else {
-                setRealtimeTheme('default');
+                setRealtimeTheme('theme-pic');
             }
         }
 
@@ -1664,8 +1664,6 @@
             
             if (themeName === 'dark') {
                 document.body.classList.add('dark-mode');
-            } else if (themeName === 'default') {
-                document.body.classList.add('theme-default');
             } else {
                 document.body.classList.add(themeName);
             }
@@ -1673,12 +1671,13 @@
             updateThemeSwitchUI(themeName);
             localStorage.setItem('theme', themeName);
             closeThemeModal();
-            const displayName = themeName === 'theme-pic' ? 'DEFAULT WALLPAPER' : themeName.replace('theme-', '').toUpperCase();
+            const displayName = themeName === 'theme-pic' ? 'DEFAULT MACOS WALLPAPER' : themeName.replace('theme-', '').toUpperCase();
             showNotification(`Realtime Theme Applied: ${displayName} (Saved permanently)`);
         }
 
         function applySavedTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'theme-pic';
+            let savedTheme = localStorage.getItem('theme') || 'theme-pic';
+            if (savedTheme === 'default') savedTheme = 'theme-pic';
             document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber', 'theme-custom-bg');
             
             if (savedTheme === 'custom') {
@@ -1694,8 +1693,6 @@
                 }
             } else if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
-            } else if (savedTheme === 'default') {
-                document.body.classList.add('theme-default');
             } else {
                 document.body.classList.add(savedTheme);
             }
