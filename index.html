@@ -490,43 +490,67 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9999;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
             justify-content: center;
             align-items: center;
         }
 
         .modal-overlay.show {
-            display: flex;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
         .modal-box {
-            background: #fff;
+            background: #ffffff !important;
+            color: #333333 !important;
             width: 90%;
             max-width: 900px;
-            height: 85vh;
-            border-radius: 8px;
+            max-height: 90vh;
+            border-radius: 10px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            position: relative;
+            z-index: 100000;
+        }
+
+        .modal-box h3, .modal-box p, .modal-box span, .modal-box label {
+            color: initial;
+        }
+
+        body.dark-mode .modal-box {
+            background: #1e1e1e !important;
+            color: #f1f1f1 !important;
+            border: 1px solid #444;
+        }
+
+        body.dark-mode .modal-box p {
+            color: #cccccc !important;
         }
 
         .modal-header {
             background: #8a2be2;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
         }
 
+        .modal-header span {
+            color: white !important;
+        }
+
         .modal-close-btn {
             background: transparent;
             border: none;
-            color: white;
-            font-size: 22px;
+            color: white !important;
+            font-size: 24px;
             cursor: pointer;
             line-height: 1;
         }
@@ -537,13 +561,14 @@
             height: 100%;
         }
 
-        /* Sheeter Modal Styles */
+        /* Sheeter Modal & Floating Change Name Button Styles */
         .sheeter-modal-box {
-            max-width: 860px;
+            max-width: 880px;
             width: 95%;
             height: 85vh;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .sheeter-table-container {
@@ -575,6 +600,11 @@
             z-index: 10;
         }
 
+        .sheeter-table th.col-d-header {
+            background-color: #6d28d9;
+            font-weight: bold;
+        }
+
         .sheeter-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
@@ -583,9 +613,42 @@
             background-color: #e9d5ff !important;
         }
 
+        .sheeter-floating-btn {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #8a2be2, #4a00e0);
+            color: #ffffff !important;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sheeter-floating-btn:hover {
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.7);
+        }
+
         /* REALTIME THEME PRESETS */
         body.theme-pic {
             background: url('bg.jpg') no-repeat center center fixed !important;
+            background-size: cover !important;
+            color: #ffffff !important;
+        }
+
+        body.theme-custom-bg {
+            background-repeat: no-repeat !important;
+            background-center: center !important;
+            background-attachment: fixed !important;
             background-size: cover !important;
             color: #ffffff !important;
         }
@@ -615,6 +678,7 @@
         }
 
         body.theme-pic .main-card,
+        body.theme-custom-bg .main-card,
         body.theme-sunset .main-card,
         body.theme-ocean .main-card,
         body.theme-cyber .main-card {
@@ -626,6 +690,7 @@
         }
 
         body.theme-pic .generator-box,
+        body.theme-custom-bg .generator-box,
         body.theme-sunset .generator-box,
         body.theme-ocean .generator-box,
         body.theme-cyber .generator-box {
@@ -634,10 +699,12 @@
         }
 
         body.theme-pic .generator-header h3,
+        body.theme-custom-bg .generator-header h3,
         body.theme-sunset .generator-header h3,
         body.theme-ocean .generator-header h3,
         body.theme-cyber .generator-header h3,
         body.theme-pic .info-row .label,
+        body.theme-custom-bg .info-row .label,
         body.theme-sunset .info-row .label,
         body.theme-ocean .info-row .label,
         body.theme-cyber .info-row .label {
@@ -645,6 +712,7 @@
         }
 
         body.theme-pic .info-row .value,
+        body.theme-custom-bg .info-row .value,
         body.theme-sunset .info-row .value,
         body.theme-ocean .info-row .value,
         body.theme-cyber .info-row .value {
@@ -955,7 +1023,7 @@
     </div>
 
     <!-- DOCUMENT CARD MODAL (Driver License / Passport / NID) -->
-    <div class="modal-overlay" id="doc-modal">
+    <div class="modal-overlay" id="doc-modal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box" style="max-width: 540px; height: auto; max-height: 90vh;">
             <div class="modal-header">
                 <span id="doc-modal-title"><i class="fa-solid fa-id-card"></i> Official Document Card</span>
@@ -971,7 +1039,7 @@
     </div>
 
     <!-- 3 CREDIT CARDS MODAL -->
-    <div class="modal-overlay" id="credit-modal">
+    <div class="modal-overlay" id="credit-modal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box" style="max-width: 600px; height: auto; max-height: 90vh;">
             <div class="modal-header">
                 <span><i class="fa-solid fa-credit-card"></i> Card Generator (3 Virtual Cards)</span>
@@ -986,33 +1054,35 @@
         </div>
     </div>
 
-    <!-- SHEETER MODAL (Drive Confirm & 1-40 Rows Grid) -->
-    <div class="modal-overlay" id="sheeter-modal">
+    <!-- SHEETER MODAL (Google Drive Link Preview & Column D 12 Rows) -->
+    <div class="modal-overlay" id="sheeter-modal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box sheeter-modal-box">
             <div class="modal-header">
-                <span><i class="fa-solid fa-table-list"></i> Identity Sheeter (Drive Sync)</span>
+                <span><i class="fa-solid fa-table-list"></i> Identity Sheeter (Drive Sync & 12 Rows)</span>
                 <button class="modal-close-btn" onclick="closeSheeterModal()">&times;</button>
             </div>
-            <div class="modal-body" style="padding: 18px; display: flex; flex-direction: column; overflow: hidden;">
+            <div class="modal-body" style="padding: 18px; display: flex; flex-direction: column; overflow: hidden; position: relative;">
                 <!-- Phase 1: Drive Link Input -->
                 <div id="sheeter-drive-step" style="text-align: center; margin: auto; padding: 20px;">
                     <h3 style="margin-bottom: 12px; color: #8a2be2;">Enter Drive / Sheet Link</h3>
-                    <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Please paste your Google Drive or Spreadsheet link to confirm and open the identity sheet.</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; max-width: 500px; margin: 0 auto; flex-wrap: wrap;">
+                    <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Paste your Google Drive or Spreadsheet link. It will open in the popup with Column D (12 Rows) name changer.</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; max-width: 520px; margin: 0 auto; flex-wrap: wrap;">
                         <input type="text" id="sheeter-drive-url" placeholder="https://docs.google.com/spreadsheets/d/..." style="flex: 1; min-width: 240px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
-                        <button class="btn-generate" onclick="confirmDriveLink()">Confirm Drive Link</button>
+                        <button class="btn-generate" onclick="confirmDriveLink()">Confirm & Open Sheet</button>
                     </div>
                 </div>
 
-                <!-- Phase 2: Sheet Grid View (1 to 40 Rows) -->
-                <div id="sheeter-grid-step" style="display: none; flex-direction: column; height: 100%;">
-                    <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 10px;">
-                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                            <label style="font-size: 12px; font-weight: bold; cursor: pointer;"><input type="checkbox" id="sheeter-mark-all" onchange="toggleMarkAllSheeter(this)"> Mark All (1-40)</label>
-                            <button class="btn-generate" style="padding: 5px 14px; font-size: 12px;" onclick="changeSelectedNames()"><i class="fa-solid fa-rotate"></i> Change Name</button>
+                <!-- Phase 2: Sheet View & Column D Grid (12 Rows) -->
+                <div id="sheeter-grid-step" style="display: none; flex-direction: column; height: 100%; overflow: hidden;">
+                    <!-- Embedded Google Drive Sheet Frame -->
+                    <iframe id="sheeter-drive-iframe" style="width: 100%; height: 200px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px; display: none;"></iframe>
+
+                    <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px;">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span style="font-size: 13px; font-weight: bold; color: #6d28d9;"><i class="fa-solid fa-table-columns"></i> Column D: Full Name (12 Rows)</span>
                         </div>
                         <div>
-                            <button class="copy-tag" onclick="exportSheeterData(this)">Copy All 40 Rows</button>
+                            <button class="copy-tag" onclick="exportSheeterData(this)">Copy All 12 Rows</button>
                         </div>
                     </div>
 
@@ -1020,26 +1090,28 @@
                         <table class="sheeter-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 45px; text-align: center;">Mark</th>
-                                    <th style="width: 40px;">#</th>
-                                    <th>Full Name</th>
-                                    <th>Gender</th>
-                                    <th>Country</th>
-                                    <th>Gmail</th>
-                                    <th>Phone</th>
-                                    <th>SSN</th>
+                                    <th style="width: 50px;">Col A (#)</th>
+                                    <th style="width: 80px;">Col B (Gender)</th>
+                                    <th style="width: 100px;">Col C (Country)</th>
+                                    <th class="col-d-header">Col D (Full Name - 12 Rows)</th>
+                                    <th>Col E (Gmail)</th>
+                                    <th>Col F (Phone)</th>
+                                    <th>Col G (SSN)</th>
                                 </tr>
                             </thead>
                             <tbody id="sheeter-tbody"></tbody>
                         </table>
                     </div>
+
+                    <!-- Floating Change Name Button -->
+                    <button class="sheeter-floating-btn" onclick="changeColumnDNames()"><i class="fa-solid fa-rotate"></i> Change Column D Names (12 Rows)</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- PREMIUM SUBSCRIPTION MODAL -->
-    <div class="modal-overlay" id="premium-modal">
+    <div class="modal-overlay" id="premium-modal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box" style="max-width: 500px; height: auto; max-height: 90vh;">
             <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
                 <span><i class="fa-solid fa-crown"></i> Prime Identity Premium Access</span>
@@ -1071,7 +1143,7 @@
     </div>
 
     <!-- REALTIME THEME & BG MODAL -->
-    <div class="modal-overlay" id="theme-modal">
+    <div class="modal-overlay" id="theme-modal" onclick="closeModalOnOverlay(event)">
         <div class="modal-box" style="max-width: 480px; height: auto;">
             <div class="modal-header">
                 <span><i class="fa-solid fa-palette"></i> Select Theme & Background</span>
@@ -1079,7 +1151,7 @@
             </div>
             <div class="modal-body" style="padding: 20px; text-align: center;">
                 <h3 style="margin-bottom: 8px; color: #8a2be2;">Realtime Background Themes</h3>
-                <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Choose a theme. It will apply instantly and remain saved until changed!</p>
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Choose a theme or upload your picture. It will apply instantly & remain saved!</p>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;">
                     <button class="theme-btn" onclick="setRealtimeTheme('theme-pic')" style="padding: 12px; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #8a2be2, #4a00e0); color: #fff; border: 2px solid #8a2be2; grid-column: span 2;">
@@ -1100,6 +1172,14 @@
                     <button class="theme-btn" onclick="setRealtimeTheme('theme-cyber')" style="padding: 12px; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #180828, #4c1d95); color: #fff; border: none; grid-column: span 2;">
                         🌌 Cyberpunk Dark Purple
                     </button>
+                </div>
+
+                <!-- Custom Wallpaper Image Upload Option -->
+                <div style="margin-top: 15px; border-top: 1px dashed #8a2be2; padding-top: 12px; text-align: left;">
+                    <label style="font-weight: bold; font-size: 12px; color: #8a2be2; display: block; margin-bottom: 6px;">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Upload Your Custom BG Wallpaper:
+                    </label>
+                    <input type="file" id="custom-bg-input" accept="image/*" onchange="uploadCustomBg(this)" style="font-size: 12px; width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; background: #fafafa;">
                 </div>
             </div>
         </div>
@@ -1128,6 +1208,12 @@
             });
         }
 
+        function closeModalOnOverlay(e) {
+            if (e && e.target && e.target.classList.contains('modal-overlay')) {
+                e.target.classList.remove('show');
+            }
+        }
+
         function openThemeModal() {
             document.getElementById('theme-modal').classList.add('show');
         }
@@ -1136,8 +1222,30 @@
             document.getElementById('theme-modal').classList.remove('show');
         }
 
+        function uploadCustomBg(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    document.body.style.backgroundImage = `url('${dataUrl}')`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundAttachment = 'fixed';
+                    document.body.style.backgroundPosition = 'center';
+
+                    document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber');
+                    document.body.classList.add('theme-custom-bg');
+
+                    localStorage.setItem('theme', 'custom');
+                    localStorage.setItem('custom_bg_data', dataUrl);
+                    closeThemeModal();
+                    showNotification('Custom Background Wallpaper uploaded & saved permanently!');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function setRealtimeTheme(themeName) {
-            document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber');
+            document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber', 'theme-custom-bg');
             
             const btn = document.getElementById('theme-btn');
             if (themeName === 'dark') {
@@ -1159,10 +1267,21 @@
 
         function applySavedTheme() {
             const savedTheme = localStorage.getItem('theme') || 'theme-pic';
-            document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber');
+            document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber', 'theme-custom-bg');
             
             const btn = document.getElementById('theme-btn');
-            if (savedTheme === 'dark') {
+            if (savedTheme === 'custom') {
+                const customData = localStorage.getItem('custom_bg_data');
+                if (customData) {
+                    document.body.style.backgroundImage = `url('${customData}')`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundAttachment = 'fixed';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.classList.add('theme-custom-bg');
+                } else {
+                    document.body.classList.add('theme-pic');
+                }
+            } else if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
                 if (btn) btn.innerText = 'Day Mode';
             } else if (savedTheme === 'default') {
@@ -1715,7 +1834,7 @@
             });
         }
 
-        /* SHEETER INTERACTIVE LOGIC (DRIVE CONFIRM & 1-40 ROWS) */
+        /* SHEETER DYNAMIC DRIVE EMBED & COLUMN D FLOATING BUTTON LOGIC */
         let sheeterRowsData = [];
 
         function openSheeterModal() {
@@ -1735,22 +1854,38 @@
                 alert("Please enter a Google Drive / Sheet link first to confirm!");
                 return;
             }
-            
+
+            // Google Sheet Iframe Embed conversion
+            const iframe = document.getElementById('sheeter-drive-iframe');
+            if (urlInput.includes("docs.google.com/spreadsheets")) {
+                let previewUrl = urlInput;
+                if (previewUrl.includes('/edit')) {
+                    previewUrl = previewUrl.replace(/\/edit.*$/, '/preview');
+                } else if (!previewUrl.includes('/preview') && !previewUrl.includes('/pubhtml')) {
+                    previewUrl = previewUrl.replace(/\/$/, '') + '/preview';
+                }
+                iframe.src = previewUrl;
+                iframe.style.display = 'block';
+            } else {
+                iframe.style.display = 'none';
+            }
+
+            // Generate 12 Rows for Column D
             sheeterRowsData = [];
-            const country = document.getElementById("country").value || "United States";
+            const country = document.getElementById("country").value || "Bangladesh";
             const nameSetInput = document.getElementById("nameset").value.toLowerCase();
 
-            let firstNames = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Barbara", "Richard", "Susan", "Joseph", "Jessica", "Thomas", "Sarah", "Charles", "Karen", "Christopher", "Nancy", "Daniel", "Lisa", "Matthew", "Betty", "Anthony", "Margaret", "Donald", "Sandra"];
-            let lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin"];
+            let firstNames = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Barbara"];
+            let lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez"];
 
             if (country === "Bangladesh" || nameSetInput === "bengali") {
-                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া", "তাসনিম", "সাবরিনা", "ফারজানা", "শারমিন", "মরিয়ম", "সানজিদা"];
-                lastNames = ["হাসান", "আহমেদ", "চৌধুরী", "রহমান", "ইসলাম", "হোসেন", "আরিফ", "কালাম", "রানা", "সরকার", "জাহান", "সুলতানা", "আক্তার", "পারভীন", "বেগম", "খানম"];
+                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া"];
+                lastNames = ["হাসান", "আহমেদ", "চৌধুরী", "রহমান", "ইসলাম", "হোসেন", "আরিফ", "কালাম", "রানা", "সরকার", "জাহান", "সুলতানা"];
             }
 
             const domains = ["gmail.com", "outlook.com", "yahoo.com"];
 
-            for (let i = 1; i <= 40; i++) {
+            for (let i = 1; i <= 12; i++) {
                 const fn = firstNames[(i - 1) % firstNames.length];
                 const ln = lastNames[(i - 1) % lastNames.length];
                 const gender = i % 2 === 0 ? "Male" : "Female";
@@ -1773,20 +1908,17 @@
             renderSheeterTable();
             document.getElementById('sheeter-drive-step').style.display = 'none';
             document.getElementById('sheeter-grid-step').style.display = 'flex';
-            showNotification('Drive Link Confirmed! 40 Identity Rows Loaded Successfully.');
+            showNotification('Drive Sheet Confirmed & 12 Rows Loaded!');
         }
 
         function renderSheeterTable() {
             const tbody = document.getElementById('sheeter-tbody');
             tbody.innerHTML = sheeterRowsData.map(row => `
                 <tr class="${row.marked ? 'marked' : ''}" id="sheeter-tr-${row.id}">
-                    <td style="text-align: center;">
-                        <input type="checkbox" ${row.marked ? 'checked' : ''} onchange="toggleRowMark(${row.id}, this.checked)">
-                    </td>
-                    <td>${row.id}</td>
-                    <td><strong id="sheeter-name-${row.id}">${row.name}</strong></td>
+                    <td><strong>${row.id}</strong></td>
                     <td>${row.gender}</td>
                     <td>${row.country}</td>
+                    <td><strong id="sheeter-name-${row.id}" style="color: #8a2be2;">${row.name}</strong></td>
                     <td>${row.email}</td>
                     <td>${row.phone}</td>
                     <td>${row.ssn}</td>
@@ -1794,45 +1926,23 @@
             `).join('');
         }
 
-        function toggleRowMark(id, isMarked) {
-            const row = sheeterRowsData.find(r => r.id === id);
-            if (row) {
-                row.marked = isMarked;
-                const tr = document.getElementById(`sheeter-tr-${id}`);
-                if (tr) {
-                    if (isMarked) tr.classList.add('marked');
-                    else tr.classList.remove('marked');
-                }
-            }
-        }
+        function changeColumnDNames() {
+            if (!sheeterRowsData.length) return;
 
-        function toggleMarkAllSheeter(checkbox) {
-            const isChecked = checkbox.checked;
-            sheeterRowsData.forEach(row => row.marked = isChecked);
-            renderSheeterTable();
-        }
-
-        function changeSelectedNames() {
-            const markedRows = sheeterRowsData.filter(r => r.marked);
-            if (markedRows.length === 0) {
-                alert("⚠️ Please mark/select the rows/columns first before clicking Change Name!");
-                return;
-            }
-
-            const country = document.getElementById("country").value || "United States";
+            const country = document.getElementById("country").value || "Bangladesh";
             const nameSetInput = document.getElementById("nameset").value.toLowerCase();
 
-            let firstNames = ["Alexander", "Charlotte", "Benjamin", "Amelia", "Lucas", "Harper", "Ethan", "Evelyn", "Mason", "Abigail", "Oliver", "Emily", "Jacob", "Ella", "Logan", "Avery", "Liam", "Sofia", "Noah", "Camila", "Henry", "Aria", "Sebastian", "Scarlett", "Jack", "Victoria", "Owen", "Madison", "Samuel", "Luna"];
-            let lastNames = ["Miller", "Davis", "Wilson", "Anderson", "Taylor", "Thomas", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green"];
+            let firstNames = ["Alexander", "Charlotte", "Benjamin", "Amelia", "Lucas", "Harper", "Ethan", "Evelyn", "Mason", "Abigail", "Oliver", "Emily"];
+            let lastNames = ["Miller", "Davis", "Wilson", "Anderson", "Taylor", "Thomas", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson"];
 
             if (country === "Bangladesh" || nameSetInput === "bengali") {
-                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া", "তাসনিম", "সাবরিনা", "ফারজানা", "শারমিন", "মরিয়ম", "সানজিদা"];
-                lastNames = ["হাসান", "আহমেদ", "চৌধুরী", "রহমান", "ইসলাম", "হোসেন", "আরিফ", "কালাম", "রানা", "সরকার", "জাহান", "সুলতানা", "আক্তার", "পারভীন", "বেগম", "খানম"];
+                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া", "তাসনিম", "সাবরিনা"];
+                lastNames = ["হাসান", "আহমেদ", "চৌধুরী", "রহমান", "ইসলাম", "হোসেন", "আরিফ", "কালাম", "রানা", "সরকার", "জাহান", "সুলতানা"];
             }
 
             const domains = ["gmail.com", "outlook.com", "yahoo.com"];
 
-            markedRows.forEach(row => {
+            sheeterRowsData.forEach(row => {
                 const fn = firstNames[Math.floor(Math.random() * firstNames.length)];
                 const ln = lastNames[Math.floor(Math.random() * lastNames.length)];
                 row.name = `${fn} ${ln}`;
@@ -1840,7 +1950,7 @@
             });
 
             renderSheeterTable();
-            showNotification(`Automatically generated & updated names for ${markedRows.length} marked rows!`);
+            showNotification('Updated Column D Names (12 Rows) successfully!');
         }
 
         function exportSheeterData(btn) {
@@ -1851,7 +1961,7 @@
 
             navigator.clipboard.writeText(textData).then(() => {
                 const orig = btn.innerText;
-                btn.innerText = 'Copied All 40 Rows!';
+                btn.innerText = 'Copied All 12 Rows!';
                 btn.classList.add('copied');
                 setTimeout(() => {
                     btn.innerText = orig;
