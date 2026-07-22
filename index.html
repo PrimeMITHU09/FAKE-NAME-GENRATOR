@@ -3,51 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prime Identity | Fake Name Generator Pro</title>
+    <title>Prime Identity | Fake Name Generator</title>
 
-    <!-- Browser Favicon -->
+    <!-- Browser Favicon and Apple Touch Icon using icon.png -->
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
-    <!-- Web App Manifest -->
+    <!-- Web App Manifest linked to external icon.png file -->
     <link rel="manifest" href='data:application/manifest+json,{"name":"Prime Identity","short_name":"PrimeID","start_url":".","display":"standalone","background_color":"#121212","theme_color":"#8a2be2","icons":[{"src":"icon.png","sizes":"192x192 512x512","type":"image/png","purpose":"any maskable"}]}'>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- QRCode Generator Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         body {
-            background-color: #e0e5ec;
-            color: #222;
+            background: #f4f4f4 url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             min-height: 100vh;
-            transition: background-color 0.4s, color 0.4s;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-        }
-
-        /* GLASSMORPHISM UI */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .header-bar {
@@ -56,19 +41,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding: 12px 20px;
-            border-radius: 12px;
+            margin-bottom: 15px;
         }
 
         .brand-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: #6a1b9a;
+            font-size: 22px;
+            font-weight: bold;
+            color: #8a2be2;
             display: flex;
             align-items: center;
             gap: 12px;
-            text-shadow: 0px 1px 2px rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            user-select: none;
         }
 
         .app-logo-img {
@@ -79,336 +63,911 @@
             object-fit: cover;
             flex-shrink: 0;
         }
-        
-        .header-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end;}
 
-        .btn-custom-bg {
-            background: linear-gradient(135deg, #8a2be2, #6a1b9a);
-            color: white;
-            border: none;
-            padding: 7px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+        .theme-btn {
+            background-color: #e6e6e6;
+            border: 1px solid #ccc;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #333;
             font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);
-            transition: 0.2s;
         }
-        .btn-custom-bg:hover { transform: translateY(-2px); }
 
-        .btn-premium {
-            background: linear-gradient(135deg, #f39c12, #d35400);
-            color: white;
-            border: none;
-            padding: 7px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
-            transition: 0.2s;
-        }
-        .btn-premium:hover { transform: translateY(-2px); }
-
-        .btn-settings-icon {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            color: #6a1b9a;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 15px;
-            transition: 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .btn-settings-icon:hover { background: #8a2be2; color: #fff; transform: rotate(45deg); }
-
-        /* SUN/MOON TOGGLE SWITCH */
-        .theme-switch { position: relative; display: inline-block; width: 54px; height: 28px; }
-        .theme-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.8); transition: .4s; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);}
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: #fff; transition: .4s; border-radius: 50%; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        input:checked + .slider { background-color: rgba(0,0,0,0.5); border-color: rgba(0,0,0,0.7); }
-        input:checked + .slider:before { transform: translateX(26px); background-color: #222;}
-        .slider .fa-sun { color: #f39c12; font-size: 12px; z-index: 1;}
-        .slider .fa-moon { color: #f1c40f; font-size: 12px; z-index: 1;}
-
-        /* MAIN BODY GLASS CARD */
         .main-card {
+            background-color: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
             width: 100%;
             max-width: 780px;
-            padding: 30px;
-            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .generator-box { 
-            background: rgba(255, 255, 255, 0.3); 
-            border: 1px solid rgba(255, 255, 255, 0.5); 
-            border-radius: 10px; 
-            padding: 20px; 
-            margin-bottom: 30px; 
-            box-shadow: inset 0 0 10px rgba(255,255,255,0.3);
+        .generator-box {
+            background-color: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            padding: 18px;
+            margin-bottom: 25px;
         }
-        .generator-box h3 { font-size: 18px; color: #111; margin-bottom: 15px; font-weight: 800; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; text-shadow: 0 1px 2px rgba(255,255,255,0.8);}
 
-        .form-group { display: flex; align-items: center; margin-bottom: 12px; }
-        .form-group label { width: 125px; font-size: 14px; font-weight: bold; color: #222; text-shadow: 0 1px 2px rgba(255,255,255,0.8);}
-        .form-group select, .form-group input { width: 220px; padding: 8px 10px; border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 6px; font-size: 14px; background-color: rgba(255, 255, 255, 0.7); color: #111; font-weight: 600; outline: none; transition: 0.3s;}
-        .form-group select:focus, .form-group input:focus { background-color: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(138,43,226,0.4); border-color: #8a2be2;}
-
-        .btn-group { display: flex; align-items: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-        .btn-generate { background: linear-gradient(135deg, #8a2be2, #6a1b9a); color: #fff; border: none; padding: 10px 20px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);}
-        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(138, 43, 226, 0.5);}
-        
-        .adv-options-link { color: #6a1b9a; font-size: 13px; text-decoration: none; cursor: pointer; font-weight: 800; text-shadow: 0px 1px 2px rgba(255,255,255,0.9); transition: 0.2s;}
-        .adv-options-link:hover { color: #8a2be2; transform: scale(1.05); }
-
-        /* Premium feature specific buttons styling */
-        .pro-btn { background: linear-gradient(135deg, #f39c12, #d35400) !important; color: #fff !important; }
-        .pro-btn:hover { background: linear-gradient(135deg, #e67e22, #b94000) !important; }
-
-        .identity-container { display: flex; gap: 30px; }
-        .left-panel { width: 140px; display: flex; flex-direction: column; align-items: flex-start; }
-        .avatar { width: 140px; height: 140px; border: 3px solid rgba(255, 255, 255, 0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: cover; margin-bottom: 12px; border-radius: 8px; background:#fff;}
-        
-        .right-panel { flex: 1; }
-        .info-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 15px; }
-        .info-row.large { font-size: 18px; font-weight: bold; }
-        .info-row .label { font-weight: 800; color: #111; min-width: 145px; text-shadow: 0 1px 2px rgba(255,255,255,0.9);}
-        .info-row .value { color: #000; margin-right: 12px; font-family: 'Consolas', 'Courier New', monospace; font-size: 16px; font-weight: 900; text-shadow: 0 1px 1px rgba(255,255,255,0.8);}
-        
-        .copy-tag { background-color: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); color: #111; font-size: 11px; padding: 4px 10px; border-radius: 5px; cursor: pointer; transition: 0.2s; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
-        .copy-tag:hover { background-color: #fff; transform: translateY(-1px); }
-        .copy-tag.copied { background-color: #27ae60; color: white; border-color: #2ecc71; text-shadow: none;}
-
-        .meaning-box { background-color: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.6); border-left: 5px solid #8a2be2; padding: 12px; margin: 20px 0; font-size: 14px; color: #444; font-weight: bold; border-radius: 0 6px 6px 0; text-shadow: 0 1px 1px rgba(255,255,255,0.7);}
-        .meaning-box a { color: #6a1b9a; text-decoration: underline; font-weight: 900;}
-
-        .section-header { font-size: 14px; font-weight: 900; color: #111; text-transform: uppercase; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 6px; margin: 25px 0 15px 0; letter-spacing: 1px; display: flex; align-items: center; justify-content: space-between; text-shadow: 0 1px 2px rgba(255,255,255,0.9);}
-
-        /* FINANCE ANIMATION */
-        @keyframes flip-scale {
-            0% { transform: scale(0.5) rotateY(90deg); opacity: 0; }
-            50% { transform: scale(1.3) rotateY(0deg); opacity: 1; }
-            100% { transform: scale(1.1) rotateY(0deg); opacity: 1; }
+        .generator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
         }
-        .finance-brand-container {
+
+        .generator-header h3 {
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .hide-toggle-btn {
+            background-color: transparent;
+            border: 1px solid #ccc;
+            padding: 3px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #8a2be2;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .hide-toggle-btn:hover {
+            background-color: #e6e6e6;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            width: 100px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group select, .form-group input {
+            width: 220px;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 13px;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .btn-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-generate {
+            background-color: #8a2be2;
+            color: #fff;
+            border: none;
+            padding: 7px 18px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-generate:hover {
+            background-color: #7220bd;
+        }
+
+        .adv-options-link {
+            color: #8a2be2;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .adv-options-link:hover {
+            text-decoration: underline;
+        }
+
+        .adv-panel {
+            display: none;
+            background: #fff;
+            border: 1px dashed #8a2be2;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .adv-panel.open {
+            display: block;
+        }
+
+        .adv-panel-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #8a2be2;
+        }
+
+        .adv-field {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(255,255,255,0.6);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .card-brand-name { font-size: 15px; font-weight: 900; color: #111; text-shadow: none;}
-        .animated-card {
-            animation: flip-scale 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            font-size: 32px;
-            filter: drop-shadow(0 2px 4px rgba(255,255,255,0.9));
+            margin-bottom: 6px;
         }
 
-        /* MODALS */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);}
-        .modal-overlay.show { display: flex; }
-        
-        .modal-box { background: rgba(255, 255, 255, 0.9); width: 90%; max-width: 900px; height: 85vh; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(15px);}
-        .modal-header { background: linear-gradient(135deg, #8a2be2, #6a1b9a); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 16px; text-shadow: 0 1px 2px rgba(0,0,0,0.3);}
-        .modal-close-btn { background: transparent; border: none; color: white; font-size: 24px; cursor: pointer; transition: 0.2s; }
-        .modal-close-btn:hover { color: #ffcccc; transform: scale(1.1);}
-        .modal-body { flex: 1; width: 100%; height: 100%; overflow-y: auto;}
-        .modal-body iframe { width: 100%; height: 100%; border: none; background: #fff;}
-
-        .small-modal { max-width: 480px; padding: 30px; text-align: center; height: auto;}
-
-        /* Warning Highlight Box */
-        .warning-box {
-            background-color: rgba(255, 243, 205, 0.85); color: #856404; padding: 12px; border-radius: 8px; 
-            font-size: 13px; font-weight: bold; margin-bottom: 20px; border: 1px solid rgba(255, 238, 186, 0.9); text-align: left; line-height: 1.5; backdrop-filter: blur(5px);
+        .identity-container {
+            display: flex;
+            gap: 25px;
         }
 
-        /* FLOATING PANEL */
-        .floating-panel { position: absolute; bottom: 30px; right: 30px; background: rgba(255, 255, 255, 0.85); padding: 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 2px solid #8a2be2; width: 280px; z-index: 10; display: flex; flex-direction: column; gap: 12px; backdrop-filter: blur(10px);}
-        .floating-panel label { font-size: 13px; font-weight: 900; color: #111;}
-        .floating-panel select { width: 100%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; font-weight: bold;}
+        .left-panel {
+            width: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
-        /* SETTINGS & TOGGLES */
-        .settings-toggle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; text-align: left; font-weight: bold; font-size: 13px;}
-        .toggle-switch { position: relative; display: inline-block; width: 44px; height: 22px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 22px; }
-        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .toggle-slider { background-color: #8a2be2; }
-        input:checked + .toggle-slider:before { transform: translateX(22px); }
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border: 1px solid #ccc;
+            object-fit: cover;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
 
-        footer { margin-top: 30px; text-align: center; font-size: 13px; color: #333; background: rgba(255,255,255,0.5); padding: 12px 25px; border-radius: 8px; backdrop-filter: blur(10px); font-weight: bold; border: 1px solid rgba(255,255,255,0.4); text-shadow: 0 1px 1px rgba(255,255,255,0.8);}
-        .social-links { margin-top: 10px; display: flex; justify-content: center; gap: 15px; }
-        .social-links a { color: #111; font-size: 18px; text-decoration: none; transition: 0.2s;}
-        .social-links a:hover { color: #8a2be2; transform: translateY(-2px);}
+        .logged-in-text {
+            font-size: 11px;
+            color: #777;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .btn-gplus {
+            background-color: #8a2be2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .right-panel {
+            flex: 1;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-row.large {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .info-row .label {
+            font-weight: bold;
+            color: #333;
+            min-width: 140px;
+        }
+
+        .info-row .value {
+            color: #111;
+            margin-right: 10px;
+        }
+
+        .copy-tag {
+            background-color: #e6e6e6;
+            border: 1px solid #ccc;
+            color: #333;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .copy-tag:hover {
+            background-color: #d8d8d8;
+        }
+
+        .copy-tag.copied {
+            background-color: #5cb85c;
+            color: white;
+            border-color: #4cae4c;
+        }
+
+        .meaning-box {
+            background-color: #fcf8e3;
+            border: 1px solid #faebcc;
+            border-left: 3px solid #8a2be2;
+            padding: 10px;
+            margin: 18px 0;
+            font-size: 13px;
+            color: #8a6d3b;
+        }
+
+        .meaning-box a {
+            color: #8a2be2;
+            text-decoration: underline;
+        }
+
+        .section-header {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+            margin: 18px 0 10px 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Temp Mail Modal Box Design */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 90%;
+            max-width: 900px;
+            height: 85vh;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            background: #8a2be2;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .social-links {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .social-links a {
+            color: #555;
+            font-size: 15px;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #8a2be2;
+        }
+
+        /* Toast Popup Notification */
+        .toast-popup {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background-color: #8a2be2;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast-popup.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        body.dark-mode .toast-popup {
+            background-color: #9d4edd;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Document Card Modal Styles */
+        .doc-card-box {
+            background: linear-gradient(135deg, #ffffff 0%, #f4f4f8 100%);
+            border: 2px solid #8a2be2;
+            border-radius: 12px;
+            padding: 18px;
+            max-width: 480px;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            color: #222222;
+        }
+
+        .doc-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #8a2be2;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .doc-card-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doc-card-flag {
+            font-size: 30px;
+            line-height: 1;
+        }
+
+        .doc-card-country-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333333;
+            text-transform: uppercase;
+        }
+
+        .doc-card-doc-type {
+            font-size: 13px;
+            font-weight: 800;
+            color: #8a2be2;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .doc-card-body {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .doc-card-photo {
+            width: 105px;
+            height: 125px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #8a2be2;
+            flex-shrink: 0;
+        }
+
+        .doc-card-info {
+            flex: 1;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .doc-card-info div {
+            margin-bottom: 4px;
+        }
+
+        .doc-card-info label {
+            font-weight: bold;
+            color: #666666;
+            display: inline-block;
+            width: 85px;
+        }
+
+        .doc-card-info span {
+            font-weight: bold;
+            color: #111111;
+        }
+
+        /* 3 Credit Cards Modal Styles */
+        .credit-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+
+        .credit-card-item {
+            background: linear-gradient(135deg, #1e1e24 0%, #2a2a36 100%);
+            color: #ffffff;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative;
+            border: 1px solid #444;
+        }
+
+        .credit-card-item.visa {
+            background: linear-gradient(135deg, #1a1f71 0%, #080b33 100%);
+        }
+
+        .credit-card-item.mastercard {
+            background: linear-gradient(135deg, #eb001b 0%, #ff5f00 100%);
+        }
+
+        .credit-card-item.amex {
+            background: linear-gradient(135deg, #0077a6 0%, #004b6e 100%);
+        }
+
+        .cc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .cc-brand {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cc-number {
+            font-size: 18px;
+            font-family: monospace;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .cc-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+
+        .cc-copy-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .cc-copy-btn:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        body.dark-mode .doc-card-box {
+            background: linear-gradient(135deg, #1e1e1e 0%, #282828 100%);
+            color: #f1f1f1;
+            border-color: #b366ff;
+        }
+        body.dark-mode .doc-card-country-name {
+            color: #ffffff;
+        }
+        body.dark-mode .doc-card-doc-type {
+            color: #b366ff;
+        }
+        body.dark-mode .doc-card-info label {
+            color: #aaaaaa;
+        }
+        body.dark-mode .doc-card-info span {
+            color: #ffffff;
+        }
+
+        /* Sheeter Modal Styles */
+        .sheeter-modal-box {
+            max-width: 860px;
+            width: 95%;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sheeter-table-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 10px;
+            background: #fff;
+        }
+
+        .sheeter-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .sheeter-table th, .sheeter-table td {
+            border: 1px solid #ddd;
+            padding: 6px 10px;
+        }
+
+        .sheeter-table th {
+            background-color: #8a2be2;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .sheeter-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .sheeter-table tr.marked {
+            background-color: #e9d5ff !important;
+        }
+
+        body.dark-mode .sheeter-table-container {
+            background: #181818;
+            border-color: #444;
+        }
+
+        body.dark-mode .sheeter-table th, body.dark-mode .sheeter-table td {
+            border-color: #333;
+            color: #eee;
+        }
+
+        body.dark-mode .sheeter-table tr:nth-child(even) {
+            background-color: #222;
+        }
+
+        body.dark-mode .sheeter-table tr.marked {
+            background-color: #3b0764 !important;
+        }
 
         /* DARK MODE */
-        body.dark-mode { color: #f1f1f1; }
-        body.dark-mode .glass-panel { background: rgba(20, 20, 20, 0.65); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); }
-        body.dark-mode .brand-title { color: #d4a5ff; text-shadow: 0px 2px 4px rgba(0,0,0,0.9); }
-        body.dark-mode .generator-box { background: rgba(0, 0, 0, 0.4); border-color: rgba(255,255,255,0.1); }
-        body.dark-mode .generator-box h3 { color: #fff; border-color: rgba(255,255,255,0.1); text-shadow: 0 2px 4px rgba(0,0,0,0.9);}
-        body.dark-mode .form-group label, body.dark-mode .info-row .label, body.dark-mode .settings-toggle-row { color: #eee !important; text-shadow: 0 2px 4px rgba(0,0,0,0.9);}
-        body.dark-mode .form-group select, body.dark-mode .form-group input { background-color: rgba(0, 0, 0, 0.6); color: #fff; border-color: rgba(255,255,255,0.2); }
-        body.dark-mode .info-row .value { color: #fff !important; text-shadow: 0 2px 4px rgba(0,0,0,0.9);}
-        body.dark-mode .section-header { color: #fff !important; border-color: rgba(255,255,255,0.1); text-shadow: 0 2px 4px rgba(0,0,0,0.9);}
-        body.dark-mode .copy-tag { background-color: rgba(0, 0, 0, 0.5); border-color: rgba(255,255,255,0.2); color: #fff; text-shadow: none;}
-        body.dark-mode .meaning-box { background-color: rgba(0, 0, 0, 0.5); border-color: rgba(255,255,255,0.1); color: #e0ca9e; text-shadow: 0 1px 2px rgba(0,0,0,0.9);}
-        body.dark-mode .adv-options-link { color: #d4a5ff; text-shadow: 0 2px 4px rgba(0,0,0,0.9);}
-        body.dark-mode footer { background: rgba(0, 0, 0, 0.6); color: #eee; border-color: rgba(255,255,255,0.1);}
-        body.dark-mode .social-links a { color: #eee; }
-        body.dark-mode .modal-box { background: rgba(25, 25, 25, 0.95); color: #fff; border-color: rgba(255,255,255,0.1);}
-        body.dark-mode .warning-box { background-color: rgba(51, 43, 0, 0.8); border-color: rgba(89, 74, 0, 0.5); color: #ffd966; }
-        body.dark-mode .floating-panel { background: rgba(20, 20, 20, 0.95); border-color: #d4a5ff;}
-        body.dark-mode .floating-panel label { color: #fff; }
-        body.dark-mode .finance-brand-container { background: rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.2);}
-        body.dark-mode .card-brand-name { color: #fff; }
-        body.dark-mode .btn-settings-icon { background: rgba(50,50,50,0.8); color: #d4a5ff; border-color: rgba(255,255,255,0.2);}
+        body.dark-mode {
+            background-color: #121212;
+            color: #f1f1f1;
+        }
+        body.dark-mode .main-card {
+            background-color: #1e1e1e;
+            border-color: #333;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        body.dark-mode .generator-box {
+            background-color: #282828;
+            border-color: #383838;
+        }
+        body.dark-mode .generator-box h3,
+        body.dark-mode .generator-header h3 {
+            color: #ffffff;
+            border-color: #444;
+        }
+        body.dark-mode .generator-header {
+            border-color: #444;
+        }
+        body.dark-mode .hide-toggle-btn {
+            border-color: #555;
+            color: #b366ff;
+        }
+        body.dark-mode .hide-toggle-btn:hover {
+            background-color: #333;
+        }
+        body.dark-mode .form-group label,
+        body.dark-mode .info-row .label {
+            color: #cccccc !important;
+        }
+        body.dark-mode .info-row .value {
+            color: #ffffff !important;
+        }
+        body.dark-mode .section-header {
+            color: #ffffff !important;
+            border-color: #444;
+        }
+        body.dark-mode select,
+        /* REALTIME THEME PRESETS */
+        body.theme-pic {
+            background: url('bg.jpg') no-repeat center center fixed !important;
+            background-size: cover !important;
+            color: #ffffff !important;
+        }
+
+        body.theme-default {
+            background-color: #f4f4f4 !important;
+            background-image: none !important;
+            color: #333 !important;
+        }
+
+        body.theme-sunset {
+            background: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 50%, #3b82f6 100%) !important;
+            background-attachment: fixed !important;
+            color: #ffffff !important;
+        }
+
+        body.theme-ocean {
+            background: linear-gradient(135deg, #0f172a 0%, #0284c7 50%, #06b6d4 100%) !important;
+            background-attachment: fixed !important;
+            color: #ffffff !important;
+        }
+
+        body.theme-cyber {
+            background: linear-gradient(135deg, #180828 0%, #4c1d95 50%, #1e1b4b 100%) !important;
+            background-attachment: fixed !important;
+            color: #ffffff !important;
+        }
+
+        body.theme-pic .main-card,
+        body.theme-sunset .main-card,
+        body.theme-ocean .main-card,
+        body.theme-cyber .main-card {
+            background-color: rgba(30, 30, 38, 0.88) !important;
+            backdrop-filter: blur(12px) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+        }
+
+        body.theme-pic .generator-box,
+        body.theme-sunset .generator-box,
+        body.theme-ocean .generator-box,
+        body.theme-cyber .generator-box {
+            background-color: rgba(45, 45, 58, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        body.theme-pic .generator-header h3,
+        body.theme-sunset .generator-header h3,
+        body.theme-ocean .generator-header h3,
+        body.theme-cyber .generator-header h3,
+        body.theme-pic .info-row .label,
+        body.theme-sunset .info-row .label,
+        body.theme-ocean .info-row .label,
+        body.theme-cyber .info-row .label {
+            color: #cbd5e1 !important;
+        }
+
+        body.theme-pic .info-row .value,
+        body.theme-sunset .info-row .value,
+        body.theme-ocean .info-row .value,
+        body.theme-cyber .info-row .value {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode input[type="text"] {
+            background-color: #181818;
+            color: #ffffff;
+            border-color: #444;
+        }
+        body.dark-mode .theme-btn {
+            background-color: #333;
+            color: #fff;
+            border-color: #555;
+        }
+        body.dark-mode .copy-tag {
+            background-color: #333;
+            border-color: #555;
+            color: #eee;
+        }
+        body.dark-mode .copy-tag:hover {
+            background-color: #444;
+        }
+        body.dark-mode .meaning-box {
+            background-color: #2a2415;
+            border-color: #4a3e20;
+            color: #e0ca9e;
+        }
+        body.dark-mode .meaning-box a {
+            color: #b366ff;
+        }
+        body.dark-mode .adv-panel {
+            background-color: #252525;
+            border-color: #8a2be2;
+            color: #eee;
+        }
+        body.dark-mode .adv-options-link {
+            color: #b366ff;
+        }
+        body.dark-mode .logged-in-text,
+        body.dark-mode footer,
+        body.dark-mode .social-links a {
+            color: #aaa;
+        }
+        body.dark-mode .modal-box {
+            background: #1e1e1e;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header-bar glass-panel">
-        <div class="brand-title">
-            <img src="icon.png" alt="Logo" class="app-logo-img" onerror="this.src='https://via.placeholder.com/42x42/8a2be2/ffffff?text=P'">
+    <div class="header-bar">
+        <div class="brand-title" onclick="generateIdentity()" title="Click to generate new identity">
+            <img src="icon.png" alt="Logo" class="app-logo-img">
             Prime Identity
         </div>
-        
-        <div class="header-controls">
-            <!-- PREMIUM BUTTON -->
-            <button class="btn-premium" onclick="openModal('premium-modal')">
-                <i class="fa-solid fa-crown"></i> Premium
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <button class="theme-btn" id="premium-btn" onclick="openPremiumModal()" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-crown"></i> <span id="premium-btn-text">Premium</span>
             </button>
-
-            <!-- CUSTOM BG BUTTON -->
-            <button class="btn-custom-bg" onclick="openModal('theme-modal')">
-                <i class="fa-solid fa-image"></i> BG
-            </button>
-
-            <!-- SETTINGS ICON BUTTON -->
-            <button class="btn-settings-icon" onclick="openModal('settings-modal')" title="Settings & Feature Toggles">
-                <i class="fa-solid fa-gear"></i>
-            </button>
-            
-            <label class="theme-switch">
-                <input type="checkbox" id="theme-toggle-checkbox" onchange="toggleTheme()">
-                <span class="slider">
-                    <i class="fa-solid fa-moon"></i>
-                    <i class="fa-solid fa-sun"></i>
-                </span>
-            </label>
+            <button class="theme-btn" onclick="openThemeModal()"><i class="fa-solid fa-palette"></i> BG / Theme</button>
+            <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">Night Mode</button>
         </div>
     </div>
 
-    <div class="main-card glass-panel">
+    <div class="main-card">
         <div class="generator-box">
-            <h3>Your Randomly Generated Identity</h3>
+            <div class="generator-header">
+                <h3>Your Randomly Generated Identity</h3>
+                <button class="hide-toggle-btn" id="toggle-generator-btn" onclick="toggleGeneratorFields()">
+                    <i class="fa-solid fa-eye-slash"></i> Hide
+                </button>
+            </div>
             
-            <div class="form-group">
-                <label for="gender">Gender</label>
-                <select id="gender">
-                    <option value="random">Random</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select>
-            </div>
+            <div id="generator-fields">
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender">
+                        <option value="random">Random</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
 
-            <!-- NAME SET (A-Z) -->
-            <div class="form-group">
-                <label for="name-set">Name Set</label>
-                <select id="name-set">
-                    <option value="native">Native (Default)</option>
-                    <option value="us">American</option>
-                    <option value="au">Australian</option>
-                    <option value="br">Brazilian</option>
-                    <option value="ca">Canadian</option>
-                    <option value="dk">Danish</option>
-                    <option value="fi">Finnish</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="in">Indian</option>
-                    <option value="ir">Iranian</option>
-                    <option value="ie">Irish</option>
-                    <option value="mx">Mexican</option>
-                    <option value="nl">Dutch</option>
-                    <option value="nz">New Zealander</option>
-                    <option value="no">Norwegian</option>
-                    <option value="pl">Polish</option>
-                    <option value="es">Spanish</option>
-                    <option value="se">Swedish</option>
-                    <option value="ch">Swiss</option>
-                    <option value="th">Thai</option>
-                    <option value="tr">Turkish</option>
-                    <option value="ua">Ukrainian</option>
-                    <option value="gb">British</option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label for="nameset">Name Set</label>
+                    <select id="nameset">
+                        <option value="native">Native (Default)</option>
+                        <option value="bengali">Bengali (বাংলা)</option>
+                        <option value="american">American</option>
+                        <option value="arabic">Arabic (عربي)</option>
+                        <option value="chinese">Chinese (中文)</option>
+                        <option value="french">French</option>
+                        <option value="german">German</option>
+                        <option value="indian">Indian (हिंदी)</option>
+                        <option value="spanish">Spanish</option>
+                    </select>
+                </div>
 
-            <!-- COUNTRY (A-Z) -->
-            <div class="form-group">
-                <label for="country">Country</label>
-                <select id="country">
-                    <option value="Australia">Australia</option>
-                    <option value="Brazil">Brazil</option>
-                    <option value="Canada">Canada</option>
-                    <option value="Denmark">Denmark</option>
-                    <option value="Finland">Finland</option>
-                    <option value="France">France</option>
-                    <option value="Germany">Germany</option>
-                    <option value="India">India</option>
-                    <option value="Iran">Iran</option>
-                    <option value="Ireland">Ireland</option>
-                    <option value="Mexico">Mexico</option>
-                    <option value="Netherlands">Netherlands</option>
-                    <option value="New Zealand">New Zealand</option>
-                    <option value="Norway">Norway</option>
-                    <option value="Poland">Poland</option>
-                    <option value="Spain">Spain</option>
-                    <option value="Switzerland">Switzerland</option>
-                    <option value="Thailand">Thailand</option>
-                    <option value="Turkey">Turkey</option>
-                    <option value="Ukraine">Ukraine</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="United States" selected>United States</option>
-                </select>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country">
+                        <option value="Bangladesh">Bangladesh</option>
+                        <option value="United States">United States</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Germany">Germany</option>
+                        <option value="France">France</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="India">India</option>
+                        <option value="Spain">Spain</option>
+                        <option value="Switzerland">Switzerland</option>
+                        <option value="Denmark">Denmark</option>
+                        <option value="Finland">Finland</option>
+                        <option value="Ireland">Ireland</option>
+                        <option value="Iran">Iran</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="Norway">Norway</option>
+                        <option value="New Zealand">New Zealand</option>
+                        <option value="Turkey">Turkey</option>
+                        <option value="Ukraine">Ukraine</option>
+                    </select>
+                </div>
             </div>
 
             <div class="btn-group">
-                <button class="btn-generate" onclick="generateIdentity()"><i class="fa-solid fa-bolt"></i> Generate</button>
-                <span class="adv-options-link" onclick="openModal('adv-options-modal')"><i class="fa-solid fa-sliders"></i> Advanced</span>
-                <span class="adv-options-link" onclick="openModal('ip-lookup-modal')"><i class="fa-solid fa-globe"></i> IP Lookup</span>
-                <span class="adv-options-link" onclick="openTempMailModal()"><i class="fa-solid fa-envelope"></i> Temp Mail</span>
-                <span class="adv-options-link" onclick="openSheetLinkModal()"><i class="fa-solid fa-table"></i> Sheeter</span>
-                <span class="adv-options-link" onclick="openQrModal()"><i class="fa-solid fa-qrcode"></i> QR Code</span>
-                <span class="adv-options-link" onclick="openExportModal()"><i class="fa-solid fa-file-arrow-down"></i> Save/Export</span>
+                <button class="btn-generate" onclick="generateIdentity()">Generate</button>
+                <span class="adv-options-link" onclick="toggleAdvOptions()"><i class="fa-solid fa-sliders"></i> Advanced Options</span>
+                <span class="adv-options-link" onclick="toggleIpPanel()"><i class="fa-solid fa-globe"></i> IP Lookup</span>
+                <span class="adv-options-link" onclick="showNotification('AI Identity Verified: Synthetic Face & Profile Synced!')"><i class="fa-solid fa-robot"></i> AI Identity</span>
+                <span class="adv-options-link" onclick="showNotification('VPN Check: Clean Connection (No Proxy / VPN Detected)')"><i class="fa-solid fa-shield-halved"></i> VPN Check</span>
                 
-                <!-- DYNAMIC PRO BUTTONS (Initially Hidden/Locked until Premium is Claimed) -->
-                <span class="adv-options-link pro-link-btn" id="pro-btn-ai" style="display:none;" onclick="alert('🤖 AI Identity Generated Successfully!')"><i class="fa-solid fa-robot"></i> AI Identity</span>
-                <span class="adv-options-link pro-link-btn" id="pro-btn-vpn" style="display:none;" onclick="alert('🌎 VPN Status: SECURE (Clean IP Detected)')"><i class="fa-solid fa-shield-halved"></i> VPN Check</span>
-                <span class="adv-options-link pro-link-btn" id="pro-btn-dl" style="display:none;" onclick="openModal('dl-modal')"><i class="fa-solid fa-id-card"></i> Driver License</span>
-                <span class="adv-options-link pro-link-btn" id="pro-btn-pass" style="display:none;" onclick="openModal('pass-modal')"><i class="fa-solid fa-passport"></i> Passport</span>
-                <span class="adv-options-link pro-link-btn" id="pro-btn-cards" style="display:none;" onclick="openModal('cards-modal')"><i class="fa-solid fa-credit-card"></i> Card Generator (3 Cards)</span>
+                <div id="premium-features-group" style="display: none; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <span class="adv-options-link" onclick="openDocModal('Driver License')"><i class="fa-solid fa-id-card"></i> Driver License</span>
+                    <span class="adv-options-link" onclick="openDocModal('Passport')"><i class="fa-solid fa-passport"></i> Passport</span>
+                    <span class="adv-options-link" onclick="openDocModal('NID')"><i class="fa-solid fa-address-card"></i> NID</span>
+                    <span class="adv-options-link" onclick="openCreditModal()"><i class="fa-solid fa-credit-card"></i> Card Generator (3 Cards)</span>
+                    <span class="adv-options-link" onclick="openSheeterModal()"><i class="fa-solid fa-table-list"></i> Sheeter</span>
+                </div>
+            </div>
+
+            <div class="adv-panel" id="adv-panel">
+                <div class="adv-panel-title">Advanced Settings:</div>
+                <div class="adv-field">
+                    <label>Email Domain:</label>
+                    <select id="email-domain" style="width: 140px; padding: 2px;">
+                        <option value="gmail.com">@gmail.com</option>
+                        <option value="outlook.com">@outlook.com</option>
+                        <option value="yahoo.com">@yahoo.com</option>
+                    </select>
+                </div>
+
+                <div id="premium-status-section" style="margin-top: 10px; border-top: 1px dashed #8a2be2; padding-top: 10px;">
+                    <div style="font-weight: bold; margin-bottom: 6px; font-size: 12px;" id="premium-status-text">Status: Free Membership</div>
+                    <button class="copy-tag" id="cancel-premium-btn" style="display: none; background-color: #ef4444; color: white; border: none; padding: 4px 10px; font-weight: bold;" onclick="cancelPremiumSubscription()"><i class="fa-solid fa-circle-xmark"></i> Cancel Premium</button>
+                </div>
+            </div>
+
+            <div class="adv-panel" id="ip-panel">
+                <div class="adv-panel-title">Generate Identity from IP Address:</div>
+                <div class="adv-field">
+                    <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8" style="width: 180px;">
+                    <button class="btn-generate" style="padding: 4px 10px;" onclick="generateByIp()">Search IP</button>
+                </div>
             </div>
         </div>
 
         <div class="identity-container">
             <div class="left-panel">
-                <img id="avatar-img" src="https://via.placeholder.com/140" alt="Profile" class="avatar">
+                <img id="avatar-img" src="" alt="Profile" class="avatar">
                 <div class="logged-in-text">Logged in users can view full details.</div>
                 <button class="btn-gplus"><i class="fa-brands fa-google"></i> Sign in</button>
             </div>
@@ -416,389 +975,242 @@
             <div class="right-panel">
                 <div class="info-row large">
                     <span class="label">First Name:</span>
-                    <span class="value" id="fn"></span>
+                    <span class="value" id="fn">Bert Y.</span>
                     <button class="copy-tag" onclick="copyText('fn', this)">Copy First Name</button>
                 </div>
 
                 <div class="info-row large" style="margin-bottom: 15px;">
                     <span class="label">Last Name:</span>
-                    <span class="value" id="ln"></span>
+                    <span class="value" id="ln">Steininger</span>
                     <button class="copy-tag" onclick="copyText('ln', this)">Copy Last Name</button>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Street:</span>
-                    <span class="value" id="street"></span>
+                    <span class="value" id="street">9463 Ringstraße</span>
                     <button class="copy-tag" onclick="copyText('street', this)">Copy</button>
                 </div>
 
                 <div class="info-row">
                     <span class="label">City:</span>
-                    <span class="value" id="city"></span>
+                    <span class="value" id="city">Betzenstein</span>
                     <button class="copy-tag" onclick="copyText('city', this)">Copy</button>
                 </div>
 
                 <div class="info-row">
                     <span class="label">State:</span>
-                    <span class="value" id="state"></span>
+                    <span class="value" id="state">Saarland</span>
                     <button class="copy-tag" onclick="copyText('state', this)">Copy</button>
                 </div>
 
                 <div class="info-row">
                     <span class="label">Zip Code:</span>
-                    <span class="value" id="zip"></span>
+                    <span class="value" id="zip">34743</span>
                     <button class="copy-tag" onclick="copyText('zip', this)">Copy</button>
                 </div>
 
-                <div class="meaning-box">
-                    Curious what <strong id="meaning-name">Name</strong> means? <a id="meaning-link" href="#" target="_blank">Click here to find out!</a>
-                </div>
-
                 <div class="info-row">
-                    <span class="label">Gmail address</span>
-                    <span class="value" id="gmail"></span>
+                    <span class="label">Gmail</span>
+                    <span class="value" id="gmail">bert.steininger84@gmail.com</span>
                     <button class="copy-tag" onclick="copyText('gmail', this)">Copy</button>
                 </div>
 
-                <!-- FINANCE SECTION -->
-                <div class="section-header" id="sec-finance">
-                    <span>FINANCE</span>
-                    <div class="finance-brand-container">
-                        <span id="card-brand-name" class="card-brand-name">VISA</span>
-                        <i id="card-brand-icon" class="fa-brands fa-cc-visa" style="font-size: 32px; color: #1a1f71;"></i>
-                    </div>
-                </div>
-                
-                <div class="info-row row-finance">
-                    <span class="label">Card Number</span>
-                    <span class="value" id="cc-num"></span>
-                    <button class="copy-tag" onclick="copyText('cc-num', this, true)">Copy</button>
-                </div>
-                <div class="info-row row-finance">
-                    <span class="label">Expiry Date</span>
-                    <span class="value" id="cc-exp"></span>
-                    <button class="copy-tag" onclick="copyText('cc-exp', this)">Copy</button>
-                </div>
-                <div class="info-row row-finance">
-                    <span class="label">CVV</span>
-                    <span class="value" id="cc-cvv"></span>
-                    <button class="copy-tag" onclick="copyText('cc-cvv', this)">Copy</button>
+                <div class="info-row">
+                    <span class="label">SSN</span>
+                    <span class="value" id="ssn">780-54-XXXX</span>
+                    <button class="copy-tag" onclick="copyText('ssn', this)">Copy</button>
                 </div>
 
-                <!-- MULTI-CARD GENERATOR CONTAINER (Initially Hidden until claimed) -->
-                <div id="multi-cards-box" style="display:none; margin-top:15px; background:rgba(138,43,226,0.1); padding:12px; border-radius:8px; border:1px dashed #8a2be2;">
-                    <h4 style="font-size:14px; color:#8a2be2; margin-bottom:8px;"><i class="fa-solid fa-credit-card"></i> Claimed Pro Cards (3 Cards):</h4>
-                    <div id="multi-cards-list" style="font-size:13px; font-family:monospace; line-height:1.5;"></div>
+                <div class="info-row">
+                    <span class="label">Geo coordinates</span>
+                    <span class="value" id="geo">-11.5604, -140.0717</span>
+                    <button class="copy-tag" onclick="copyText('geo', this)">Copy</button>
                 </div>
 
-                <div class="section-header" id="sec-phone">PHONE</div>
-                <div class="info-row row-phone">
+                <div class="section-header">PHONE</div>
+
+                <div class="info-row">
                     <span class="label">Phone</span>
-                    <span class="value" id="phone"></span>
+                    <span class="value" id="phone">0554-4430674</span>
                     <button class="copy-tag" onclick="copyText('phone', this, true)">Copy</button>
                 </div>
-                <div class="info-row row-phone">
-                    <span class="label">Country code</span>
-                    <span class="value" id="country-code"></span>
-                    <button class="copy-tag" onclick="copyText('country-code', this)">Copy</button>
+
+                <div class="info-row">
+                    <span class="label">Home phone</span>
+                    <span class="value" id="home-phone">0554-4430674</span>
+                    <button class="copy-tag" onclick="copyText('home-phone', this, true)">Copy</button>
                 </div>
 
-                <div class="section-header" id="sec-bday">BIRTHDAY</div>
-                <div class="info-row row-bday">
+                <div class="section-header">BIRTHDAY</div>
+
+                <div class="info-row">
                     <span class="label">Birthday</span>
-                    <span class="value" id="bday"></span>
-                    <button class="copy-tag" onclick="copyText('bday', this)">Copy</button>
+                    <span class="value" id="bday" data-numeric="12/1/1970" data-year="1970">December 1, 1970</span>
+                    <div style="display: flex; gap: 5px;">
+                        <button class="copy-tag" onclick="copyBirthday('numeric', this)">Copy</button>
+                        <button class="copy-tag" onclick="copyBirthday('year', this)">Copy Year</button>
+                    </div>
                 </div>
-                <div class="info-row row-bday">
+
+                <div class="info-row">
                     <span class="label">Age</span>
-                    <span class="value" id="age"></span>
+                    <span class="value" id="age">55 years old</span>
                     <button class="copy-tag" onclick="copyText('age', this)">Copy</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ---------------- MODALS SECTION ---------------- -->
-
-    <!-- ADVANCED SETTINGS MODAL (With Toggles & Mail Configs) -->
-    <div class="modal-overlay" id="settings-modal">
-        <div class="modal-box small-modal" style="text-align: left; max-width: 480px;">
-            <div class="modal-header" style="border-radius: 12px 12px 0 0; margin: -30px -30px 20px -30px;">
-                <span><i class="fa-solid fa-gear"></i> Advanced Settings & Modules</span>
-                <button class="modal-close-btn" onclick="closeModal('settings-modal')">&times;</button>
-            </div>
-            
-            <h4 style="margin-bottom: 8px; font-size: 13px; color:#8a2be2;">Section Visibility Toggles</h4>
-            <div class="settings-toggle-row">
-                <span>Show Finance Section</span>
-                <label class="toggle-switch"><input type="checkbox" id="toggle-finance" checked onchange="toggleSection('finance')"><span class="toggle-slider"></span></label>
-            </div>
-            <div class="settings-toggle-row">
-                <span>Show Phone Section</span>
-                <label class="toggle-switch"><input type="checkbox" id="toggle-phone" checked onchange="toggleSection('phone')"><span class="toggle-slider"></span></label>
-            </div>
-            <div class="settings-toggle-row">
-                <span>Show Birthday Section</span>
-                <label class="toggle-switch"><input type="checkbox" id="toggle-bday" checked onchange="toggleSection('bday')"><span class="toggle-slider"></span></label>
-            </div>
-
-            <hr style="margin: 12px 0; border:0; border-top:1px solid #ddd;">
-            <h4 style="margin-bottom: 8px; font-size: 13px; color:#8a2be2;">Temp Mail & Security Configs</h4>
-            <div class="settings-toggle-row">
-                <span>Auto-refresh Temp Mail Inbox</span>
-                <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-            </div>
-            <div class="settings-toggle-row">
-                <span>Real-time Proxy/VPN Shield</span>
-                <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-            </div>
-
-            <hr style="margin: 12px 0; border:0; border-top:1px solid #ddd;">
-            <h4 style="margin-bottom: 8px; font-size: 13px; color:#8a2be2;">Live Profile Quick Edit</h4>
-            <div class="form-group" style="margin-bottom: 6px;"><label style="width:80px; font-size:11px;">First Name:</label><input type="text" id="set-fn" style="width:100%;"></div>
-            <div class="form-group" style="margin-bottom: 6px;"><label style="width:80px; font-size:11px;">Last Name:</label><input type="text" id="set-ln" style="width:100%;"></div>
-            <div class="form-group" style="margin-bottom: 6px;"><label style="width:80px; font-size:11px;">Email:</label><input type="text" id="set-email" style="width:100%;"></div>
-
-            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
-                <button class="btn-generate" style="background: #888; flex:1;" onclick="closeModal('settings-modal')">Close</button>
-                <button class="btn-generate" style="background: #27ae60; flex:1;" onclick="saveCustomSettings()">Save</button>
-            </div>
-        </div>
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast" class="toast-popup">
+        <i class="fa-solid fa-circle-info"></i>
+        <span id="toast-msg">Notification message</span>
     </div>
 
-    <!-- PREMIUM FEATURES MODAL -->
-    <div class="modal-overlay" id="premium-modal">
-        <div class="modal-box small-modal" style="text-align: center;">
-            <div class="modal-header" style="border-radius: 12px 12px 0 0; margin: -30px -30px 20px -30px; background: linear-gradient(135deg, #f39c12, #d35400);">
-                <span><i class="fa-solid fa-crown"></i> Prime Identity PRO</span>
-                <button class="modal-close-btn" onclick="closeModal('premium-modal')">&times;</button>
-            </div>
-            
-            <div style="background: rgba(243, 156, 18, 0.1); border: 2px dashed #f39c12; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                <h4 style="color: #d35400; margin-bottom: 5px;">⭐ Unlock Pro Tier</h4>
-                <p style="font-size: 13px; font-weight: bold;">7 Days: <b>$1.20</b> | Monthly: <b>$5.90</b></p>
-            </div>
-
-            <div style="text-align: left; font-size: 13px; font-weight: bold; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
-                <div><i class="fa-solid fa-check" style="color:green;"></i> 🤖 AI Identity Generator</div>
-                <div><i class="fa-solid fa-check" style="color:green;"></i> 🌎 Real-time VPN Check</div>
-                <div><i class="fa-solid fa-check" style="color:green;"></i> 🪪 Fake Driver License (Realistic)</div>
-                <div><i class="fa-solid fa-check" style="color:green;"></i> 🛂 Passport Template (Realistic)</div>
-                <div><i class="fa-solid fa-check" style="color:green;"></i> 💳 Card Generator (<b>Generates 3 cards per click</b>)</div>
-            </div>
-
-            <button class="btn-generate" style="background: #f39c12; width: 100%; padding: 12px;" onclick="claimPremium()">Claim / Unlock PRO Now</button>
-        </div>
-    </div>
-
-    <!-- CARD GENERATOR CLAIM MODAL (3 Cards) -->
-    <div class="modal-overlay" id="cards-modal">
-        <div class="modal-box small-modal" style="text-align:center;">
-            <h3 style="margin-bottom: 10px; color:#8a2be2;"><i class="fa-solid fa-credit-card"></i> Multi-Card Generator</h3>
-            <p style="font-size: 13px; margin-bottom: 15px;">Select how many cards you want to claim for this profile:</p>
-            <select id="card-qty-select" style="width: 100%; padding: 8px; margin-bottom: 15px; border-radius: 6px; font-weight: bold;">
-                <option value="1">1 Card</option>
-                <option value="2">2 Cards</option>
-                <option value="3" selected>3 Cards (PRO Limit)</option>
-            </select>
-            <button class="btn-generate" style="width: 100%; background: #27ae60;" onclick="claimCards()">Claim Cards Now</button>
-        </div>
-    </div>
-
-    <!-- FAKE DRIVER LICENSE MODAL (Realistic Preview) -->
-    <div class="modal-overlay" id="dl-modal">
-        <div class="modal-box small-modal" style="background: #f9f9f9; color: #111; text-align: left; border: 3px solid #333;">
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #333; padding-bottom:8px; margin-bottom:12px;">
-                <h4 style="font-size:15px; color:#000;">UNITED STATES DRIVER LICENSE</h4>
-                <button onclick="closeModal('dl-modal')" style="background:none; border:none; font-size:18px; cursor:pointer;">&times;</button>
-            </div>
-            <div style="display:flex; gap:15px; align-items:center;">
-                <img id="dl-img" src="" style="width:90px; height:110px; border:1px solid #999; object-fit:cover;">
-                <div style="font-size:12px; font-family:monospace; line-height:1.4;">
-                    <b>DL NO:</b> D948-2849-019<br>
-                    <b>NAME:</b> <span id="dl-name"></span><br>
-                    <b>DOB:</b> <span id="dl-dob"></span><br>
-                    <b>EXP:</b> 10/12/2032<br>
-                    <b>ADDRESS:</b> <span id="dl-addr"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PASSPORT TEMPLATE MODAL (Realistic Preview) -->
-    <div class="modal-overlay" id="pass-modal">
-        <div class="modal-box small-modal" style="background: #0f2a4a; color: #fff; text-align: left; border: 3px solid #d4af37;">
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #d4af37; padding-bottom:8px; margin-bottom:12px;">
-                <h4 style="font-size:14px; color:#d4af37;"><i class="fa-solid fa-passport"></i> PASSPORT REPUBLIC</h4>
-                <button onclick="closeModal('pass-modal')" style="background:none; border:none; color:#fff; font-size:18px; cursor:pointer;">&times;</button>
-            </div>
-            <div style="display:flex; gap:15px; align-items:center;">
-                <img id="pass-img" src="" style="width:90px; height:110px; border:1px solid #d4af37; object-fit:cover;">
-                <div style="font-size:11px; font-family:monospace; line-height:1.4;">
-                    <b>PASSPORT NO:</b> X94820194<br>
-                    <b>SURNAME:</b> <span id="pass-ln"></span><br>
-                    <b>GIVEN NAMES:</b> <span id="pass-fn"></span><br>
-                    <b>NATIONALITY:</b> USA<br>
-                    <b>EXP:</b> 04/09/2034
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SAVE JSON & EXPORT PDF COMBINED MODAL -->
-    <div class="modal-overlay" id="export-modal">
-        <div class="modal-box small-modal">
-            <h3 style="margin-bottom: 15px; color:#8a2be2;"><i class="fa-solid fa-file-arrow-down"></i> Save & Export Profile</h3>
-            <p style="font-size: 13px; margin-bottom: 20px;">Choose how you want to download your generated identity data.</p>
-            
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <button class="btn-generate" onclick="downloadJSON()"><i class="fa-solid fa-file-code"></i> 💾 Save JSON (Identity File)</button>
-                <button class="btn-generate" style="background: #27ae60;" onclick="exportPDF()"><i class="fa-solid fa-file-pdf"></i> 📄 Export PDF (Print View)</button>
-            </div>
-            <button class="btn-generate" style="background: #888; width: 100%; margin-top: 15px;" onclick="closeModal('export-modal')">Cancel</button>
-        </div>
-    </div>
-
-    <!-- QR CODE MODAL -->
-    <div class="modal-overlay" id="qr-modal">
-        <div class="modal-box small-modal">
-            <h3 style="margin-bottom: 15px; color:#8a2be2;"><i class="fa-solid fa-qrcode"></i> vCard Contact QR</h3>
-            <p style="font-size: 13px; margin-bottom: 15px;">Scan this QR code with any mobile camera to import contact details directly.</p>
-            <div id="qrcode-container" style="display: flex; justify-content: center; margin: 15px 0; background: #fff; padding: 15px; border-radius: 8px;"></div>
-            <button class="btn-generate" style="width: 100%; margin-top: 10px;" onclick="closeModal('qr-modal')">Close</button>
-        </div>
-    </div>
-
-    <!-- TEMP MAIL MODAL -->
-    <div class="modal-overlay" id="tempmail-modal">
-        <div class="modal-box">
+    <!-- DOCUMENT CARD MODAL (Driver License / Passport / NID) -->
+    <div class="modal-overlay" id="doc-modal">
+        <div class="modal-box" style="max-width: 540px; height: auto; max-height: 90vh;">
             <div class="modal-header">
-                <span><i class="fa-solid fa-envelope"></i> Temporary Mail Inbox (mail.tm)</span>
-                <button class="modal-close-btn" onclick="closeTempMailModal()">&times;</button>
+                <span id="doc-modal-title"><i class="fa-solid fa-id-card"></i> Official Document Card</span>
+                <button class="modal-close-btn" onclick="closeDocModal()">&times;</button>
             </div>
-            <div class="modal-body">
-                <iframe id="tempmail-frame" src="" title="Temp Mail"></iframe>
-            </div>
-        </div>
-    </div>
-
-    <!-- UPLOAD CUSTOM THEME -->
-    <div class="modal-overlay" id="theme-modal">
-        <div class="modal-box small-modal">
-            <h3 style="margin-bottom: 15px; color:#8a2be2;"><i class="fa-solid fa-image"></i> Background Image</h3>
-            <p style="font-size: 14px; margin-bottom: 20px;">Upload a picture for your glassy layout background.</p>
-            <input type="file" id="bg-upload-input" accept="image/*" style="width: 100%; margin-bottom: 15px; font-size: 14px; padding: 10px; border: 1px dashed #8a2be2; border-radius: 6px;">
-            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
-                <button class="btn-generate" style="background: #e74c3c; flex: 1;" onclick="removeCustomBackground()">Remove BG</button>
-                <button class="btn-generate" style="background: #888; flex: 1;" onclick="closeModal('theme-modal')">Cancel</button>
-                <button class="btn-generate" style="background: #27ae60; flex: 1;" onclick="applyCustomBackground()">Apply</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ADVANCED OPTIONS -->
-    <div class="modal-overlay" id="adv-options-modal">
-        <div class="modal-box small-modal" style="text-align: left;">
-            <div class="modal-header" style="border-radius: 12px 12px 0 0; margin: -30px -30px 20px -30px;">
-                <span><i class="fa-solid fa-sliders"></i> Advanced Settings</span>
-                <button class="modal-close-btn" onclick="closeModal('adv-options-modal')">&times;</button>
-            </div>
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <label style="font-weight: bold;">Email Domain:</label>
-                <select id="email-domain" style="width: 160px; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-weight: bold;">
-                    <option value="gmail.com">@gmail.com</option>
-                    <option value="outlook.com">@outlook.com</option>
-                    <option value="yahoo.com">@yahoo.com</option>
-                </select>
-            </div>
-            <button class="btn-generate" style="width: 100%; margin-top: 25px; padding: 12px;" onclick="closeModal('adv-options-modal')">Save Changes</button>
-        </div>
-    </div>
-
-    <!-- IP LOOKUP -->
-    <div class="modal-overlay" id="ip-lookup-modal">
-        <div class="modal-box small-modal">
-            <div class="modal-header" style="border-radius: 12px 12px 0 0; margin: -30px -30px 20px -30px;">
-                <span><i class="fa-solid fa-globe"></i> Generate via IP</span>
-                <button class="modal-close-btn" onclick="closeModal('ip-lookup-modal')">&times;</button>
-            </div>
-            <p style="font-size: 14px; margin-bottom: 15px; line-height: 1.4;">Enter an IP address to generate an identity matching that region.</p>
-            <input type="text" id="ip-input" placeholder="e.g. 8.8.8.8" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; font-weight: bold;">
-            <button class="btn-generate" style="width: 100%; padding: 12px;" onclick="generateByIp()">Search & Generate</button>
-        </div>
-    </div>
-
-    <!-- ENTER GOOGLE DRIVE LINK -->
-    <div class="modal-overlay" id="sheet-link-modal">
-        <div class="modal-box small-modal" style="text-align: left;">
-            <div class="modal-header" style="border-radius: 12px 12px 0 0; margin: -30px -30px 20px -30px;">
-                <span><i class="fa-solid fa-link"></i> Connect Google Sheet</span>
-                <button class="modal-close-btn" onclick="closeModal('sheet-link-modal')">&times;</button>
-            </div>
-            <p style="font-size: 15px; font-weight: bold; margin-bottom: 10px;">Enter your Google Sheet Link:</p>
-            <div class="warning-box">
-                <i class="fa-solid fa-triangle-exclamation" style="font-size: 16px;"></i> 
-                Important: Before pasting the link, please ensure the Share setting is set to <u>"Anyone with the link (Editor)"</u>.
-            </div>
-            <input type="text" id="sheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/..." style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; font-weight: bold;">
-            <div style="display: flex; justify-content: center; gap: 10px;">
-                <button class="btn-generate" style="background: #888; flex:1;" onclick="closeModal('sheet-link-modal')">Cancel</button>
-                <button class="btn-generate" style="flex:1;" onclick="askLinkConfirm()">Next step <i class="fa-solid fa-arrow-right"></i></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- CONFIRM LINK -->
-    <div class="modal-overlay" id="confirm-link-modal">
-        <div class="modal-box small-modal">
-            <h3 style="margin-bottom: 15px; color: #e74c3c; font-size: 20px;"><i class="fa-solid fa-circle-question"></i> Are you sure?</h3>
-            <p style="font-size: 15px; margin-bottom: 25px; font-weight: bold;">Do you want to securely open this Google Sheet link?</p>
-            <div style="display: flex; justify-content: center; gap: 10px;">
-                <button class="btn-generate" style="background: #888; flex:1;" onclick="closeModal('confirm-link-modal')">No, Cancel</button>
-                <button class="btn-generate" style="background: #27ae60; flex:1;" onclick="openEmbeddedSheet()">Yes, Confirm</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- EMBEDDED SHEET WITH FLOATING PANEL -->
-    <div class="modal-overlay" id="embedded-sheet-modal">
-        <div class="modal-box" style="width: 98%; max-width: 1400px; height: 95vh; position: relative; border-radius: 10px;">
-            <div class="modal-header" style="border-radius: 10px 10px 0 0;">
-                <span><i class="fa-solid fa-table"></i> Live Google Sheet Editor</span>
-                <button class="modal-close-btn" onclick="closeModal('embedded-sheet-modal')">&times;</button>
-            </div>
-            <div class="modal-body" style="position: relative;">
-                <iframe id="connected-sheet-frame" src="" style="width: 100%; height: 100%; border: none; background: #fff;"></iframe>
-                <div class="floating-panel">
-                    <h4 style="color: #8a2be2; text-align: center; margin-bottom: 10px; border-bottom: 2px solid #ccc; padding-bottom: 8px; text-shadow: none;">Settings Panel</h4>
-                    <div>
-                        <label>Select Column (A-Z):</label>
-                        <select id="float-col"></select>
-                    </div>
-                    <div>
-                        <label>Names to Change:</label>
-                        <select id="float-row"></select>
-                    </div>
-                    <button class="btn-generate" style="width: 100%; margin-top: 15px; background: #27ae60; padding: 12px; font-size: 14px;" onclick="askUpdateConfirm()">Change Names</button>
-                    <p id="float-status" style="font-weight: bold; font-size: 13px; text-align: center; margin-top: 8px; text-shadow: none;"></p>
+            <div class="modal-body" style="padding: 20px; overflow-y: auto;">
+                <div id="doc-modal-content"></div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <button class="btn-generate" onclick="copyDocText(this)"><i class="fa-solid fa-copy"></i> Copy Card Details (1-Click)</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- CONFIRM UPDATE NAMES -->
-    <div class="modal-overlay" id="confirm-update-modal" style="z-index: 10005;">
-        <div class="modal-box small-modal">
-            <h3 style="margin-bottom: 15px; color: #e74c3c;"><i class="fa-solid fa-check-double"></i> Mark Cells & Confirm</h3>
-            <p id="confirm-update-msg" style="font-size: 15px; margin-bottom: 25px; line-height: 1.6; font-weight: bold;"></p>
-            <div style="display: flex; justify-content: center; gap: 10px;">
-                <button class="btn-generate" style="background: #888; flex:1;" onclick="closeModal('confirm-update-modal')">Cancel</button>
-                <button class="btn-generate" style="background: #27ae60; flex:1;" onclick="executeNameChange()">Confirm Update</button>
+    <!-- 3 CREDIT CARDS MODAL -->
+    <div class="modal-overlay" id="credit-modal">
+        <div class="modal-box" style="max-width: 600px; height: auto; max-height: 90vh;">
+            <div class="modal-header">
+                <span><i class="fa-solid fa-credit-card"></i> Card Generator (3 Virtual Cards)</span>
+                <button class="modal-close-btn" onclick="closeCreditModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 15px;">
+                <div id="credit-modal-content" class="credit-cards-container"></div>
+                <div style="text-align: center; margin: 15px 0 10px 0;">
+                    <button class="btn-generate" onclick="copyAllCreditCards(this)"><i class="fa-solid fa-copy"></i> Copy All 3 Cards (1-Click)</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
+    <!-- SHEETER MODAL (Drive Confirm & 1-40 Rows Grid) -->
+    <div class="modal-overlay" id="sheeter-modal">
+        <div class="modal-box sheeter-modal-box">
+            <div class="modal-header">
+                <span><i class="fa-solid fa-table-list"></i> Identity Sheeter (Drive Sync)</span>
+                <button class="modal-close-btn" onclick="closeSheeterModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 18px; display: flex; flex-direction: column; overflow: hidden;">
+                <!-- Phase 1: Drive Link Input -->
+                <div id="sheeter-drive-step" style="text-align: center; margin: auto; padding: 20px;">
+                    <h3 style="margin-bottom: 12px; color: #8a2be2;">Enter Drive / Sheet Link</h3>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Please paste your Google Drive or Spreadsheet link to confirm and open the identity sheet.</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; max-width: 500px; margin: 0 auto; flex-wrap: wrap;">
+                        <input type="text" id="sheeter-drive-url" placeholder="https://docs.google.com/spreadsheets/d/..." style="flex: 1; min-width: 240px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
+                        <button class="btn-generate" onclick="confirmDriveLink()">Confirm Drive Link</button>
+                    </div>
+                </div>
+
+                <!-- Phase 2: Sheet Grid View (1 to 40 Rows) -->
+                <div id="sheeter-grid-step" style="display: none; flex-direction: column; height: 100%;">
+                    <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 10px;">
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <label style="font-size: 12px; font-weight: bold; cursor: pointer;"><input type="checkbox" id="sheeter-mark-all" onchange="toggleMarkAllSheeter(this)"> Mark All (1-40)</label>
+                            <button class="btn-generate" style="padding: 5px 14px; font-size: 12px;" onclick="changeSelectedNames()"><i class="fa-solid fa-rotate"></i> Change Name</button>
+                        </div>
+                        <div>
+                            <button class="copy-tag" onclick="exportSheeterData(this)">Copy All 40 Rows</button>
+                        </div>
+                    </div>
+
+                    <div class="sheeter-table-container">
+                        <table class="sheeter-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 45px; text-align: center;">Mark</th>
+                                    <th style="width: 40px;">#</th>
+                                    <th>Full Name</th>
+                                    <th>Gender</th>
+                                    <th>Country</th>
+                                    <th>Gmail</th>
+                                    <th>Phone</th>
+                                    <th>SSN</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sheeter-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    <!-- PREMIUM SUBSCRIPTION MODAL -->
+    <div class="modal-overlay" id="premium-modal">
+        <div class="modal-box" style="max-width: 500px; height: auto; max-height: 90vh;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                <span><i class="fa-solid fa-crown"></i> Prime Identity Premium Access</span>
+                <button class="modal-close-btn" onclick="closePremiumModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px; text-align: center;">
+                <h3 style="color: #d97706; margin-bottom: 8px;">Unlock All Premium Tools</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Claim premium access to unlock Sheeter, Driver License, Passport, NID Card, and Card Generator (3 Cards)!</p>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
+                    <!-- Weekly Plan -->
+                    <div id="plan-weekly" class="premium-plan-card" onclick="selectPlan('weekly')" style="border: 2px solid #f59e0b; border-radius: 8px; padding: 15px; width: 190px; cursor: pointer; background: #fff8f0; transition: 0.2s;">
+                        <div style="font-weight: bold; color: #d97706; font-size: 15px; margin-bottom: 5px;">Weekly Pass</div>
+                        <div style="font-size: 20px; font-weight: bold; color: #222; margin-bottom: 5px;">$4.99 <span style="font-size: 11px; font-weight: normal;">/ 7 days</span></div>
+                        <div style="font-size: 11px; color: #777;">Full access for 7 days</div>
+                    </div>
+
+                    <!-- Monthly Plan -->
+                    <div id="plan-monthly" class="premium-plan-card" onclick="selectPlan('monthly')" style="border: 2px solid #ddd; border-radius: 8px; padding: 15px; width: 190px; cursor: pointer; background: #fff; transition: 0.2s;">
+                        <div style="font-weight: bold; color: #d97706; font-size: 15px; margin-bottom: 5px;">Monthly Pass</div>
+                        <div style="font-size: 20px; font-weight: bold; color: #222; margin-bottom: 5px;">$14.99 <span style="font-size: 11px; font-weight: normal;">/ 30 days</span></div>
+                        <div style="font-size: 11px; color: #777;">Full access for 30 days</div>
+                    </div>
+                </div>
+
+                <button class="btn-generate" style="background: linear-gradient(135deg, #f59e0b, #d97706); width: 100%; padding: 10px; font-size: 14px;" onclick="claimPremiumSubscription()"><i class="fa-solid fa-gem"></i> Claim Premium Access Now</button>
+    <!-- REALTIME THEME & BG MODAL -->
+    <div class="modal-overlay" id="theme-modal">
+        <div class="modal-box" style="max-width: 480px; height: auto;">
+            <div class="modal-header">
+                <span><i class="fa-solid fa-palette"></i> Select Theme & Background</span>
+                <button class="modal-close-btn" onclick="closeThemeModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px; text-align: center;">
+                <h3 style="margin-bottom: 8px; color: #8a2be2;">Realtime Background Themes</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Choose a theme. It will apply instantly and remain saved until changed!</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;">
+                    <button class="theme-btn" onclick="setRealtimeTheme('theme-pic')" style="padding: 12px; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #8a2be2, #4a00e0); color: #fff; border: 2px solid #8a2be2; grid-column: span 2;">
+                        🖼️ Default Wallpaper (bg.jpg)
+                    </button>
+                    <button class="theme-btn" onclick="setRealtimeTheme('default')" style="padding: 12px; font-size: 13px; font-weight: bold; background: #ffffff; color: #333; border: 2px solid #ccc;">
+                        ☀️ Plain Light
+                    </button>
+                    <button class="theme-btn" onclick="setRealtimeTheme('dark')" style="padding: 12px; font-size: 13px; font-weight: bold; background: #121212; color: #fff; border: 2px solid #555;">
+                        🌙 Night Mode
+                    </button>
+                    <button class="theme-btn" onclick="setRealtimeTheme('theme-sunset')" style="padding: 12px; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #f43f5e, #8b5cf6); color: #fff; border: none;">
+                        🌅 Sunset Gradient
+                    </button>
+                    <button class="theme-btn" onclick="setRealtimeTheme('theme-ocean')" style="padding: 12px; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #0284c7, #06b6d4); color: #fff; border: none;">
+                        🌊 Ocean Gradient
+                    </button>
+                    <button class="theme-btn" onclick="setRealtimeTheme('theme-cyber')" style="padding: 12px; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #180828, #4c1d95); color: #fff; border: none; grid-column: span 2;">
+                        🌌 Cyberpunk Dark Purple
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2026 Prime World. All rights reserved.</p>
         <div class="social-links">
@@ -822,326 +1234,231 @@
             });
         }
 
-        function openModal(id) { 
-            if(id === 'settings-modal') {
-                document.getElementById('set-fn').value = document.getElementById('fn').innerText;
-                document.getElementById('set-ln').value = document.getElementById('ln').innerText;
-                document.getElementById('set-email').value = document.getElementById('gmail').innerText;
-            }
-            if(id === 'dl-modal' || id === 'pass-modal') {
-                let fn = document.getElementById('fn').innerText;
-                let ln = document.getElementById('ln').innerText;
-                let street = document.getElementById('street').innerText;
-                let city = document.getElementById('city').innerText;
-                let avatar = document.getElementById('avatar-img').src;
-
-                document.getElementById('dl-name').innerText = `${fn} ${ln}`;
-                document.getElementById('dl-dob').innerText = document.getElementById('bday').innerText;
-                document.getElementById('dl-addr').innerText = `${street}, ${city}`;
-                document.getElementById('dl-img').src = avatar;
-
-                document.getElementById('pass-fn').innerText = fn;
-                document.getElementById('pass-ln').innerText = ln;
-                document.getElementById('pass-img').src = avatar;
-            }
-            document.getElementById(id).classList.add('show'); 
+        function openThemeModal() {
+            document.getElementById('theme-modal').classList.add('show');
         }
 
-        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-
-        // Claim Premium Function to Unlock Pro Features
-        function claimPremium() {
-            localStorage.setItem('isPremium', 'true');
-            closeModal('premium-modal');
-            checkPremiumStatus();
-            alert("🎉 Congratulations! PRO features have been unlocked successfully.");
+        function closeThemeModal() {
+            document.getElementById('theme-modal').classList.remove('show');
         }
 
-        function checkPremiumStatus() {
-            let isPro = localStorage.getItem('isPremium') === 'true';
-            let proButtons = document.querySelectorAll('.pro-link-btn');
-            proButtons.forEach(btn => {
-                btn.style.display = isPro ? 'inline-block' : 'none';
-            });
-        }
-
-        // Claim Multi-Cards (1, 2, or 3 cards)
-        function claimCards() {
-            let qty = parseInt(document.getElementById('card-qty-select').value);
-            let container = document.getElementById('multi-cards-list');
-            container.innerHTML = "";
+        function setRealtimeTheme(themeName) {
+            document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber');
             
-            for(let i=1; i<=qty; i++) {
-                let fakeNum = Math.floor(Math.random() * 9000 + 1000) + " " + Math.floor(Math.random() * 9000 + 1000) + " " + Math.floor(Math.random() * 9000 + 1000) + " " + Math.floor(Math.random() * 9000 + 1000);
-                container.innerHTML += `Card #${i}: ${fakeNum} (Exp: 08/29)<br>`;
-            }
-
-            document.getElementById('multi-cards-box').style.display = 'block';
-            closeModal('cards-modal');
-        }
-
-        function saveCustomSettings() {
-            document.getElementById('fn').innerText = document.getElementById('set-fn').value;
-            document.getElementById('ln').innerText = document.getElementById('set-ln').value;
-            document.getElementById('gmail').innerText = document.getElementById('set-email').value;
-            closeModal('settings-modal');
-        }
-
-        function toggleSection(secName) {
-            let checkbox = document.getElementById(`toggle-${secName}`);
-            let rows = document.querySelectorAll(`.row-${secName}`);
-            let header = document.getElementById(`sec-${secName}`);
-            let displayStyle = checkbox.checked ? "flex" : "none";
-            if(header) header.style.display = checkbox.checked ? "flex" : "none";
-            rows.forEach(r => r.style.display = displayStyle);
-        }
-
-        function openQrModal() {
-            let fn = document.getElementById('fn').innerText;
-            let ln = document.getElementById('ln').innerText;
-            let email = document.getElementById('gmail').innerText;
-            let phone = document.getElementById('phone').innerText;
-            let street = document.getElementById('street').innerText;
-            let city = document.getElementById('city').innerText;
-
-            let vcard = `BEGIN:VCARD\nVERSION:3.0\nN:${ln};${fn}\nFN:${fn} ${ln}\nEMAIL:${email}\nTEL:${phone}\nADR:;;${street};${city};;;\nEND:VCARD`;
-            let qrContainer = document.getElementById('qrcode-container');
-            qrContainer.innerHTML = ""; 
-            
-            new QRCode(qrContainer, {
-                text: vcard,
-                width: 180,
-                height: 180,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-
-            openModal('qr-modal');
-        }
-
-        function openExportModal() { openModal('export-modal'); }
-
-        function downloadJSON() {
-            let profileData = {
-                firstName: document.getElementById('fn').innerText,
-                lastName: document.getElementById('ln').innerText,
-                street: document.getElementById('street').innerText,
-                city: document.getElementById('city').innerText,
-                state: document.getElementById('state').innerText,
-                zip: document.getElementById('zip').innerText,
-                email: document.getElementById('gmail').innerText,
-                phone: document.getElementById('phone').innerText,
-                cardNumber: document.getElementById('cc-num').innerText,
-                expiry: document.getElementById('cc-exp').innerText,
-                cvv: document.getElementById('cc-cvv').innerText,
-                birthday: document.getElementById('bday').innerText
-            };
-
-            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profileData, null, 4));
-            let downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "identity_profile.json");
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            closeModal('export-modal');
-        }
-
-        function exportPDF() {
-            window.print();
-            closeModal('export-modal');
-        }
-
-        function applyCustomBackground() {
-            const fileInput = document.getElementById('bg-upload-input');
-            const file = fileInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.body.style.backgroundImage = `url('${e.target.result}')`;
-                    localStorage.setItem('customBg', e.target.result); 
-                    closeModal('theme-modal');
-                }
-                reader.readAsDataURL(file);
+            const btn = document.getElementById('theme-btn');
+            if (themeName === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (btn) btn.innerText = 'Day Mode';
+            } else if (themeName === 'default') {
+                document.body.classList.add('theme-default');
+                if (btn) btn.innerText = 'Night Mode';
             } else {
-                alert("Please select an image file first.");
+                document.body.classList.add(themeName);
+                if (btn) btn.innerText = 'Night Mode';
             }
-        }
 
-        function removeCustomBackground() {
-            document.body.style.backgroundImage = "none";
-            localStorage.removeItem('customBg');
-            document.getElementById('bg-upload-input').value = "";
-            closeModal('theme-modal');
-        }
-
-        function loadSavedBackground() {
-            const savedBg = localStorage.getItem('customBg');
-            if(savedBg) { document.body.style.backgroundImage = `url('${savedBg}')`; }
+            localStorage.setItem('theme', themeName);
+            closeThemeModal();
+            const displayName = themeName === 'theme-pic' ? 'DEFAULT WALLPAPER' : themeName.replace('theme-', '').toUpperCase();
+            showNotification(`Realtime Theme Applied: ${displayName} (Saved permanently until changed)`);
         }
 
         function applySavedTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
+            const savedTheme = localStorage.getItem('theme') || 'theme-pic';
+            document.body.classList.remove('dark-mode', 'theme-default', 'theme-pic', 'theme-sunset', 'theme-ocean', 'theme-cyber');
+            
+            const btn = document.getElementById('theme-btn');
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
-                toggleCheckbox.checked = true;
+                if (btn) btn.innerText = 'Day Mode';
+            } else if (savedTheme === 'default') {
+                document.body.classList.add('theme-default');
+                if (btn) btn.innerText = 'Night Mode';
             } else {
-                document.body.classList.remove('dark-mode');
-                toggleCheckbox.checked = false;
+                document.body.classList.add(savedTheme);
+                if (btn) btn.innerText = 'Night Mode';
             }
-            loadSavedBackground();
-            checkPremiumStatus();
         }
 
         function toggleTheme() {
-            const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
-            if (toggleCheckbox.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
+            const isDark = document.body.classList.contains('dark-mode');
+            if (isDark) {
+                setRealtimeTheme('default');
             } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
+                setRealtimeTheme('dark');
             }
         }
 
-        function openTempMailModal() {
-            const iframe = document.getElementById('tempmail-frame');
-            iframe.src = "https://mail.tm/en/";
-            openModal('tempmail-modal');
-        }
-        function closeTempMailModal() {
-            document.getElementById('tempmail-frame').src = ""; 
-            closeModal('tempmail-modal');
-        }
-
-        function openSheetLinkModal() { openModal('sheet-link-modal'); }
-
-        function askLinkConfirm() {
-            let url = document.getElementById('sheet-url-input').value.trim();
-            if(!url) return alert("Please paste a valid Google Sheet Link first!");
-            closeModal('sheet-link-modal');
-            openModal('confirm-link-modal');
-        }
-
-        function openEmbeddedSheet() {
-            closeModal('confirm-link-modal');
-            let rawUrl = document.getElementById('sheet-url-input').value.trim();
-            document.getElementById('connected-sheet-frame').src = rawUrl;
-            populateFloatingPanel();
-            openModal('embedded-sheet-modal');
-        }
-
-        function populateFloatingPanel() {
-            let colSelect = document.getElementById('float-col');
-            let rowSelect = document.getElementById('float-row');
-            colSelect.innerHTML = ''; rowSelect.innerHTML = '';
-            
-            for (let i = 65; i <= 90; i++) {
-                let letter = String.fromCharCode(i);
-                colSelect.innerHTML += `<option value="${letter}">Column ${letter}</option>`;
-            }
-            for (let i = 1; i <= 50; i++) {
-                rowSelect.innerHTML += `<option value="${i}">${i} Names</option>`;
-            }
-            rowSelect.innerHTML += `<option value="Unlimited">Unlimited</option>`;
-        }
-
-        function askUpdateConfirm() {
-            let count = document.getElementById('float-row').value;
-            let msgBox = document.getElementById('confirm-update-msg');
-            if(count === "Unlimited") {
-                msgBox.innerHTML = `দয়া করে শিটের ভেতরে যে <span style="color:#e74c3c;">নামগুলো পরিবর্তন করতে চান</span> তা মাউস দিয়ে মার্ক করুন।<br><br>মার্ক করা হয়ে গেলে নিচের Confirm Update বাটনে ক্লিক করুন।`;
+        function toggleGeneratorFields() {
+            const fields = document.getElementById('generator-fields');
+            const btn = document.getElementById('toggle-generator-btn');
+            if (fields.style.display === 'none') {
+                fields.style.display = 'block';
+                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Hide';
             } else {
-                msgBox.innerHTML = `দয়া করে শিটের ভেতরে <span style="color:#e74c3c;">${count} টি ঘর</span> মাউস দিয়ে মার্ক করুন।<br><br>মার্ক করা হয়ে গেলে নিচের Confirm Update বাটনে ক্লিক করুন।`;
+                fields.style.display = 'none';
+                btn.innerHTML = '<i class="fa-solid fa-eye"></i> Show';
             }
-            openModal('confirm-update-modal');
         }
 
-        function executeNameChange() {
-            closeModal('confirm-update-modal');
-            let statusText = document.getElementById('float-status');
-            statusText.style.color = "#007bff";
-            statusText.innerText = "Processing...";
-            setTimeout(() => {
-                statusText.style.color = "#28a745";
-                statusText.innerText = `Success! Names updated.`;
-                setTimeout(() => { statusText.innerText = ""; }, 4000);
-            }, 1500);
+        function closeAllPanels() {
+            document.getElementById('adv-panel').classList.remove('open');
+            document.getElementById('ip-panel').classList.remove('open');
         }
 
-        function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        function toggleAdvOptions() {
+            const panel = document.getElementById('adv-panel');
+            const isOpen = panel.classList.contains('open');
+            closeAllPanels();
+            if(!isOpen) panel.classList.add('open');
+        }
+
+        function toggleIpPanel() {
+            const panel = document.getElementById('ip-panel');
+            const isOpen = panel.classList.contains('open');
+            closeAllPanels();
+            if(!isOpen) panel.classList.add('open');
+        }
+
+        /* Notification Toast Function */
+        function showNotification(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = msg;
+            toast.classList.add('show');
+            if (window.toastTimeout) clearTimeout(window.toastTimeout);
+            window.toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
 
         const countryToNatMap = {
-            "Australia": { nat: "au", phoneCode: "61", format: "04## ### ###" },
-            "Brazil": { nat: "br", phoneCode: "55", format: "(11) 9####-####" },
+            "Bangladesh": { nat: "in", phoneCode: "880", format: "017##-######" },
+            "United States": { nat: "us", phoneCode: "1", format: "(###) ###-####" },
+            "United Kingdom": { nat: "gb", phoneCode: "44", format: "07### ######" },
             "Canada": { nat: "ca", phoneCode: "1", format: "(###) ###-####" },
-            "Denmark": { nat: "dk", phoneCode: "45", format: "## ## ## ##" },
-            "Finland": { nat: "fi", phoneCode: "358", format: "040 ### ####" },
-            "France": { nat: "fr", phoneCode: "33", format: "06 ## ## ## ##" },
+            "Australia": { nat: "au", phoneCode: "61", format: "04## ### ###" },
             "Germany": { nat: "de", phoneCode: "49", format: "015# ########" },
+            "France": { nat: "fr", phoneCode: "33", format: "06 ## ## ## ##" },
+            "Brazil": { nat: "br", phoneCode: "55", format: "(11) 9####-####" },
             "India": { nat: "in", phoneCode: "91", format: "9#### #####" },
-            "Iran": { nat: "ir", phoneCode: "98", format: "0912 ### ####" },
-            "Ireland": { nat: "ie", phoneCode: "353", format: "087 ### ####" },
-            "Mexico": { nat: "mx", phoneCode: "52", format: "55 #### ####" },
-            "Netherlands": { nat: "nl", phoneCode: "31", format: "06 ########" },
-            "New Zealand": { nat: "nz", phoneCode: "64", format: "021 ### ####" },
-            "Norway": { nat: "no", phoneCode: "47", format: "9## ## ###" },
-            "Poland": { nat: "pl", phoneCode: "48", format: "### ### ###" },
             "Spain": { nat: "es", phoneCode: "34", format: "6## ## ## ##" },
             "Switzerland": { nat: "ch", phoneCode: "41", format: "079 ### ## ##" },
-            "Thailand": { nat: "th", phoneCode: "66", format: "08# ### ####" },
+            "Denmark": { nat: "dk", phoneCode: "45", format: "## ## ## ##" },
+            "Finland": { nat: "fi", phoneCode: "358", format: "040 ### ####" },
+            "Ireland": { nat: "ie", phoneCode: "353", format: "087 ### ####" },
+            "Iran": { nat: "ir", phoneCode: "98", format: "0912 ### ####" },
+            "Mexico": { nat: "mx", phoneCode: "52", format: "55 #### ####" },
+            "Netherlands": { nat: "nl", phoneCode: "31", format: "06 ########" },
+            "Norway": { nat: "no", phoneCode: "47", format: "9## ## ###" },
+            "New Zealand": { nat: "nz", phoneCode: "64", format: "021 ### ####" },
             "Turkey": { nat: "tr", phoneCode: "90", format: "0532 ### ## ##" },
-            "Ukraine": { nat: "ua", phoneCode: "380", format: "050 ### ####" },
-            "United Kingdom": { nat: "gb", phoneCode: "44", format: "07### ######" },
-            "United States": { nat: "us", phoneCode: "1", format: "(###) ###-####" }
+            "Ukraine": { nat: "ua", phoneCode: "380", format: "050 ### ####" }
         };
 
-        function generateRealPhone(pattern) { return pattern.replace(/#/g, () => getRandomInt(0, 9)); }
+        const bdCities = ["Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Khulna", "Barisal", "Rangpur", "Comilla", "Mymensingh", "Gazipur"];
+        const bdStreets = ["Mirpur Road", "Dhanmondi 27", "Gulshan Avenue", "Banani Block C", "Uttara Sector 7", "GEC Circle", "Zindabazar", "College Road"];
 
-        function generateFakeFinance() {
-            let cardTypes = [
-                { brand: 'fa-cc-visa', name: 'VISA', color: '#1a1f71', prefix: '4' },
-                { brand: 'fa-cc-mastercard', name: 'MasterCard', color: '#eb001b', prefix: '51' },
-                { brand: 'fa-cc-mastercard', name: 'MasterCard', color: '#eb001b', prefix: '55' },
-                { brand: 'fa-cc-amex', name: 'Amex', color: '#002663', prefix: '34' },
-                { brand: 'fa-cc-discover', name: 'Discover', color: '#e55c20', prefix: '6011' }
-            ];
-            
-            let selectedType = cardTypes[Math.floor(Math.random() * cardTypes.length)];
-            let ccNum = selectedType.prefix;
-            let totalLength = (selectedType.brand === 'fa-cc-amex') ? 15 : 16;
-            for(let i = 0; i < (totalLength - selectedType.prefix.length); i++) {
-                ccNum += Math.floor(Math.random() * 10);
+        const nameSetData = {
+            bengali: {
+                male: [
+                    { native: "মো: রাকিব হাসান", eng: "Md. Rakib Hasan" },
+                    { native: "তানভীর আহমেদ", eng: "Tanvir Ahmed" },
+                    { native: "সাকিব চৌধুরী", eng: "Shakib Chowdhury" },
+                    { native: "মেহেদী হাসান", eng: "Mehedi Hasan" },
+                    { native: "কামরুল ইসলাম", eng: "Kamrul Islam" },
+                    { native: "ইমরান হোসেন", eng: "Imran Hossain" },
+                    { native: "ফারহান আরিফ", eng: "Farhan Arif" },
+                    { native: "আবুল কালাম", eng: "Abul Kalam" },
+                    { native: "সোহেল রানা", eng: "Sohel Rana" },
+                    { native: "রিফাত সরকার", eng: "Rifat Sarker" }
+                ],
+                female: [
+                    { native: "নুসরাত জাহান", eng: "Nusrat Jahan" },
+                    { native: "সাদিয়া রহমান", eng: "Sadia Rahman" },
+                    { native: "তাসনিম সুলতানা", eng: "Tasnim Sultana" },
+                    { native: "সাবরিনা চৌধুরী", eng: "Sabrina Chowdhury" },
+                    { native: "ফারজানা আক্তার", eng: "Farzana Akter" },
+                    { native: "শারমিন পারভীন", eng: "Sharmin Parvin" },
+                    { native: "মরিয়ম বেগম", eng: "Moriom Begum" },
+                    { native: "সানজিদা ইসলাম", eng: "Sanjida Islam" },
+                    { native: "রাবেয়া খানম", eng: "Rabeya Khanam" }
+                ]
+            },
+            arabic: {
+                male: [
+                    { native: "محمد عبد الله", eng: "Muhammad Abdullah" },
+                    { native: "أحمد علي", eng: "Ahmed Ali" },
+                    { native: "عمر المصري", eng: "Omar El-Masry" },
+                    { native: "يوسف الغامدي", eng: "Youssef Al-Ghamdi" },
+                    { native: "خالد الشريف", eng: "Khaled Al-Sharif" }
+                ],
+                female: [
+                    { native: "فاطمة الزهراء", eng: "Fatima Al-Zahra" },
+                    { native: "مريم نور", eng: "Maryam Noor" },
+                    { native: "عائشة أحمد", eng: "Aisha Ahmed" },
+                    { native: "زينب ليلى", eng: "Zainab Layla" }
+                ]
+            },
+            chinese: {
+                male: [
+                    { native: "张伟", eng: "Zhang Wei" },
+                    { native: "王强", eng: "Wang Qiang" },
+                    { native: "李杰", eng: "Li Jie" },
+                    { native: "刘洋", eng: "Liu Yang" }
+                ],
+                female: [
+                    { native: "李娜", eng: "Li Na" },
+                    { native: "王芳", eng: "Wang Fang" },
+                    { native: "张敏", eng: "Zhang Min" }
+                ]
+            },
+            indian: {
+                male: [
+                    { native: "आरव शर्मा", eng: "Aarav Sharma" },
+                    { native: "रोहन वर्मा", eng: "Rohan Verma" },
+                    { native: "आदित्य सिंह", eng: "Aditya Singh" }
+                ],
+                female: [
+                    { native: "अनन्या पटेल", eng: "Ananya Patel" },
+                    { native: "दीया कुमार", eng: "Diya Kumar" }
+                ]
             }
-            
-            let formattedCC = (selectedType.brand === 'fa-cc-amex') ? ccNum.replace(/(\d{4})(\d{6})(\d{5})/, '$1 $2 $3') : ccNum.match(/.{1,4}/g).join(' ');
-            let month = Math.floor(Math.random() * 12) + 1;
-            let exp = (month < 10 ? '0' + month : month) + '/' + (Math.floor(Math.random() * 6) + 26);
-            let cvv = Math.floor(Math.random() * 900) + 100;
+        };
 
-            document.getElementById("cc-num").innerText = formattedCC;
-            document.getElementById("cc-exp").innerText = exp;
-            document.getElementById("cc-cvv").innerText = cvv;
-            
-            document.getElementById("card-brand-name").innerText = selectedType.name;
-            let brandIcon = document.getElementById("card-brand-icon");
-            brandIcon.className = `fa-brands ${selectedType.brand} animated-card`;
-            brandIcon.style.color = selectedType.color;
-            brandIcon.style.animation = 'none';
-            void brandIcon.offsetWidth; 
-            brandIcon.style.animation = null;
+        const countryPhotos = {
+            "Bangladesh": {
+                male: [
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80"
+                ],
+                female: [
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
+                    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80"
+                ]
+            }
+        };
+
+        function generateRealPhone(pattern) {
+            return pattern.replace(/#/g, () => getRandomInt(0, 9));
         }
 
         async function generateIdentity(customLocation = null) {
             let genderInput = document.getElementById("gender").value.toLowerCase();
             let countryInput = document.getElementById("country").value;
-            let nameSetInput = document.getElementById("name-set").value;
+            let nameSetInput = document.getElementById("nameset").value.toLowerCase();
 
-            let countryData = countryToNatMap[countryInput] || countryToNatMap["United States"];
-            let natCode = nameSetInput !== "native" ? nameSetInput : countryData.nat;
             let apiGender = genderInput === "random" ? (Math.random() > 0.5 ? "male" : "female") : genderInput;
+            let selectedCountryData = countryToNatMap[countryInput] || { nat: "us", phoneCode: "1", format: "(###) ###-####" };
+            let natCode = selectedCountryData.nat;
 
             try {
                 let response = await fetch(`https://randomuser.me/api/?gender=${apiGender}&nat=${natCode}`);
@@ -1151,70 +1468,572 @@
                 let firstName = user.name.first;
                 let lastName = user.name.last;
                 let middleInitial = String.fromCharCode(65 + Math.floor(Math.random() * 26)) + ".";
+
+                let street = `${user.location.street.number} ${user.location.street.name}`;
+                let city = customLocation ? customLocation.city : user.location.city;
+                let state = customLocation ? customLocation.region : user.location.state;
+                let zip = customLocation ? customLocation.postal : (countryInput === "United States" ? getRandomInt(10001, 99950).toString() : user.location.postcode);
+
+                // Override for Bangladesh details
+                if (countryInput === "Bangladesh") {
+                    city = bdCities[Math.floor(Math.random() * bdCities.length)];
+                    state = city + " Division";
+                    street = `${getRandomInt(10, 150)} ${bdStreets[Math.floor(Math.random() * bdStreets.length)]}`;
+                    zip = getRandomInt(1000, 1300).toString();
+                }
+
+                // 99% Ethnicity Photo Match Logic
+                let photoUrl = user.picture.large;
+                if (countryPhotos[countryInput] && countryPhotos[countryInput][apiGender]) {
+                    const photosList = countryPhotos[countryInput][apiGender];
+                    photoUrl = photosList[Math.floor(Math.random() * photosList.length)];
+                }
+
+                // Native Language Script & Name Set Handling
+                if (nameSetData[nameSetInput] && nameSetData[nameSetInput][apiGender]) {
+                    const pool = nameSetData[nameSetInput][apiGender];
+                    const selectedObj = pool[Math.floor(Math.random() * pool.length)];
+                    firstName = selectedObj.native;
+                    lastName = `(${selectedObj.eng})`;
+                    middleInitial = "";
+                } else if (countryInput === "Bangladesh" && nameSetInput === "native") {
+                    const pool = nameSetData["bengali"][apiGender];
+                    const selectedObj = pool[Math.floor(Math.random() * pool.length)];
+                    firstName = selectedObj.native;
+                    lastName = `(${selectedObj.eng})`;
+                    middleInitial = "";
+                }
+                let phone = generateRealPhone(selectedCountryData.format);
+                let homePhone = generateRealPhone(selectedCountryData.format);
+
                 let domain = document.getElementById("email-domain").value;
                 let birthYear = new Date(user.dob.date).getFullYear().toString().substring(2);
-                let generatedEmail = `${firstName.toLowerCase().replace(/[^a-z0-9]/g, '')}.${lastName.toLowerCase().replace(/[^a-z0-9]/g, '')}${birthYear}@${domain}`;
+                let cleanFirstName = firstName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                let cleanLastName = lastName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                
+                let generatedEmail = `${cleanFirstName}.${cleanLastName}${birthYear}@${domain}`;
+
+                let ssn = `${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-XXXX`;
+                let geo = customLocation ? `${customLocation.lat}, ${customLocation.lon}` : `${user.location.coordinates.latitude}, ${user.location.coordinates.longitude}`;
 
                 let dobDate = new Date(user.dob.date);
                 let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                let zipVal = user.location.postcode || getRandomInt(10000, 99999).toString();
+                let birthdayDisplay = `${monthNames[dobDate.getMonth()]} ${dobDate.getDate()}, ${dobDate.getFullYear()}`;
+                let numericDob = `${dobDate.getMonth() + 1}/${dobDate.getDate()}/${dobDate.getFullYear()}`;
+                let fullYear = dobDate.getFullYear().toString();
+                let age = `${user.dob.age} years old`;
 
-                document.getElementById("avatar-img").src = user.picture.large;
+                document.getElementById("avatar-img").src = photoUrl;
                 document.getElementById("fn").innerText = `${firstName} ${middleInitial}`;
                 document.getElementById("ln").innerText = lastName;
-                document.getElementById("street").innerText = `${user.location.street.number} ${user.location.street.name}`;
-                document.getElementById("city").innerText = customLocation ? customLocation.city : user.location.city;
-                document.getElementById("state").innerText = customLocation ? customLocation.region : user.location.state;
-                document.getElementById("zip").innerText = customLocation ? customLocation.postal : zipVal;
-                document.getElementById("meaning-name").innerText = firstName;
-                document.getElementById("meaning-link").href = `https://www.behindthename.com/name/${firstName.toLowerCase()}`;
+                document.getElementById("street").innerText = street;
+                document.getElementById("city").innerText = city;
+                document.getElementById("state").innerText = state;
+                document.getElementById("zip").innerText = zip;
+
                 document.getElementById("gmail").innerText = generatedEmail;
-                document.getElementById("phone").innerText = generateRealPhone(countryData.format);
-                document.getElementById("country-code").innerText = countryData.phoneCode;
-                document.getElementById("bday").innerText = `${monthNames[dobDate.getMonth()]} ${dobDate.getDate()}, ${dobDate.getFullYear()}`;
-                document.getElementById("age").innerText = `${user.dob.age} years old`;
 
-                // Reset multi card box on generation until claimed again
-                document.getElementById('multi-cards-box').style.display = 'none';
+                document.getElementById("ssn").innerText = ssn;
+                document.getElementById("geo").innerText = geo;
+                document.getElementById("phone").innerText = phone;
+                document.getElementById("home-phone").innerText = homePhone;
+                
+                let bdayElem = document.getElementById("bday");
+                bdayElem.innerText = birthdayDisplay;
+                bdayElem.setAttribute("data-numeric", numericDob);
+                bdayElem.setAttribute("data-year", fullYear);
 
-                generateFakeFinance();
-            } catch (error) { console.error("Error: ", error); }
+                document.getElementById("age").innerText = age;
+
+            } catch (error) {
+                console.error("Error generating identity: ", error);
+            }
         }
 
         async function generateByIp() {
             let ip = document.getElementById("ip-input").value.trim();
             if(!ip) return alert("Please enter an IP address!");
+
             try {
                 let res = await fetch(`https://ipapi.co/${ip}/json/`);
                 let ipData = await res.json();
-                if(ipData.error) return alert("Invalid IP Address!");
+
+                if(ipData.error) {
+                    alert("Invalid IP Address!");
+                    return;
+                }
 
                 let matchedCountry = Object.keys(countryToNatMap).find(c => c.toLowerCase() === ipData.country_name.toLowerCase());
-                if(matchedCountry) document.getElementById("country").value = matchedCountry;
+                if(matchedCountry) {
+                    document.getElementById("country").value = matchedCountry;
+                }
 
-                closeModal('ip-lookup-modal');
-                generateIdentity({ city: ipData.city, region: ipData.region, postal: ipData.postal });
-            } catch(e) { alert("Error fetching IP details."); }
+                generateIdentity({
+                    city: ipData.city,
+                    region: ipData.region,
+                    postal: ipData.postal,
+                    lat: ipData.latitude,
+                    lon: ipData.longitude
+                });
+
+            } catch(e) {
+                alert("Could not fetch IP details.");
+            }
         }
 
         window.onload = function() {
             applySavedTheme();
+            applyPremiumState();
             generateIdentity();
         };
 
-        function copyText(elementId, btn, isNumbersOnly = false) {
+        function copyText(elementId, btn, isPhone = false) {
             let text = document.getElementById(elementId).innerText.trim();
-            if (isNumbersOnly) text = text.replace(/[^0-9]/g, ''); 
+            if (isPhone) text = text.replace(/\D/g, '');
 
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = btn.innerText;
-                btn.innerText = 'Copied!';
+                btn.innerText = 'Copied';
                 btn.classList.add('copied');
                 setTimeout(() => {
                     btn.innerText = originalText;
                     btn.classList.remove('copied');
                 }, 1500);
             });
+        }
+
+        function copyBirthday(type, btn) {
+            let bdayElem = document.getElementById("bday");
+            let textToCopy = "";
+            if (type === 'numeric') {
+                textToCopy = bdayElem.getAttribute("data-numeric") || bdayElem.innerText;
+            } else if (type === 'year') {
+                textToCopy = bdayElem.getAttribute("data-year") || bdayElem.innerText.split(', ')[1];
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        }
+
+        /* DOCUMENT CARD & VIRTUAL CREDIT CARDS LOGIC */
+        const countryFlags = {
+            "Bangladesh": "🇧🇩",
+            "United States": "🇺🇸",
+            "United Kingdom": "🇬🇧",
+            "Canada": "🇨🇦",
+            "Australia": "🇦🇺",
+            "Germany": "🇩🇪",
+            "France": "🇫🇷",
+            "Brazil": "🇧🇷",
+            "India": "🇮🇳",
+            "Spain": "🇪🇸",
+            "Switzerland": "🇨🇭",
+            "Denmark": "🇩🇰",
+            "Finland": "🇫🇮",
+            "Ireland": "🇮🇪",
+            "Iran": "🇮🇷",
+            "Mexico": "🇲🇽",
+            "Netherlands": "🇳🇱",
+            "Norway": "🇳🇴",
+            "New Zealand": "🇳🇿",
+            "Turkey": "🇹🇷",
+            "Ukraine": "🇺🇦"
+        };
+
+        let currentDocText = "";
+
+        function openDocModal(docType) {
+            const country = document.getElementById("country").value;
+            const flag = countryFlags[country] || "🌐";
+            const firstName = document.getElementById("fn").innerText;
+            const lastName = document.getElementById("ln").innerText;
+            const fullName = `${firstName} ${lastName}`;
+            const photo = document.getElementById("avatar-img").src;
+            const street = document.getElementById("street").innerText;
+            const city = document.getElementById("city").innerText;
+            const state = document.getElementById("state").innerText;
+            const zip = document.getElementById("zip").innerText;
+            const fullAddress = `${street}, ${city}, ${state} ${zip}`;
+            const bday = document.getElementById("bday").innerText;
+            const ssn = document.getElementById("ssn").innerText;
+
+            let docNumber = "";
+            if (docType === "Driver License") {
+                docNumber = `DL-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}`;
+            } else if (docType === "Passport") {
+                docNumber = `P-${getRandomInt(10000000, 99999999)}`;
+            } else {
+                docNumber = `NID-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}`;
+            }
+
+            const issueDate = `0${getRandomInt(1, 9)}/${getRandomInt(10, 28)}/2021`;
+            const expiryDate = `0${getRandomInt(1, 9)}/${getRandomInt(10, 28)}/2031`;
+
+            currentDocText = `=== ${country.toUpperCase()} ${docType.toUpperCase()} ===\nFull Name: ${fullName}\nDocument Number: ${docNumber}\nCountry: ${country}\nDate of Birth: ${bday}\nAddress: ${fullAddress}\nIssue Date: ${issueDate}\nExpiry Date: ${expiryDate}\nSSN: ${ssn}`;
+
+            const container = document.getElementById("doc-modal-content");
+            container.innerHTML = `
+                <div class="doc-card-box">
+                    <div class="doc-card-header">
+                        <div class="doc-card-title-group">
+                            <span class="doc-card-flag">${flag}</span>
+                            <span class="doc-card-country-name">${country}</span>
+                        </div>
+                        <span class="doc-card-doc-type">${docType}</span>
+                    </div>
+                    <div class="doc-card-body">
+                        <img src="${photo}" alt="Photo" class="doc-card-photo">
+                        <div class="doc-card-info">
+                            <div><label>Name:</label> <span>${fullName}</span></div>
+                            <div><label>Doc No:</label> <span>${docNumber}</span></div>
+                            <div><label>DOB:</label> <span>${bday}</span></div>
+                            <div><label>Address:</label> <span>${fullAddress}</span></div>
+                            <div><label>Issue Date:</label> <span>${issueDate}</span></div>
+                            <div><label>Expiry Date:</label> <span>${expiryDate}</span></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("doc-modal-title").innerHTML = `<i class="fa-solid fa-id-card"></i> ${flag} ${country} ${docType}`;
+            document.getElementById("doc-modal").classList.add("show");
+        }
+
+        function closeDocModal() {
+            document.getElementById("doc-modal").classList.remove("show");
+        }
+
+        function copyDocText(btn) {
+            if (!currentDocText) return;
+            navigator.clipboard.writeText(currentDocText).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        }
+
+        let generatedCardsData = [];
+
+        function openCreditModal() {
+            const firstName = document.getElementById("fn").innerText;
+            const lastName = document.getElementById("ln").innerText;
+            const holderName = `${firstName} ${lastName}`.toUpperCase();
+
+            generatedCardsData = [
+                {
+                    brand: "Visa",
+                    typeClass: "visa",
+                    number: `4532 ${getRandomInt(1000, 9999)} ${getRandomInt(1000, 9999)} ${getRandomInt(1000, 9999)}`,
+                    exp: `0${getRandomInt(1, 9)}/${getRandomInt(26, 30)}`,
+                    cvv: `${getRandomInt(100, 999)}`,
+                    name: holderName
+                },
+                {
+                    brand: "Mastercard",
+                    typeClass: "mastercard",
+                    number: `5424 ${getRandomInt(1000, 9999)} ${getRandomInt(1000, 9999)} ${getRandomInt(1000, 9999)}`,
+                    exp: `1${getRandomInt(0, 2)}/${getRandomInt(26, 30)}`,
+                    cvv: `${getRandomInt(100, 999)}`,
+                    name: holderName
+                },
+                {
+                    brand: "American Express",
+                    typeClass: "amex",
+                    number: `3782 ${getRandomInt(100000, 999999)} ${getRandomInt(10000, 99999)}`,
+                    exp: `0${getRandomInt(1, 9)}/${getRandomInt(26, 30)}`,
+                    cvv: `${getRandomInt(1000, 9999)}`,
+                    name: holderName
+                }
+            ];
+
+            const container = document.getElementById("credit-modal-content");
+            container.innerHTML = generatedCardsData.map((card, idx) => `
+                <div class="credit-card-item ${card.typeClass}">
+                    <div class="cc-header">
+                        <span class="cc-brand">${card.brand}</span>
+                        <button class="cc-copy-btn" onclick="copySingleCreditCard(${idx}, this)"><i class="fa-solid fa-copy"></i> Copy Card</button>
+                    </div>
+                    <div class="cc-number">${card.number}</div>
+                    <div class="cc-details">
+                        <div>HOLDER: <strong>${card.name}</strong></div>
+                        <div>EXP: <strong>${card.exp}</strong> | CVV: <strong>${card.cvv}</strong></div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById("credit-modal").classList.add("show");
+        }
+
+        function closeCreditModal() {
+            document.getElementById("credit-modal").classList.remove("show");
+        }
+
+        function copySingleCreditCard(idx, btn) {
+            const card = generatedCardsData[idx];
+            if (!card) return;
+            const text = `Card Brand: ${card.brand}\nCard Number: ${card.number}\nExp Date: ${card.exp}\nCVV: ${card.cvv}\nCardholder Name: ${card.name}`;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 1500);
+            });
+        }
+
+        function copyAllCreditCards(btn) {
+            if (!generatedCardsData.length) return;
+            const allText = generatedCardsData.map(card => 
+                `=== ${card.brand.toUpperCase()} ===\nCard Number: ${card.number}\nExp Date: ${card.exp}\nCVV: ${card.cvv}\nHolder: ${card.name}`
+            ).join('\n\n');
+
+            navigator.clipboard.writeText(allText).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied All 3 Cards!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        }
+
+        /* SHEETER INTERACTIVE LOGIC (DRIVE CONFIRM & 1-40 ROWS) */
+        let sheeterRowsData = [];
+
+        function openSheeterModal() {
+            document.getElementById('sheeter-drive-step').style.display = 'block';
+            document.getElementById('sheeter-grid-step').style.display = 'none';
+            document.getElementById('sheeter-drive-url').value = '';
+            document.getElementById('sheeter-modal').classList.add('show');
+        }
+
+        function closeSheeterModal() {
+            document.getElementById('sheeter-modal').classList.remove('show');
+        }
+
+        function confirmDriveLink() {
+            const urlInput = document.getElementById('sheeter-drive-url').value.trim();
+            if (!urlInput) {
+                alert("Please enter a Google Drive / Sheet link first to confirm!");
+                return;
+            }
+            
+            sheeterRowsData = [];
+            const country = document.getElementById("country").value || "United States";
+            const nameSetInput = document.getElementById("nameset").value.toLowerCase();
+
+            let firstNames = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Barbara", "Richard", "Susan", "Joseph", "Jessica", "Thomas", "Sarah", "Charles", "Karen", "Christopher", "Nancy", "Daniel", "Lisa", "Matthew", "Betty", "Anthony", "Margaret", "Donald", "Sandra"];
+            let lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin"];
+
+            if (country === "Bangladesh" || nameSetInput === "bengali") {
+                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া", "তাসনিম", "সাবরিনা", "ফারজানা", "শারমিন", "মরিয়ম", "সানজিদা"];
+                lastNames = ["হাসান", "আহমেদ", "চৌধুরী", "রহমান", "ইসলাম", "হোসেন", "আরিফ", "কালাম", "রানা", "সরকার", "জাহান", "সুলতানা", "আক্তার", "পারভীন", "বেগম", "খানম"];
+            }
+
+            const domains = ["gmail.com", "outlook.com", "yahoo.com"];
+
+            for (let i = 1; i <= 40; i++) {
+                const fn = firstNames[(i - 1) % firstNames.length];
+                const ln = lastNames[(i - 1) % lastNames.length];
+                const gender = i % 2 === 0 ? "Male" : "Female";
+                const email = `user${i}${getRandomInt(10, 99)}@${domains[i % domains.length]}`;
+                const phone = country === "Bangladesh" ? `017${getRandomInt(10, 99)}-${getRandomInt(100000, 999999)}` : `(${getRandomInt(200, 999)}) ${getRandomInt(100, 999)}-${getRandomInt(1000, 9999)}`;
+                const ssn = `${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-${getRandomInt(1000, 9999)}`;
+
+                sheeterRowsData.push({
+                    id: i,
+                    marked: false,
+                    name: `${fn} ${ln}`,
+                    gender: gender,
+                    country: country,
+                    email: email,
+                    phone: phone,
+                    ssn: ssn
+                });
+            }
+
+            renderSheeterTable();
+            document.getElementById('sheeter-drive-step').style.display = 'none';
+            document.getElementById('sheeter-grid-step').style.display = 'flex';
+            showNotification('Drive Link Confirmed! 40 Identity Rows Loaded Successfully.');
+        }
+
+        function renderSheeterTable() {
+            const tbody = document.getElementById('sheeter-tbody');
+            tbody.innerHTML = sheeterRowsData.map(row => `
+                <tr class="${row.marked ? 'marked' : ''}" id="sheeter-tr-${row.id}">
+                    <td style="text-align: center;">
+                        <input type="checkbox" ${row.marked ? 'checked' : ''} onchange="toggleRowMark(${row.id}, this.checked)">
+                    </td>
+                    <td>${row.id}</td>
+                    <td><strong id="sheeter-name-${row.id}">${row.name}</strong></td>
+                    <td>${row.gender}</td>
+                    <td>${row.country}</td>
+                    <td>${row.email}</td>
+                    <td>${row.phone}</td>
+                    <td>${row.ssn}</td>
+                </tr>
+            `).join('');
+        }
+
+        function toggleRowMark(id, isMarked) {
+            const row = sheeterRowsData.find(r => r.id === id);
+            if (row) {
+                row.marked = isMarked;
+                const tr = document.getElementById(`sheeter-tr-${id}`);
+                if (tr) {
+                    if (isMarked) tr.classList.add('marked');
+                    else tr.classList.remove('marked');
+                }
+            }
+        }
+
+        function toggleMarkAllSheeter(checkbox) {
+            const isChecked = checkbox.checked;
+            sheeterRowsData.forEach(row => row.marked = isChecked);
+            renderSheeterTable();
+        }
+
+        function changeSelectedNames() {
+            const markedRows = sheeterRowsData.filter(r => r.marked);
+            if (markedRows.length === 0) {
+                alert("⚠️ Please mark/select the rows/columns first before clicking Change Name!");
+                return;
+            }
+
+            const country = document.getElementById("country").value || "United States";
+            const nameSetInput = document.getElementById("nameset").value.toLowerCase();
+
+            let firstNames = ["Alexander", "Charlotte", "Benjamin", "Amelia", "Lucas", "Harper", "Ethan", "Evelyn", "Mason", "Abigail", "Oliver", "Emily", "Jacob", "Ella", "Logan", "Avery", "Liam", "Sofia", "Noah", "Camila", "Henry", "Aria", "Sebastian", "Scarlett", "Jack", "Victoria", "Owen", "Madison", "Samuel", "Luna"];
+            let lastNames = ["Miller", "Davis", "Wilson", "Anderson", "Taylor", "Thomas", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green"];
+
+            if (country === "Bangladesh" || nameSetInput === "bengali") {
+                firstNames = ["মো: রাকিব", "তানভীর", "সাকিব", "মেহেদী", "কামরুল", "ইমরান", "ফারহান", "আবুল", "সোহেল", "রিফাত", "নুসরাত", "সাদিয়া", "তাসনিম", "সাবরিনা", "ফারজানা", "শারমিন", "মরিয়ম", "সানজিদা"];
+                lastNames = ["হাসান", "আহমেদ", "চৌধুরী", "রহমান", "ইসলাম", "হোসেন", "আরিফ", "কালাম", "রানা", "সরকার", "জাহান", "সুলতানা", "আক্তার", "পারভীন", "বেগম", "খানম"];
+            }
+
+            const domains = ["gmail.com", "outlook.com", "yahoo.com"];
+
+            markedRows.forEach(row => {
+                const fn = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const ln = lastNames[Math.floor(Math.random() * lastNames.length)];
+                row.name = `${fn} ${ln}`;
+                row.email = `user${row.id}${getRandomInt(10, 99)}@${domains[getRandomInt(0, 2)]}`;
+            });
+
+            renderSheeterTable();
+            showNotification(`Automatically generated & updated names for ${markedRows.length} marked rows!`);
+        }
+
+        function exportSheeterData(btn) {
+            if (!sheeterRowsData.length) return;
+            const textData = sheeterRowsData.map(r => 
+                `${r.id}. Name: ${r.name} | Gender: ${r.gender} | Country: ${r.country} | Email: ${r.email} | Phone: ${r.phone} | SSN: ${r.ssn}`
+            ).join('\n');
+
+            navigator.clipboard.writeText(textData).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = 'Copied All 40 Rows!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerText = orig;
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        }
+
+        /* PREMIUM SUBSCRIPTION CONTROL LOGIC */
+        let currentSelectedPlan = 'weekly';
+
+        function openPremiumModal() {
+            document.getElementById('premium-modal').classList.add('show');
+        }
+
+        function closePremiumModal() {
+            document.getElementById('premium-modal').classList.remove('show');
+        }
+
+        function selectPlan(plan) {
+            currentSelectedPlan = plan;
+            const weeklyCard = document.getElementById('plan-weekly');
+            const monthlyCard = document.getElementById('plan-monthly');
+            if (plan === 'weekly') {
+                weeklyCard.style.border = '2px solid #f59e0b';
+                weeklyCard.style.background = '#fff8f0';
+                monthlyCard.style.border = '2px solid #ddd';
+                monthlyCard.style.background = '#fff';
+            } else {
+                monthlyCard.style.border = '2px solid #f59e0b';
+                monthlyCard.style.background = '#fff8f0';
+                weeklyCard.style.border = '2px solid #ddd';
+                weeklyCard.style.background = '#fff';
+            }
+        }
+
+        function claimPremiumSubscription() {
+            const now = new Date().getTime();
+            const days = currentSelectedPlan === 'weekly' ? 7 : 30;
+            const expiryTimestamp = now + (days * 24 * 60 * 60 * 1000);
+
+            localStorage.setItem('premium_active', 'true');
+            localStorage.setItem('premium_plan', currentSelectedPlan);
+            localStorage.setItem('premium_expiry', expiryTimestamp.toString());
+
+            closePremiumModal();
+            applyPremiumState();
+            showNotification(`🎉 Premium Claimed! ${currentSelectedPlan.toUpperCase()} Pass active. Premium features unlocked!`);
+        }
+
+        function cancelPremiumSubscription() {
+            if (confirm("Are you sure you want to cancel your Premium subscription? Premium buttons will be hidden.")) {
+                localStorage.removeItem('premium_active');
+                localStorage.removeItem('premium_plan');
+                localStorage.removeItem('premium_expiry');
+                applyPremiumState();
+                showNotification('Premium Subscription Cancelled. Premium features are now hidden.');
+            }
+        }
+
+        function applyPremiumState() {
+            const isActive = localStorage.getItem('premium_active') === 'true';
+            const expiry = parseInt(localStorage.getItem('premium_expiry') || '0', 10);
+            const now = new Date().getTime();
+
+            const premiumGroup = document.getElementById('premium-features-group');
+            const premiumBtnText = document.getElementById('premium-btn-text');
+            const cancelBtn = document.getElementById('cancel-premium-btn');
+            const statusText = document.getElementById('premium-status-text');
+
+            if (isActive && expiry > now) {
+                const remainingDays = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+                const planType = localStorage.getItem('premium_plan') || 'weekly';
+
+                if (premiumGroup) premiumGroup.style.display = 'inline-flex';
+                if (premiumBtnText) premiumBtnText.innerText = `⭐ Premium Active (${remainingDays}d)`;
+                if (cancelBtn) cancelBtn.style.display = 'inline-block';
+                if (statusText) statusText.innerText = `Status: Premium Active (${planType.toUpperCase()} - ${remainingDays} days remaining)`;
+            } else {
+                localStorage.removeItem('premium_active');
+                localStorage.removeItem('premium_plan');
+                localStorage.removeItem('premium_expiry');
+
+                if (premiumGroup) premiumGroup.style.display = 'none';
+                if (premiumBtnText) premiumBtnText.innerText = 'Premium';
+                if (cancelBtn) cancelBtn.style.display = 'none';
+                if (statusText) statusText.innerText = 'Status: Free Membership (Claim Premium to unlock tools)';
+            }
         }
     </script>
 </body>
