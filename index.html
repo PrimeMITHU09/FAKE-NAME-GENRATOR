@@ -1560,9 +1560,16 @@
                     <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                         <label style="font-size: 11px; color: #444; font-weight: bold; cursor: pointer;">
                             <input type="checkbox" id="font-high-contrast" onchange="toggleHighContrast(this)">
-                            <i class="fa-solid fa-eye"></i> Ultra High Contrast Mode (Crisp Text Shadow)
+                            <i class="fa-solid fa-eye"></i> High Contrast Mode (Crisp Text Shadow)
                         </label>
                     </div>
+                </div>
+
+                <!-- Theme Reset Button -->
+                <div style="margin-top: 15px; border-top: 1px dashed #ef4444; padding-top: 12px; text-align: center;">
+                    <button class="btn-generate" onclick="resetThemeToDefault()" style="width: 100%; padding: 9px; font-size: 13px; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; color: white; cursor: pointer; border-radius: 6px; font-weight: bold; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+                        <i class="fa-solid fa-rotate-left"></i> Reset Theme & Settings to Default
+                    </button>
                 </div>
             </div>
         </div>
@@ -2121,6 +2128,38 @@
             applyBgFilter(brightnessVal, colorVal, useColorTint);
             closeThemeModal();
             showNotification('BG Color & Theme Saved permanently!');
+        }
+
+        function resetThemeToDefault() {
+            localStorage.removeItem('theme');
+            localStorage.removeItem('custom_bg_data');
+            localStorage.removeItem('bg_brightness');
+            localStorage.removeItem('bg_color_tint');
+            localStorage.removeItem('bg_use_tint');
+            localStorage.removeItem('font_size');
+            localStorage.removeItem('high_contrast_font');
+
+            document.body.style.filter = '';
+            document.body.style.background = '';
+            document.body.style.backgroundImage = '';
+            document.body.classList.remove('dark-mode', 'theme-default', 'theme-sunset', 'theme-ocean', 'theme-cyber', 'theme-custom-bg', 'high-contrast-font', 'font-size-sm', 'font-size-lg', 'font-size-xl');
+            document.body.classList.add('theme-pic', 'font-size-md');
+
+            const brightnessRange = document.getElementById('bg-brightness-range');
+            const colorPicker = document.getElementById('bg-color-picker');
+            const useTintCheckbox = document.getElementById('bg-use-color-tint');
+            const valText = document.getElementById('brightness-val-text');
+            const contrastCheckbox = document.getElementById('font-high-contrast');
+
+            if (brightnessRange) brightnessRange.value = 100;
+            if (colorPicker) colorPicker.value = '#8a2be2';
+            if (useTintCheckbox) useTintCheckbox.checked = false;
+            if (valText) valText.innerText = '100%';
+            if (contrastCheckbox) contrastCheckbox.checked = false;
+
+            updateThemeSwitchUI('theme-pic');
+            closeThemeModal();
+            showNotification('🔄 Theme & Settings successfully Reset to Default!');
         }
 
         function setFontSize(size) {
